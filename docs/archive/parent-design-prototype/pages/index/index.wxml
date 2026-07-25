@@ -1,0 +1,173 @@
+<view class="page">
+  <!-- Header -->
+  <view class="header" style="padding-top: {{statusBarHeight}}px;">
+    <view class="header-row">
+      <view class="header-left">
+        <text class="greeting-text">下午好</text>
+        <text class="greeting-name">妈妈</text>
+      </view>
+      <view class="header-right" bindtap="goNotification">
+        <image src="/assets/icons/bell-dark.svg" class="icon-48" />
+      </view>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <!-- Child Info Card -->
+    <view class="child-card" bindtap="goChildManage">
+      <view class="child-avatar">
+        <image src="/assets/icons/user-white.svg" class="avatar-icon" />
+      </view>
+      <view class="child-info">
+        <view class="child-name-row">
+          <text class="child-name">{{childInfo.name}}</text>
+          <view class="online-tag" wx:if="{{deviceOnline}}">
+            <view class="online-dot"></view>
+            <text class="online-text">在线</text>
+          </view>
+        </view>
+        <text class="child-detail">{{childInfo.age}}岁 · {{childInfo.grade}} · 今日学习 {{todayData.studyMinutes}}分钟</text>
+      </view>
+    </view>
+
+    <!-- Today Stats -->
+    <view class="stats-card">
+      <view class="stat-item">
+        <image src="/assets/icons/timer-primary.svg" class="stat-icon" />
+        <text class="stat-value">{{todayData.studyMinutes}}min</text>
+        <text class="stat-label">学习时长</text>
+      </view>
+      <view class="stat-item">
+        <image src="/assets/icons/circle-check-primary.svg" class="stat-icon" />
+        <text class="stat-value">{{todayData.taskDone}}/{{todayData.taskTotal}}</text>
+        <text class="stat-label">任务完成</text>
+      </view>
+      <view class="stat-item">
+        <image src="/assets/icons/message-circle-primary.svg" class="stat-icon" />
+        <text class="stat-value">{{todayData.interaction}}次</text>
+        <text class="stat-label">互动次数</text>
+      </view>
+    </view>
+
+    <!-- Quick Access -->
+    <view class="section">
+      <text class="section-title">快捷入口</text>
+      <view class="quick-grid">
+        <view class="quick-row">
+          <view class="quick-item" wx:for="{{quickRow1}}" wx:key="key" bindtap="onQuickEntry" data-key="{{item.key}}">
+            <view class="quick-icon-bg" style="background-color: {{item.bgColor}};">
+              <image src="/assets/icons/{{item.icon}}.svg" class="quick-icon" />
+            </view>
+            <text class="quick-label">{{item.label}}</text>
+          </view>
+        </view>
+        <view class="quick-row">
+          <view class="quick-item" wx:for="{{quickRow2}}" wx:key="key" bindtap="onQuickEntry" data-key="{{item.key}}">
+            <view class="quick-icon-bg" style="background-color: {{item.bgColor}};">
+              <image src="/assets/icons/{{item.icon}}.svg" class="quick-icon" />
+            </view>
+            <text class="quick-label">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Today Tasks -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">今日任务</text>
+        <text class="section-more" bindtap="goAllTasks">查看全部</text>
+      </view>
+      <view class="task-list">
+        <view class="task-item" wx:for="{{tasks}}" wx:key="id" bindtap="goTaskDetail" data-id="{{item.id}}">
+          <image wx:if="{{item.status === 'completed'}}" src="/assets/icons/circle-check-green.svg" class="task-check" />
+          <image wx:else src="/assets/icons/circle-gray.svg" class="task-check" />
+          <view class="task-text">
+            <text class="task-name {{item.status === 'completed' ? 'done' : ''}}">{{item.title}}</text>
+          </view>
+          <view class="doing-tag" wx:if="{{item.status === 'in_progress'}}">
+            <text class="doing-text">进行中</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Recent Behavior -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">最近行为</text>
+        <text class="section-more" bindtap="goBehaviorAnalysis">更多</text>
+      </view>
+      <view class="behavior-card">
+        <view class="behavior-item {{index > 0 ? 'border-top' : ''}}" wx:for="{{recentBehaviors}}" wx:key="index">
+          <text class="bh-time">{{item.time}}</text>
+          <image src="/assets/icons/{{item.icon}}.svg" class="bh-icon" />
+          <text class="bh-text">{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+
+  <!-- Task Sheet Overlay -->
+  <view class="sheet-overlay" wx:if="{{showTaskSheet}}" bindtap="onSheetClose">
+    <view class="sheet-panel" catchtap="preventBubble">
+      <view class="sheet-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="sheet-header">
+        <text class="sheet-title">派任务</text>
+        <view class="sheet-close" bindtap="onSheetClose">
+          <image src="/assets/icons/chevron-left.svg" class="close-icon" />
+        </view>
+      </view>
+
+      <view class="sheet-tabs">
+        <view class="sheet-tab {{sheetTab === 'study' ? 'active' : ''}}" bindtap="onSheetTab" data-tab="study">
+          <text class="sheet-tab-text {{sheetTab === 'study' ? 'active' : ''}}">学习任务</text>
+          <view class="sheet-tab-bar" wx:if="{{sheetTab === 'study'}}"></view>
+        </view>
+        <view class="sheet-tab {{sheetTab === 'life' ? 'active' : ''}}" bindtap="onSheetTab" data-tab="life">
+          <text class="sheet-tab-text {{sheetTab === 'life' ? 'active' : ''}}">生活任务</text>
+          <view class="sheet-tab-bar" wx:if="{{sheetTab === 'life'}}"></view>
+        </view>
+        <view class="sheet-tab {{sheetTab === 'parent' ? 'active' : ''}}" bindtap="onSheetTab" data-tab="parent">
+          <text class="sheet-tab-text {{sheetTab === 'parent' ? 'active' : ''}}">亲子任务</text>
+          <view class="sheet-tab-bar" wx:if="{{sheetTab === 'parent'}}"></view>
+        </view>
+      </view>
+
+      <scroll-view scroll-y class="sheet-body" enhanced show-scrollbar="{{false}}">
+        <view class="sheet-task {{item.checked ? 'checked' : ''}}" wx:for="{{sheetTasks}}" wx:key="id" bindtap="onSheetToggle" data-id="{{item.id}}">
+          <view class="sheet-check {{item.checked ? 'checked' : ''}}">
+            <text wx:if="{{item.checked}}" class="sheet-check-mark">✓</text>
+          </view>
+          <view class="sheet-task-text">
+            <text class="sheet-task-name">{{item.name}}</text>
+            <text class="sheet-task-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="sheet-footer">
+        <view class="sheet-send-btn" bindtap="onSheetSend">
+          <image src="/assets/icons/send.svg" class="sheet-send-icon" />
+          <text class="sheet-send-text">发送任务</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Success Toast -->
+    <view class="sheet-toast" wx:if="{{showSheetToast}}">
+      <view class="sheet-toast-row">
+        <view class="sheet-toast-icon">
+          <image src="/assets/icons/check-circle.svg" class="sheet-toast-check" />
+        </view>
+        <text class="sheet-toast-title">任务已发送</text>
+      </view>
+      <text class="sheet-toast-sub">任务已发送到蛋仔机器人</text>
+      <view class="sheet-toast-bar"></view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,65 @@
+<!-- 学习目标设置页 -->
+<view class="page-wrap">
+
+  <!-- 每日目标时长 -->
+  <view class="goal-goal-card ca">
+    <view class="goal-ghdr">
+      <image class="goal-ghdr-icon" src="/icons/ic-clock-white.svg" mode="aspectFit"/>
+      <text>每日目标时长</text>
+    </view>
+    <view class="goal-goal-big">
+      <text class="goal-gnum">{{goalMinutes}}</text>
+      <text class="goal-gunit">min</text>
+      <view class="goal-glabel">建议 90-150 分钟</view>
+    </view>
+    <view class="goal-slider-wrap">
+      <view class="goal-slider-track" bind:tap="onSliderTap">
+        <view class="goal-slider-fill" style="width:{{sliderPercent}}%"></view>
+        <view
+          class="goal-slider-thumb"
+          style="left:{{sliderPercent}}%"
+          bindtouchstart="onThumbStart"
+          bindtouchmove="onThumbMove"
+          bindtouchend="onThumbEnd"
+        ></view>
+      </view>
+      <view class="goal-slider-marks">
+        <text>30</text>
+        <text>90</text>
+        <text>150</text>
+        <text>240</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 模块时间分配 -->
+  <view class="goal-mod-section-label ca">模块时间分配</view>
+  <view class="goal-mod-section ca">
+    <view
+      wx:for="{{modules}}"
+      wx:key="key"
+      class="goal-mod-item {{item.key}}"
+    >
+      <view class="goal-mod-left-bar"></view>
+      <view class="goal-mod-body">
+        <view class="goal-mod-name">{{item.name}}</view>
+        <view class="goal-mod-hint">{{item.hint}}</view>
+      </view>
+      <view class="goal-mod-stepper">
+        <view class="goal-stepper-btn" bind:tap="onAdjust" data-key="{{item.key}}" data-delta="-5">
+          <image class="goal-stepper-icon" src="/icons/ic-minus-pa2.svg" mode="aspectFit"/>
+        </view>
+        <view class="goal-stepper-btn" bind:tap="onAdjust" data-key="{{item.key}}" data-delta="5">
+          <image class="goal-stepper-icon" src="/icons/ic-plus-pa2.svg" mode="aspectFit"/>
+        </view>
+      </view>
+      <view class="goal-mod-time">
+        <text class="goal-mval">{{item.minutes}}</text>
+        <text class="goal-munit">m</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="goal-save-btn ca" bind:tap="onSave">保存设置</button>
+
+</view>

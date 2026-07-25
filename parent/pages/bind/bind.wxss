@@ -1,0 +1,112 @@
+/* ===== 设备绑定引导页 ===== */
+
+.bind-steps {
+  display: flex;
+  gap: 16rpx;
+  justify-content: center;
+  margin-bottom: 64rpx;
+  padding-top: 48rpx;
+}
+.bind-step {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--pa3);
+}
+.bind-step.active {
+  background: #A89F80;
+  width: 56rpx;
+  border-radius: 8rpx;
+}
+
+/* 引导卡片 */
+.bind-hero {
+  background: #A4CBF2;
+  border-radius: var(--r);
+  margin: 0 var(--m) 40rpx;
+  padding: 64rpx 48rpx 56rpx;
+  text-align: center;
+  color: #3D3D50;
+  position: relative;
+  overflow: hidden;
+}
+.bind-hero::after {
+  content: '';
+  position: absolute;
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 50%;
+  bottom: -80rpx;
+  right: -40rpx;
+  background: rgba(0,0,0,0.03);
+}
+
+.bind-mascot-ring {
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 40rpx;
+  position: relative;
+  z-index: 1;
+  animation: dankeFloat 2.6s ease-in-out infinite;
+}
+
+.bind-hero-title {
+  font-size: var(--t1);
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+}
+.bind-hero-desc {
+  font-size: var(--t4);
+  color: var(--pa2);
+  margin-top: 16rpx;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+/* 按钮 */
+.bind-btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  margin: 0 var(--m) 48rpx;
+}
+.bind-scan-btn {
+  width: 100%;
+  padding: 34rpx;
+  background: #A89F80;
+  border-radius: 36rpx;
+  color: var(--white);
+  font-size: var(--t3);
+  font-weight: 700;
+  box-shadow: 0 8rpx 32rpx rgba(168,159,128,0.25);
+  border: none;
+}
+.bind-scan-btn::after { border: none; }
+
+.bind-manual-btn {
+  width: 100%;
+  padding: 34rpx;
+  background: #FDEDDD;
+  border-radius: 36rpx;
+  color: #A89F80;
+  font-size: var(--t3);
+  font-weight: 700;
+  border: none;
+}
+.bind-manual-btn::after { border: none; }
+
+.bind-skip {
+  text-align: center;
+}
+.bind-skip text {
+  font-size: var(--t4);
+  color: var(--pa2);
+  font-weight: 600;
+}

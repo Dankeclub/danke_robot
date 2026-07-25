@@ -1,0 +1,31 @@
+<view class="page">
+  <nav-bar title="固件更新" showBack="{{true}}" />
+  <scroll-view class="content" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- Current Version Card -->
+    <view class="version-card">
+      <text class="version-label">当前版本</text>
+      <text class="version-number">{{currentVersion}}</text>
+      <view class="latest-badge">
+        <text>已是最新版本</text>
+      </view>
+    </view>
+
+    <!-- Changelog -->
+    <view class="changelog-section" wx:for="{{changelog}}" wx:key="version">
+      <view class="changelog-header">
+        <text class="changelog-version">{{item.version}}</text>
+      </view>
+      <view class="changelog-card">
+        <view class="changelog-item" wx:for="{{item.items}}" wx:key="*this" wx:for-item="log">
+          <view class="bullet"></view>
+          <text class="log-text">{{log}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Check Update Button -->
+    <view class="check-btn" bindtap="onCheckUpdate">
+      <text>检查更新</text>
+    </view>
+  </scroll-view>
+</view>

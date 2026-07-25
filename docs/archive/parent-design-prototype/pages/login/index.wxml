@@ -1,0 +1,20 @@
+<view class="page">
+  <!-- Top Gradient Area -->
+  <view class="top-area">
+    <view class="logo-circle">
+      <image src="/assets/icons/smartphone.svg" class="logo-icon" />
+    </view>
+    <text class="app-title">AI陪伴机器人</text>
+    <text class="app-subtitle">让陪伴更有温度</text>
+  </view>
+
+  <!-- Bottom Card Area -->
+  <view class="bottom-card">
+    <text class="login-title">微信授权登录</text>
+    <text class="login-desc">使用微信一键登录，开启陪伴之旅</text>
+    <view class="wechat-btn" bindtap="onWechatLogin">
+      <text>微信登录</text>
+    </view>
+    <text class="terms-text">登录即表示同意《用户协议》和《隐私政策》</text>
+  </view>
+</view>

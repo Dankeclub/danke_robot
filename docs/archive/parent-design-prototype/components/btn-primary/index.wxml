@@ -1,0 +1,4 @@
+<view class="btn-primary {{block ? 'block' : ''}} {{type === 'danger' ? 'danger' : ''}} {{disabled ? 'disabled' : ''}}" bindtap="handleTap">
+  <image wx:if="{{icon}}" src="/assets/icons/{{icon}}.svg" class="btn-icon" />
+  <text class="btn-text">{{text}}</text>
+</view>

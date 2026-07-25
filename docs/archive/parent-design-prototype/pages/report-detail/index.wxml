@@ -1,0 +1,39 @@
+<view class="page">
+  <nav-bar title="成长周报详情" rightIcon="share" />
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <view class="date-bar">
+      <text class="date-text">2026.06.15 - 06.21</text>
+      <view class="week-badge"><text class="week-badge-text">第24周</text></view>
+    </view>
+    <view class="card score-card">
+      <view class="score-row">
+        <view class="score-ring"><view class="ring-bg"></view><view class="ring-fill"></view><view class="ring-center"><text class="ring-grade">A</text></view></view>
+        <view class="score-right">
+          <text class="score-title">综合评价：优秀</text>
+          <text class="score-desc">本周学习表现非常出色，各项指标均达到或超过预期目标</text>
+          <view class="mini-stats">
+            <view class="ms-item"><text class="ms-value">92</text><text class="ms-label">学习分</text></view>
+            <view class="ms-item"><text class="ms-value">88</text><text class="ms-label">行为分</text></view>
+            <view class="ms-item"><text class="ms-value">95</text><text class="ms-label">参与分</text></view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="card ai-card2">
+      <view class="ai-header"><view class="ai-badge"><image src="/assets/icons/qi-brain.svg" class="ai-badge-icon" /></view><text class="ai-title">蛋仔AI评语</text></view>
+      <text class="ai-comment">小明本周学习状态非常棒！数学正确率从85%提升到92%，阅读时长增加了20分钟。继续保持这个节奏，建议下周适当增加英语口语练习时间。</text>
+      <text class="ai-teacher">—— 蛋仔 AI 成长助手</text>
+    </view>
+    <view class="card"><text class="card-title">学科表现</text>
+      <view class="subj-row" wx:for="{{subjects}}" wx:key="name"><text class="subj-name">{{item.name}}</text><view class="subj-bar-track"><view class="subj-bar-fill" style="width:{{item.pct}}%;background-color:{{item.color}};"></view></view><text class="subj-score" style="color:{{item.color}};">{{item.score}}分</text></view>
+    </view>
+    <view class="card"><view class="card-header-row"><text class="card-title">学习趋势</text><view class="trend-badge"><text class="trend-badge-text">较上周 +12%</text></view></view>
+      <view class="chart-bars"><view class="chart-day" wx:for="{{trendData}}" wx:key="day"><view class="chart-bar" style="height:{{item.height}}rpx;background-color:{{item.color}};"></view><text class="chart-label">{{item.day}}</text></view></view>
+      <view class="legend-row"><view class="legend-item"><view class="legend-dot primary"></view><text class="legend-text">本周</text></view><view class="legend-item"><view class="legend-dot disabled"></view><text class="legend-text disabled">上周</text></view></view>
+    </view>
+    <view class="card"><text class="card-title">本周亮点</text>
+      <view class="hl-item" wx:for="{{highlights}}" wx:key="id"><image src="/assets/icons/target.svg" class="hl-icon" /><text class="hl-text">{{item.text}}</text></view>
+    </view>
+    <view style="height:120rpx;"></view>
+  </scroll-view>
+</view>

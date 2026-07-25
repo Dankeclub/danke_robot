@@ -1,0 +1,62 @@
+<view class="page">
+  <nav-bar title="设备配网" />
+
+  <scroll-view scroll-y class="content" show-scrollbar="{{false}}">
+    <!-- Illustration Area -->
+    <view class="illust-area">
+      <view class="wifi-circle">
+        <image src="/assets/icons/wifi.svg" class="wifi-icon" />
+      </view>
+      <view class="floor-shadow"></view>
+      <view class="dot dot-1"></view>
+      <view class="dot dot-2"></view>
+      <view class="dot dot-3"></view>
+      <view class="dot dot-4"></view>
+    </view>
+
+    <!-- Steps Card -->
+    <view class="steps-card">
+      <view class="step-row">
+        <view class="step-num">
+          <text class="step-num-text">1</text>
+        </view>
+        <view class="step-text">
+          <text class="step-title">确保机器人已开机</text>
+          <text class="step-desc">指示灯应为蓝色常亮状态</text>
+        </view>
+      </view>
+      <view class="step-divider"></view>
+
+      <view class="step-row">
+        <view class="step-num">
+          <text class="step-num-text">2</text>
+        </view>
+        <view class="step-text">
+          <text class="step-title">长按背面配对键 3 秒</text>
+          <text class="step-desc">听到提示音后松手，指示灯开始闪烁</text>
+        </view>
+      </view>
+      <view class="step-divider"></view>
+
+      <view class="step-row">
+        <view class="step-num">
+          <text class="step-num-text">3</text>
+        </view>
+        <view class="step-text">
+          <text class="step-title">等待指示灯变为绿色</text>
+          <text class="step-desc">变绿后点击下方按钮完成配网</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="pair-btn" bindtap="onPair">
+      <text class="pair-btn-text">开始配网</text>
+    </view>
+
+    <view class="help-row">
+      <text class="help-text" bindtap="onHelp">遇到问题？查看配网教程</text>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

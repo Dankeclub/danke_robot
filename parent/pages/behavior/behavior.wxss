@@ -1,0 +1,151 @@
+/* ===== 行为分析页 ===== */
+
+.beh-tab-bar {
+  display: flex;
+  margin: 28rpx var(--m) var(--g);
+  background: var(--white);
+  border-radius: 40rpx;
+  padding: 8rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.03);
+}
+.beh-tab-btn {
+  flex: 1;
+  text-align: center;
+  padding: 22rpx 0;
+  border-radius: 32rpx;
+  font-size: var(--t4);
+  font-weight: 700;
+  color: var(--pa2);
+}
+.beh-tab-btn.on {
+  background: var(--pd);
+  color: var(--white);
+  box-shadow: 0 4rpx 20rpx rgba(119,140,205,0.25);
+}
+
+/* 评分卡片 */
+.beh-score-card {
+  border-radius: var(--r);
+  padding: 64rpx 40rpx 56rpx;
+  text-align: center;
+  margin: 0 var(--m) var(--g);
+}
+.beh-score-card.purple { background: var(--pd); color: var(--white); }
+.beh-score-card.mint   { background: var(--pg); color: #3D3D50; }
+
+.beh-big-score { font-size: 144rpx; font-weight: 900; line-height: 1; letter-spacing: -2rpx; }
+.beh-unit { font-size: 64rpx; font-weight: 700; margin-left: 8rpx; }
+.beh-slabel { font-size: var(--t3); font-weight: 600; margin-top: 12rpx; }
+.beh-score-card.purple .beh-slabel { color: rgba(255,255,255,0.88); }
+.beh-score-card.mint   .beh-slabel { color: #3A7D4A; }
+.beh-sdelta { font-size: var(--t5); font-weight: 600; margin-top: 16rpx; opacity: 0.65; }
+
+/* 统计网格 */
+.beh-stat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 var(--m) var(--g);
+}
+.beh-sg-card {
+  width: calc(50% - 8rpx);
+  margin: 4rpx;
+  border-radius: 44rpx;
+  padding: 40rpx 32rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+.beh-sg-card.blue  { background: var(--pl); }
+.beh-sg-card.amber { background: rgba(240,168,85,0.14); }
+.beh-sg-card.mint  { background: var(--pg); }
+.beh-sg-card.pink  { background: var(--pp); }
+
+.beh-sv { font-size: 68rpx; font-weight: 900; line-height: 1; }
+.beh-sg-card.blue  .beh-sv { color: var(--pd); }
+.beh-sg-card.amber .beh-sv { color: #C5781E; }
+.beh-sg-card.mint  .beh-sv { color: #3A7D4A; }
+.beh-sg-card.pink  .beh-sv { color: #B55A5A; }
+.beh-sl { font-size: var(--t4); font-weight: 600; color: #5A5A62; margin-top: 10rpx; }
+
+/* 姿态卡片 */
+.beh-pose-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 40rpx 36rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.03);
+}
+.beh-phdr {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+  margin-bottom: 28rpx;
+}
+
+.beh-pose-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 32rpx;
+  border-radius: 28rpx;
+  margin-bottom: 8rpx;
+}
+.beh-pose-row:last-child { margin-bottom: 0; }
+.beh-pose-row.good { background: rgba(109,175,125,0.1); }
+.beh-pose-row.warn { background: rgba(240,168,85,0.1); }
+.beh-pose-row.bad  { background: rgba(199,121,116,0.08); }
+
+.beh-pose-left-bar {
+  width: 10rpx;
+  height: 72rpx;
+  border-radius: 6rpx;
+  flex-shrink: 0;
+}
+.beh-pose-row.good .beh-pose-left-bar { background: #4F9A5F; }
+.beh-pose-row.warn .beh-pose-left-bar { background: #D4892E; }
+.beh-pose-row.bad  .beh-pose-left-bar { background: #C77974; }
+
+.beh-pose-info { flex: 1; }
+.beh-pose-title { font-size: var(--t3); font-weight: 700; color: #3D3D50; }
+.beh-pose-desc  { font-size: var(--t4); font-weight: 500; color: var(--pa2); margin-top: 4rpx; }
+.beh-pose-pct   { font-size: var(--t2); font-weight: 900; }
+.beh-pose-row.good .beh-pose-pct { color: #4F9A5F; }
+.beh-pose-row.warn .beh-pose-pct { color: #D4892E; }
+.beh-pose-row.bad  .beh-pose-pct { color: #C77974; }
+
+/* 位置卡片 */
+.beh-loc-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 40rpx 36rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.03);
+}
+.beh-loc-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx 28rpx;
+  border-radius: 28rpx;
+  margin-bottom: 8rpx;
+}
+.beh-loc-row:last-child { margin-bottom: 0; }
+.beh-loc-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 32rpx;
+}
+.beh-loc-icon.living { background: var(--pd); color: var(--white); }
+.beh-loc-icon.study  { background: #4F9A5F;   color: var(--white); }
+.beh-loc-icon.bed    { background: #D97A84;   color: var(--white); }
+.beh-loc-name { font-size: var(--t3); font-weight: 700; color: #3D3D50; width: 80rpx; flex-shrink: 0; }
+.beh-loc-bar-wrap { flex: 1; height: 20rpx; background: rgba(0,0,0,0.05); border-radius: 10rpx; overflow: hidden; }
+.beh-loc-bar       { height: 100%; border-radius: 10rpx; }
+.beh-loc-bar.living { background: var(--pd); }
+.beh-loc-bar.study  { background: #4F9A5F; }
+.beh-loc-bar.bed    { background: #D97A84; }
+.beh-loc-time { font-size: var(--t3); font-weight: 800; color: #5A5A62; width: 80rpx; text-align: right; flex-shrink: 0; }

@@ -1,0 +1,42 @@
+.btn-primary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 24rpx 48rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  box-shadow: 0 8rpx 32rpx rgba(49, 106, 253, 0.2);
+  transition: opacity 0.2s;
+}
+
+.btn-primary.block {
+  width: 100%;
+}
+
+.btn-primary.danger {
+  background-color: var(--color-danger);
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 107, 0.2);
+}
+
+.btn-primary.disabled {
+  background-color: var(--color-disabled);
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.btn-primary:active {
+  opacity: 0.85;
+}
+
+.btn-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.btn-text {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text-white);
+}

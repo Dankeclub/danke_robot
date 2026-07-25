@@ -1,0 +1,19 @@
+<view class="nav-bar {{transparent ? 'transparent' : ''}}" style="padding-top: {{statusBarHeight}}px;">
+  <view class="nav-content">
+    <view class="nav-left" bindtap="goBack" wx:if="{{showBack}}">
+      <view class="back-icon">
+        <image src="/assets/icons/chevron-left.svg" class="icon-24" />
+      </view>
+    </view>
+    <view class="nav-left" wx:else>
+      <view class="placeholder"></view>
+    </view>
+    <view class="nav-title">
+      <text>{{title}}</text>
+    </view>
+    <view class="nav-right" bindtap="onRightTap">
+      <image wx:if="{{rightIcon}}" src="/assets/icons/{{rightIcon}}.svg" class="icon-24" />
+      <view wx:else class="placeholder"></view>
+    </view>
+  </view>
+</view>

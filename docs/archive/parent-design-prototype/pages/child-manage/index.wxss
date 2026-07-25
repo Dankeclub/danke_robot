@@ -1,0 +1,147 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: 48rpx 32rpx 0 32rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Avatar Area */
+.avatar-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 32rpx;
+}
+
+.avatar-circle {
+  width: 176rpx;
+  height: 176rpx;
+  border-radius: 50%;
+  background-color: var(--color-tag-blue-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.camera-badge {
+  position: absolute;
+  bottom: 4rpx;
+  right: 50%;
+  transform: translateX(28rpx);
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+/* Form Card */
+.form-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+  padding: 8rpx 0;
+  margin-bottom: 32rpx;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+}
+
+.field-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24rpx;
+  flex: 1;
+}
+
+.field-icon {
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+}
+
+.field-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.field-label {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+}
+
+.field-value {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.field-inline-input {
+  font-size: 30rpx;
+  color: var(--color-text-primary);
+  height: 44rpx;
+  line-height: 44rpx;
+}
+
+picker {
+  display: block;
+  width: 100%;
+}
+
+.field-arrow {
+  width: 36rpx;
+  height: 36rpx;
+  opacity: 0.4;
+}
+
+.field-divider {
+  height: 2rpx;
+  background-color: var(--color-divider);
+  margin: 0 32rpx;
+}
+
+/* Save Button */
+.save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  box-shadow: 0 8rpx 32rpx rgba(49, 106, 253, 0.2);
+}
+
+.save-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}

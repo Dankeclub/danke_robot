@@ -1,0 +1,9 @@
+<view class="card shadow-card" style="padding: {{padding}};">
+  <view class="card-header" wx:if="{{title}}" bindtap="onHeaderTap">
+    <text class="card-title">{{title}}</text>
+    <image wx:if="{{showArrow}}" src="/assets/icons/chevron-right.svg" class="card-arrow" />
+  </view>
+  <view class="card-body">
+    <slot></slot>
+  </view>
+</view>

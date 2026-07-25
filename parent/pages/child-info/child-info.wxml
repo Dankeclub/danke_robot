@@ -1,0 +1,79 @@
+<!-- 孩子信息录入/编辑页 -->
+<view class="page-wrap ci-page">
+
+  <!-- 头像卡片 -->
+  <view class="ci-avatar-card ca">
+    <view class="ci-avatar-circle" style="background:{{avatarColor}}" bindtap="onChangeAvatar">
+      <image class="ci-avatar-icon" src="/icons/ic-child-white.svg" mode="aspectFit"/>
+      <view class="ci-avatar-tap-hint">点击更换</view>
+    </view>
+    <view class="ci-avatar-info">
+      <view class="ci-aname">{{form.name || '未设置'}}</view>
+      <view class="ci-asub">{{ageText}}</view>
+    </view>
+  </view>
+
+  <!-- 表单 -->
+  <view class="ci-form-card ca">
+    <!-- 昵称 -->
+    <view class="ci-form-item">
+      <text class="ci-form-label">昵称</text>
+      <input class="ci-form-input" value="{{form.name}}" placeholder="请输入孩子昵称" bindinput="onInputName" maxlength="12"/>
+    </view>
+
+    <!-- 出生年月 -->
+    <view class="ci-form-item ci-birth-row" bindtap="onPickBirth">
+      <text class="ci-form-label">出生年月</text>
+      <view class="ci-birth-display">
+        <text class="ci-birth-year">{{form.birthYear}}</text>
+        <text class="ci-birth-sep">年</text>
+        <text class="ci-birth-month">{{form.birthMonth}}</text>
+        <text class="ci-birth-sep">月</text>
+      </view>
+      <image class="ci-form-arrow" src="/icons/ic-chevron-pa2.svg" mode="aspectFit"/>
+    </view>
+
+    <!-- 性别 -->
+    <view class="ci-form-item">
+      <text class="ci-form-label">性别</text>
+      <view class="ci-gender-pick">
+        <view class="ci-goption {{form.gender === 'boy' ? 'selected' : ''}}" bindtap="onSelectGender" data-gender="boy">男孩</view>
+        <view class="ci-goption {{form.gender === 'girl' ? 'selected' : ''}}" bindtap="onSelectGender" data-gender="girl">女孩</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设备链接 -->
+  <view class="ci-device-link ca" bindtap="goDevice">
+    <view class="ci-dl-icon">
+      <image class="ci-dl-icon-img" src="/icons/ic-device-olive.svg" mode="aspectFit"/>
+    </view>
+    <text class="ci-dl-text">已绑定 · 蛋仔机器人</text>
+    <view class="ci-dl-stat"><view class="ci-dl-dot"></view>在线</view>
+  </view>
+
+  <!-- 保存 -->
+  <view class="ci-submit-btn ca" bindtap="onSave">保存</view>
+
+  <!-- 解绑（仅编辑模式） -->
+  <view wx:if="{{mode === 'edit'}}" class="ci-danger-btn ca" bindtap="onUnbind">解绑孩子</view>
+
+  <!-- 日期选择器 -->
+  <view class="ci-picker-mask {{showPicker ? 'show' : ''}}" bindtap="onClosePicker"></view>
+  <view class="ci-picker {{showPicker ? 'show' : ''}}">
+    <view class="ci-picker-hdr">
+      <text class="ci-picker-cancel" bindtap="onClosePicker">取消</text>
+      <text class="ci-picker-title">选择出生年月</text>
+      <text class="ci-picker-confirm" bindtap="onConfirmPicker">确定</text>
+    </view>
+    <picker-view class="ci-picker-view" value="{{pickerValue}}" bindchange="onPickerChange" indicator-class="ci-picker-indicator">
+      <picker-view-column>
+        <view wx:for="{{years}}" wx:key="*this" class="ci-pv-item">{{item}} 年</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{months}}" wx:key="*this" class="ci-pv-item">{{item}} 月</view>
+      </picker-view-column>
+    </picker-view>
+  </view>
+
+</view>

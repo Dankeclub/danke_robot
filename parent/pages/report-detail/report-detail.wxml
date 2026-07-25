@@ -1,0 +1,128 @@
+<!-- 行为挖掘报告详情 -->
+<view class="page-wrap">
+
+  <!-- 眉页 -->
+  <view class="rd-eyebrow ca">
+    <text class="rd-eyebrow-text">{{reportDate}}</text>
+    <view class="rd-eyebrow-share" bind:tap="onShare">
+      <image class="rd-eyebrow-share-icon" src="/icons/ic-send-white.svg" mode="aspectFit"/>
+    </view>
+  </view>
+
+  <!-- 三大指标卡片 -->
+  <view class="rd-m-row ca">
+    <view class="rd-m-card rd-m-focus">
+      <view class="rd-m-label">专注度</view>
+      <view class="rd-m-value">{{metrics.focus}}</view>
+      <view class="rd-m-unit">分</view>
+      <view class="rd-m-change {{metrics.focusChange > 0 ? 'up' : (metrics.focusChange < 0 ? 'down' : 'stable')}}">
+        {{metrics.focusChange > 0 ? '↑' : (metrics.focusChange < 0 ? '↓' : '→')}} {{metrics.focusChangeText}} 较上周
+      </view>
+    </view>
+    <view class="rd-m-card rd-m-posture">
+      <view class="rd-m-label">坐姿</view>
+      <view class="rd-m-value">{{metrics.posture}}</view>
+      <view class="rd-m-unit">分</view>
+      <view class="rd-m-change {{metrics.postureChange > 0 ? 'up' : (metrics.postureChange < 0 ? 'down' : 'stable')}}">
+        {{metrics.postureChange > 0 ? '↑' : (metrics.postureChange < 0 ? '↓' : '→')}} {{metrics.postureChangeText}} 较上周
+      </view>
+    </view>
+    <view class="rd-m-card rd-m-usage">
+      <view class="rd-m-label">日均使用</view>
+      <view class="rd-m-value">{{metrics.dailyUsage}}</view>
+      <view class="rd-m-unit">min</view>
+      <view class="rd-m-change stable">→ 持平</view>
+    </view>
+  </view>
+
+  <!-- 异常发现 -->
+  <view class="rd-sec ca">
+    <image class="rd-sec-icon" src="/icons/ic-alert-amber.svg" mode="aspectFit"/>
+    <text>异常发现</text>
+  </view>
+  <view class="rd-anom-card ca">
+    <view wx:for="{{anomalies}}" wx:key="title" class="rd-anom-item">
+      <view class="rd-anom-icon {{item.iconBg}}">
+        <image class="rd-anom-icon-img" src="/icons/{{item.icon}}.svg" mode="aspectFit"/>
+      </view>
+      <view class="rd-anom-body">
+        <view class="rd-a-title">{{item.title}}</view>
+        <view class="rd-a-desc">{{item.desc}}</view>
+        <view class="rd-tags">
+          <view wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" class="rd-tag {{tag.cls}}">{{tag.text}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 趋势分析 -->
+  <view class="rd-sec ca">
+    <image class="rd-sec-icon" src="/icons/ic-chart-pd.svg" mode="aspectFit"/>
+    <text>趋势分析</text>
+  </view>
+  <view class="rd-chart-card ca">
+    <view class="rd-chart-label">专注度 7 日趋势</view>
+    <view class="rd-chart-hint">周一至周日 · 虚线为预警线（70分）· 周三需关注</view>
+    <view class="rd-chart-wrap">
+      <canvas type="2d" id="focusChart" class="rd-canvas"></canvas>
+    </view>
+    <view class="rd-chart-legend">
+      <view class="rd-lgd-item">
+        <view class="rd-swatch" style="background:var(--pd)"></view>
+        <text>专注度</text>
+      </view>
+      <view class="rd-lgd-item">
+        <view class="rd-swatch rd-swatch-dash"></view>
+        <text>预警线</text>
+      </view>
+    </view>
+  </view>
+  <view class="rd-chart-card ca">
+    <view class="rd-chart-label">坐姿正确率 4 周趋势</view>
+    <view class="rd-chart-hint">第23—26周对比 · 第26周首次超过良好线</view>
+    <view class="rd-chart-wrap rd-chart-wrap-sm">
+      <canvas type="2d" id="postureChart" class="rd-canvas"></canvas>
+    </view>
+    <view class="rd-chart-legend">
+      <view class="rd-lgd-item">
+        <view class="rd-swatch" style="background:#4F9A5F"></view>
+        <text>坐姿正确率</text>
+      </view>
+      <view class="rd-lgd-item">
+        <view class="rd-swatch rd-swatch-dash"></view>
+        <text>良好线</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关联洞察 -->
+  <view class="rd-sec ca">
+    <image class="rd-sec-icon" src="/icons/ic-star-pd.svg" mode="aspectFit"/>
+    <text>关联洞察</text>
+  </view>
+  <view class="rd-disc-list ca">
+    <view wx:for="{{discoveries}}" wx:key="title" class="rd-disc-card">
+      <view class="rd-disc-num">
+        <view class="rd-num-circle" style="background:{{item.color}}">{{index + 1}}</view>
+        <view wx:if="{{index < discoveries.length - 1}}" class="rd-num-line" style="background:{{item.color}}"></view>
+      </view>
+      <view class="rd-disc-body">
+        <view class="rd-d-title">{{item.title}}</view>
+        <view class="rd-d-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- AI 综合分析 -->
+  <view class="rd-ai-card ca">
+    <view class="rd-ai-mascot">
+      <danke-mascot size="sm" state="online"/>
+    </view>
+    <view class="rd-ai-content">
+      <view class="rd-ai-label">蛋仔综合分析</view>
+      <text class="rd-ai-text">{{aiSummary}}</text>
+    </view>
+  </view>
+
+  <view style="height:48rpx"></view>
+</view>

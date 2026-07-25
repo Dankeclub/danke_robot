@@ -1,0 +1,27 @@
+.page{min-height:100vh;background-color:var(--color-background);display:flex;flex-direction:column;width:100%;overflow-x:hidden}
+.content{flex:1;padding:32rpx 32rpx 0 32rpx}
+
+/* Subject score card */
+.score-card{background-color:var(--color-card);border-radius:var(--radius-lg);padding:32rpx;margin-bottom:24rpx;box-shadow:0 4rpx 24rpx rgba(0,0,0,0.04)}
+.score-label{font-size:var(--font-size-base);color:var(--color-text-secondary);margin-bottom:8rpx}
+.score-value{font-size:var(--font-size-3xl);font-weight:700;color:var(--color-primary);margin-bottom:20rpx}
+.progress-bar{width:100%;height:16rpx;background-color:var(--color-skeleton);border-radius:var(--radius-pill);overflow:hidden}
+.progress-fill{height:100%;background-color:var(--color-primary);border-radius:var(--radius-pill)}
+
+/* Stats row */
+.stats-row{display:flex;flex-direction:row;gap:16rpx;margin-bottom:24rpx}
+.stat-card{flex:1;background-color:var(--color-card);border-radius:var(--radius-lg);padding:24rpx;box-shadow:0 4rpx 24rpx rgba(0,0,0,0.04);display:flex;flex-direction:column;align-items:center}
+.stat-value{font-size:var(--font-size-lg);font-weight:700;color:var(--color-primary);margin-bottom:8rpx}
+.stat-label{font-size:var(--font-size-xs);color:var(--color-text-secondary);text-align:center}
+
+/* Section title */
+.section-title{font-size:var(--font-size-md);font-weight:600;color:var(--color-text-primary);margin-bottom:20rpx}
+
+/* Record card */
+.record-card{background-color:var(--color-card);border-radius:var(--radius-lg);padding:32rpx;margin-bottom:24rpx;box-shadow:0 4rpx 24rpx rgba(0,0,0,0.04)}
+.record-row{display:flex;flex-direction:row;align-items:center;justify-content:space-between;padding:12rpx 0}
+.record-info{flex:1}
+.record-title{font-size:var(--font-size-base);color:var(--color-text-primary);font-weight:500;margin-bottom:6rpx}
+.record-time{font-size:var(--font-size-sm);color:var(--color-text-secondary)}
+.record-score{font-size:var(--font-size-md);font-weight:600;color:var(--color-success)}
+.record-divider{height:1rpx;background-color:var(--color-divider);margin-top:12rpx}

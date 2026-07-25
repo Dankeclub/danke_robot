@@ -1,0 +1,89 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: 16rpx 32rpx 0 32rpx;
+}
+
+.task-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.04);
+  padding: 4rpx 0;
+}
+
+.task-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 32rpx;
+  gap: 24rpx;
+}
+
+.task-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.task-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.task-desc {
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
+}
+
+.task-badge {
+  padding: 8rpx 20rpx;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.task-badge.done {
+  background-color: var(--color-tag-green-bg);
+  border: 2rpx solid var(--color-success);
+}
+
+.task-badge.done .badge-text {
+  font-size: 22rpx;
+  color: var(--color-success);
+}
+
+.task-badge.progress {
+  background-color: var(--color-tag-warning-bg);
+  border: 2rpx solid var(--color-warning);
+}
+
+.task-badge.progress .badge-text {
+  font-size: 22rpx;
+  color: var(--color-warning);
+}
+
+.task-badge.pending {
+  background-color: var(--color-card);
+  border: 2rpx solid var(--color-divider);
+}
+
+.task-badge.pending .badge-text {
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
+}
+
+.row-divider {
+  height: 2rpx;
+  background-color: var(--color-divider);
+  margin: 0 32rpx;
+}

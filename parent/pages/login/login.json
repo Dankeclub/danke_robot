@@ -1,0 +1,6 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "danke-mascot": "/components/danke-mascot/danke-mascot"
+  }
+}

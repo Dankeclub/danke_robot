@@ -1,0 +1,2422 @@
+openapi: 3.0.3
+info:
+  title: 家长端微信小程序 API
+  version: 0.2.0-draft
+  description: 家长端 API，统一前缀 /v1/api/parent。普通 JSON 响应使用 {code,msg,data}，与车机端 /v1/api/car 保持一致。
+servers:
+- url: https://api.example.com
+  description: 示例域名，路径已包含 /v1/api/parent 前缀
+tags:
+- name: Auth
+  description: 微信登录、手机号绑定与 JWT
+- name: Children
+  description: 孩子资料与家庭关系
+- name: Device
+  description: 车机/机器人设备绑定与管理
+- name: Learning Config
+  description: 六个学习模块配置
+- name: Learning Goal
+  description: 每日学习目标
+- name: Dashboard
+  description: 今日任务与学习大盘
+- name: Dispatched Tasks
+  description: 家长主动派发任务
+- name: Behavior
+  description: 专注度、坐姿、位置等行为数据
+- name: Usage
+  description: 设备使用时长统计
+- name: Reports
+  description: 学习进度、周报、错题
+- name: Parent Messages
+  description: 家长消息下发与历史
+- name: Remote Control
+  description: 远程跳转与在线状态
+- name: Notification Settings
+  description: 通知设置
+- name: Notifications
+  description: 通知中心
+- name: Files
+  description: 文件上传和私有访问
+paths:
+  /v1/api/parent/auth/wechat/login:
+    post:
+      tags:
+      - Auth
+      summary: 微信小程序登录
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WechatLoginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/auth/phone/bind:
+    post:
+      tags:
+      - Auth
+      summary: 绑定手机号
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneBindRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/auth/token/refresh:
+    post:
+      tags:
+      - Auth
+      summary: 刷新 JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/auth/logout:
+    post:
+      tags:
+      - Auth
+      summary: 退出登录
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children:
+    get:
+      tags:
+      - Children
+      summary: 获取孩子列表
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    post:
+      tags:
+      - Children
+      summary: 新增孩子
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChildRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}:
+    get:
+      tags:
+      - Children
+      summary: 获取孩子详情
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    put:
+      tags:
+      - Children
+      summary: 更新孩子资料
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChildRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    delete:
+      tags:
+      - Children
+      summary: 解绑孩子
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/device:
+    get:
+      tags:
+      - Device
+      summary: 获取已绑定设备
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    put:
+      tags:
+      - Device
+      summary: 修改设备名称
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeviceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    delete:
+      tags:
+      - Device
+      summary: 解绑设备
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/device/bind:
+    post:
+      tags:
+      - Device
+      summary: 绑定新设备
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindDeviceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '409':
+          description: Device already bound
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /v1/api/parent/children/{child_id}/learning/config:
+    get:
+      tags:
+      - Learning Config
+      summary: 获取当前学习配置
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    put:
+      tags:
+      - Learning Config
+      summary: 更新学习配置
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLearningConfigRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/learning/config/audit:
+    get:
+      tags:
+      - Learning Config
+      summary: 获取配置变更历史
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: module
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Module'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/learning/goal:
+    get:
+      tags:
+      - Learning Goal
+      summary: 获取每日学习目标
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    put:
+      tags:
+      - Learning Goal
+      summary: 更新每日学习目标
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLearningGoalRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/dashboard/today:
+    get:
+      tags:
+      - Dashboard
+      summary: 今日学习大盘
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/today-tasks:
+    get:
+      tags:
+      - Dashboard
+      summary: 获取今日任务列表
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/today-tasks/{task_id}:
+    get:
+      tags:
+      - Dashboard
+      summary: 获取任务详情
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/dispatched-tasks:
+    get:
+      tags:
+      - Dispatched Tasks
+      summary: 获取今日已派发任务
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    post:
+      tags:
+      - Dispatched Tasks
+      summary: 家长派发任务
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchTasksRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/behavior/focus:
+    get:
+      tags:
+      - Behavior
+      summary: 专注度数据
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          default: week
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/behavior/posture:
+    get:
+      tags:
+      - Behavior
+      summary: 坐姿数据
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          default: week
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/behavior/location:
+    get:
+      tags:
+      - Behavior
+      summary: 位置区域数据
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          default: week
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/behavior/insights:
+    get:
+      tags:
+      - Behavior
+      summary: 行为洞察
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          default: week
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/usage:
+    get:
+      tags:
+      - Usage
+      summary: 使用时长序列
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: granularity
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          default: day
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/usage/modules:
+    get:
+      tags:
+      - Usage
+      summary: 模块使用时长分布
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/learning/progress:
+    get:
+      tags:
+      - Reports
+      summary: 学习进度总览
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/learning/sessions:
+    get:
+      tags:
+      - Reports
+      summary: 学习会话列表
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: module
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Module'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - active
+          - completed
+          - expired
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/learning/sessions/{session_id}:
+    get:
+      tags:
+      - Reports
+      summary: 会话详情
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/learning/wrong-answers:
+    get:
+      tags:
+      - Reports
+      summary: 错题本
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: module
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Module'
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/reports/weekly:
+    get:
+      tags:
+      - Reports
+      summary: 周报列表
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/reports/weekly/{week_key}:
+    get:
+      tags:
+      - Reports
+      summary: 周报详情
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: week_key
+        in: path
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/messages:
+    get:
+      tags:
+      - Parent Messages
+      summary: 获取消息历史
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    post:
+      tags:
+      - Parent Messages
+      summary: 发送家长消息
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendParentMessageRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/messages/{message_id}:
+    delete:
+      tags:
+      - Parent Messages
+      summary: 删除消息
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: message_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/navigations:
+    post:
+      tags:
+      - Remote Control
+      summary: 创建远程跳转指令
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNavigationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/online-status:
+    get:
+      tags:
+      - Remote Control
+      summary: 获取设备在线状态
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/children/{child_id}/notification-settings:
+    get:
+      tags:
+      - Notification Settings
+      summary: 获取通知设置
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+    put:
+      tags:
+      - Notification Settings
+      summary: 更新通知设置
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNotificationSettingsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/notifications:
+    get:
+      tags:
+      - Notifications
+      summary: 通知中心列表
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - all
+          - unread
+          - behavior
+          - learning
+          - device
+          - system
+          default: all
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/notifications/{notification_id}/read:
+    put:
+      tags:
+      - Notifications
+      summary: 标记通知已读
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: notification_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/files/uploads:
+    post:
+      tags:
+      - Files
+      summary: 初始化文件上传
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadInitRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/files/uploads/{upload_id}/complete:
+    post:
+      tags:
+      - Files
+      summary: 确认文件上传完成
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: upload_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadCompleteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /v1/api/parent/files/{file_id}/access:
+    get:
+      tags:
+      - Files
+      summary: 获取私有文件访问地址
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApiEnvelope:
+      type: object
+      required:
+      - code
+      - msg
+      - data
+      properties:
+        code:
+          type: integer
+          example: 0
+        msg:
+          type: string
+          example: ok
+        data:
+          nullable: true
+          description: 具体接口正文
+    ErrorEnvelope:
+      type: object
+      required:
+      - code
+      - msg
+      - data
+      properties:
+        code:
+          type: integer
+          example: 42004
+        msg:
+          type: string
+          example: device_already_bound
+        data:
+          nullable: true
+          type: object
+    WechatLoginRequest:
+      type: object
+      required:
+      - wx_code
+      - app_id
+      properties:
+        wx_code:
+          type: string
+        app_id:
+          type: string
+        invite_code:
+          type: string
+          nullable: true
+    PhoneBindRequest:
+      type: object
+      required:
+      - wx_bind_token
+      properties:
+        wx_bind_token:
+          type: string
+        encrypted_data:
+          type: string
+          nullable: true
+        iv:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        verify_code:
+          type: string
+          nullable: true
+    RefreshTokenRequest:
+      type: object
+      required:
+      - refresh_token
+      properties:
+        refresh_token:
+          type: string
+    ParentInfo:
+      type: object
+      properties:
+        parent_id:
+          type: string
+        phone_masked:
+          type: string
+        nickname:
+          type: string
+        avatar_url:
+          type: string
+          nullable: true
+    FamilyInfo:
+      type: object
+      properties:
+        family_id:
+          type: string
+        name:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildSummary'
+    ChildSummary:
+      type: object
+      properties:
+        child_id:
+          type: string
+        nickname:
+          type: string
+        avatar_url:
+          type: string
+          nullable: true
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        gender:
+          type: string
+          enum:
+          - boy
+          - girl
+          - unknown
+          nullable: true
+        family_id:
+          type: string
+        family_name:
+          type: string
+        is_default:
+          type: boolean
+    CreateChildRequest:
+      type: object
+      required:
+      - nickname
+      - family_id
+      properties:
+        nickname:
+          type: string
+        avatar_url:
+          type: string
+          nullable: true
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        gender:
+          type: string
+          enum:
+          - boy
+          - girl
+          - unknown
+          nullable: true
+        family_id:
+          type: string
+    UpdateChildRequest:
+      type: object
+      required:
+      - nickname
+      properties:
+        nickname:
+          type: string
+        avatar_url:
+          type: string
+          nullable: true
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        gender:
+          type: string
+          enum:
+          - boy
+          - girl
+          - unknown
+          nullable: true
+    DeviceType:
+      type: string
+      enum:
+      - car
+      - robot
+    DeviceInfo:
+      type: object
+      properties:
+        device_id:
+          type: string
+        device_name:
+          type: string
+        device_type:
+          $ref: '#/components/schemas/DeviceType'
+        platform:
+          type: string
+        app_version:
+          type: string
+        online:
+          type: boolean
+        last_online_at:
+          type: string
+          format: date-time
+          nullable: true
+        bound_at:
+          type: string
+          format: date-time
+        bind_status:
+          type: string
+          enum:
+          - active
+          - inactive
+          - revoked
+        battery_level:
+          type: integer
+          nullable: true
+          description: 电量百分比 0-100
+        signal_strength:
+          type: integer
+          nullable: true
+          description: 信号强度，设备定义
+        connection_type:
+          type: string
+          nullable: true
+          description: wifi / 4g / 5g / bluetooth
+        current_zone:
+          type: string
+          nullable: true
+    UpdateDeviceRequest:
+      type: object
+      required:
+      - device_name
+      properties:
+        device_name:
+          type: string
+    BindMethod:
+      type: string
+      enum:
+      - device_code
+      - phone_auto
+      - scan_qr
+    BindDeviceRequest:
+      type: object
+      required:
+      - bind_method
+      properties:
+        bind_method:
+          $ref: '#/components/schemas/BindMethod'
+        device_code:
+          type: string
+          nullable: true
+        device_id:
+          type: string
+          nullable: true
+        device_name:
+          type: string
+          nullable: true
+    Module:
+      type: string
+      enum:
+      - science
+      - math
+      - english
+      - poems
+      - music
+      - quiz
+    ConfigSnapshot:
+      type: object
+      properties:
+        difficulty:
+          type: string
+          nullable: true
+        difficulty_label:
+          type: string
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        category_label:
+          type: string
+          nullable: true
+        batch_size:
+          type: integer
+        min_repeat_interval_seconds:
+          type: integer
+        config_version:
+          type: integer
+    LearningConfigModule:
+      type: object
+      properties:
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+        enabled:
+          type: boolean
+        effective_config:
+          $ref: '#/components/schemas/ConfigSnapshot'
+    UpdateLearningConfigModule:
+      type: object
+      required:
+      - module
+      properties:
+        module:
+          $ref: '#/components/schemas/Module'
+        enabled:
+          type: boolean
+        difficulty:
+          type: string
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        batch_size:
+          type: integer
+        min_repeat_interval_seconds:
+          type: integer
+    UpdateLearningConfigRequest:
+      type: object
+      required:
+      - modules
+      properties:
+        modules:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateLearningConfigModule'
+    LearningGoalModule:
+      type: object
+      properties:
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+        goal_minutes:
+          type: integer
+    UpdateLearningGoalRequest:
+      type: object
+      required:
+      - daily_goal_minutes
+      - modules
+      properties:
+        daily_goal_minutes:
+          type: integer
+        modules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LearningGoalModule'
+    TaskCategory:
+      type: string
+      enum:
+      - learning
+      - lifestyle
+      - sports
+      - custom
+    TaskProgress:
+      type: object
+      properties:
+        completed_count:
+          type: integer
+        total_count:
+          type: integer
+        accuracy:
+          type: number
+          nullable: true
+        correct_count:
+          type: integer
+          nullable: true
+        wrong_count:
+          type: integer
+          nullable: true
+        is_final:
+          type: boolean
+          nullable: true
+    TodayTask:
+      type: object
+      properties:
+        task_id:
+          type: string
+        task_category:
+          $ref: '#/components/schemas/TaskCategory'
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+          - assigned
+          - claimed
+          - in_progress
+          - completed
+          - expired
+        title:
+          type: string
+        progress:
+          $ref: '#/components/schemas/TaskProgress'
+        expires_at:
+          type: string
+          format: date-time
+    DispatchTaskItem:
+      type: object
+      required:
+      - task_category
+      - title
+      properties:
+        task_category:
+          $ref: '#/components/schemas/TaskCategory'
+        module:
+          $ref: '#/components/schemas/Module'
+        title:
+          type: string
+    DispatchTasksRequest:
+      type: object
+      required:
+      - tasks
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/DispatchTaskItem'
+    BehaviorStat:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: integer
+        unit:
+          type: string
+          nullable: true
+    DailyScorePoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        score:
+          type: integer
+    FocusBehavior:
+      type: object
+      properties:
+        period:
+          type: string
+        score:
+          type: integer
+        change_percent:
+          type: integer
+        stats:
+          type: array
+          items:
+            $ref: '#/components/schemas/BehaviorStat'
+        daily_series:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyScorePoint'
+    PostureDistribution:
+      type: object
+      properties:
+        label:
+          type: string
+        percent:
+          type: integer
+    WeeklyScorePoint:
+      type: object
+      properties:
+        week_key:
+          type: string
+          format: date
+        score:
+          type: integer
+    PostureBehavior:
+      type: object
+      properties:
+        period:
+          type: string
+        score:
+          type: integer
+        change_percent:
+          type: integer
+        reminder_count:
+          type: integer
+        distribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostureDistribution'
+        weekly_series:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeeklyScorePoint'
+    ZoneDistribution:
+      type: object
+      properties:
+        zone:
+          type: string
+        percent:
+          type: integer
+    LocationBehavior:
+      type: object
+      properties:
+        period:
+          type: string
+        active_zones_count:
+          type: integer
+        distribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZoneDistribution'
+        anomaly_detected:
+          type: boolean
+    BehaviorInsightTag:
+      type: object
+      properties:
+        text:
+          type: string
+        cls:
+          type: string
+    BehaviorInsight:
+      type: object
+      properties:
+        insight_id:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/BehaviorInsightTag'
+        occurred_at:
+          type: string
+          format: date-time
+    UsagePoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        total_minutes:
+          type: integer
+    UsageResponse:
+      type: object
+      properties:
+        granularity:
+          type: string
+        daily_goal_minutes:
+          type: integer
+        series:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsagePoint'
+    ModuleUsage:
+      type: object
+      properties:
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+        minutes:
+          type: integer
+        percent:
+          type: integer
+    ModuleUsageResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        total_minutes:
+          type: integer
+        modules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModuleUsage'
+    SessionSummary:
+      type: object
+      properties:
+        completed_count:
+          type: integer
+        total_count:
+          type: integer
+        accuracy:
+          type: number
+          nullable: true
+        correct_count:
+          type: integer
+          nullable: true
+        wrong_count:
+          type: integer
+          nullable: true
+        total_active_duration_ms:
+          type: integer
+    LearningSession:
+      type: object
+      properties:
+        session_id:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+        source:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - completed
+          - expired
+        created_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        summary:
+          $ref: '#/components/schemas/SessionSummary'
+    WrongAnswer:
+      type: object
+      properties:
+        wrong_answer_id:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+        question_snapshot:
+          $ref: '#/components/schemas/QuestionSnapshot'
+        selected_option_id:
+          type: string
+        first_wrong_at:
+          type: string
+          format: date-time
+        last_wrong_at:
+          type: string
+          format: date-time
+        wrong_count:
+          type: integer
+    QuestionSnapshot:
+      type: object
+      properties:
+        question_id:
+          type: string
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+        correct_option_id:
+          type: string
+    Option:
+      type: object
+      properties:
+        option_id:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          - D
+        text:
+          type: string
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+    PaginatedLearningSessions:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LearningSession'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    PaginatedWrongAnswers:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/WrongAnswer'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    WeeklyReportSummary:
+      type: object
+      properties:
+        focus_score:
+          type: integer
+        focus_change_percent:
+          type: integer
+        posture_score:
+          type: integer
+        posture_change_percent:
+          type: integer
+        anomaly_count:
+          type: integer
+        discovery_count:
+          type: integer
+    WeeklyReportLearningSummary:
+      type: object
+      properties:
+        total_active_duration_minutes:
+          type: integer
+        completed_tasks:
+          type: integer
+        total_tasks:
+          type: integer
+        average_accuracy:
+          type: number
+        modules_touched:
+          type: array
+          items:
+            $ref: '#/components/schemas/Module'
+    AnomalyItem:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/BehaviorInsightTag'
+    DiscoveryItem:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+    WeeklyReport:
+      type: object
+      properties:
+        week_key:
+          type: string
+        label:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        learning_summary:
+          $ref: '#/components/schemas/WeeklyReportLearningSummary'
+        behavior_summary:
+          $ref: '#/components/schemas/WeeklyReportSummary'
+        focus_daily_series:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyScorePoint'
+        posture_weekly_series:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeeklyScorePoint'
+        anomalies:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnomalyItem'
+        discoveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscoveryItem'
+        ai_summary:
+          type: string
+    ParentMessage:
+      type: object
+      properties:
+        message_id:
+          type: string
+        direction:
+          type: string
+          enum:
+          - parent_to_child
+          - child_to_parent
+        type:
+          type: string
+          enum:
+          - text
+          - image
+          - audio
+          - task_card
+        content:
+          $ref: '#/components/schemas/MessageContent'
+        created_at:
+          type: string
+          format: date-time
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParentMessageReply'
+    MessageContent:
+      type: object
+      properties:
+        text:
+          type: string
+          nullable: true
+        file_id:
+          type: string
+          nullable: true
+        playback_url:
+          type: string
+          nullable: true
+        duration_ms:
+          type: integer
+          nullable: true
+        task_id:
+          type: string
+          nullable: true
+        task_category:
+          $ref: '#/components/schemas/TaskCategory'
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+    ParentMessageReply:
+      type: object
+      properties:
+        reply_id:
+          type: string
+        type:
+          type: string
+          enum:
+          - preset_text
+          - voice
+        preset_code:
+          type: string
+          nullable: true
+        text:
+          type: string
+          nullable: true
+        file_id:
+          type: string
+          nullable: true
+        duration_ms:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+    SendParentMessageRequest:
+      type: object
+      required:
+      - type
+      - content
+      properties:
+        type:
+          type: string
+          enum:
+          - text
+          - image
+          - audio
+          - task_card
+        content:
+          $ref: '#/components/schemas/MessageContent'
+    PaginatedParentMessages:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParentMessage'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    CreateNavigationRequest:
+      type: object
+      required:
+      - destination
+      - route_key
+      properties:
+        destination:
+          type: string
+          enum:
+          - learning
+          - chat
+          - parent_messages
+        route_key:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        custom_batch_size:
+          type: integer
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        expires_in_seconds:
+          type: integer
+          nullable: true
+    NavigationResponse:
+      type: object
+      properties:
+        navigation_id:
+          type: string
+        destination:
+          type: string
+        route_key:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        custom_batch_size:
+          type: integer
+          nullable: true
+        title:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+    OnlineStatus:
+      type: object
+      properties:
+        online:
+          type: boolean
+        ws_connected:
+          type: boolean
+        last_seen_at:
+          type: string
+          format: date-time
+          nullable: true
+        current_zone:
+          type: string
+          nullable: true
+        current_route_key:
+          type: string
+          nullable: true
+        current_activity:
+          type: string
+          nullable: true
+    DndSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        start_time:
+          type: string
+        end_time:
+          type: string
+    NotificationSettings:
+      type: object
+      properties:
+        task_completed:
+          type: boolean
+        task_expired:
+          type: boolean
+        child_replied:
+          type: boolean
+        behavior_alert:
+          type: boolean
+        realtime_alert:
+          type: boolean
+        goal_achieved:
+          type: boolean
+        daily_summary:
+          type: boolean
+        weekly_report:
+          type: boolean
+        device_offline:
+          type: boolean
+        learning_milestone:
+          type: boolean
+    UpdateNotificationSettingsRequest:
+      type: object
+      required:
+      - settings
+      properties:
+        settings:
+          $ref: '#/components/schemas/NotificationSettings'
+        dnd:
+          $ref: '#/components/schemas/DndSettings'
+    Notification:
+      type: object
+      properties:
+        notification_id:
+          type: string
+        type:
+          type: string
+        icon:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        child_id:
+          type: string
+        child_nickname:
+          type: string
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    PaginatedNotifications:
+      type: object
+      properties:
+        unread_count:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    UploadInitRequest:
+      type: object
+      required:
+      - purpose
+      - file_name
+      - content_type
+      - size_bytes
+      - sha256
+      properties:
+        purpose:
+          type: string
+          enum:
+          - parent_message_image
+          - parent_message_audio
+          - parent_avatar
+          - child_avatar
+        file_name:
+          type: string
+        content_type:
+          type: string
+        size_bytes:
+          type: integer
+        sha256:
+          type: string
+    UploadCompleteRequest:
+      type: object
+      properties:
+        size_bytes:
+          type: integer
+        sha256:
+          type: string
+        etag:
+          type: string
+          nullable: true
+    FileAccessResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+        url:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+    ScienceDifficulty:
+      type: string
+      enum:
+      - beginner
+      - intermediate
+      - advanced
+    MathDifficulty:
+      type: string
+      enum:
+      - within_10_add_subtract
+      - within_10_multiply_divide
+      - two_digit_add_subtract
+      - two_digit_multiply_divide
+      - three_digit_four_operations
+      - mixed_four_operations
+    EnglishDifficulty:
+      type: string
+      enum:
+      - grade_3
+      - grade_4
+      - grade_5
+      - grade_6
+    PoemsDifficulty:
+      type: string
+      enum:
+      - enlightenment
+      - beginner
+      - intermediate
+      - advanced
+    MusicCategory:
+      type: string
+      enum:
+      - children_song
+      - popular_music
+      - classical_music
+      - classic_music
+      - patriotic_music
+      - mixed
+    QuizDifficulty:
+      type: string
+      enum:
+      - beginner
+      - intermediate
+      - advanced

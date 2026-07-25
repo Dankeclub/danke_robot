@@ -1,0 +1,91 @@
+<!-- 通知设置页 -->
+<view class="page-wrap">
+
+  <!-- 订阅引导卡片 -->
+  <view class="ns-sub-card ca">
+    <view class="ns-sub-card-inner">
+      <view class="ns-sub-title">开启微信通知</view>
+      <view class="ns-sub-desc">授权后可在微信服务通知中接收周报、行为异常提醒和设备状态变更通知</view>
+      <view class="ns-sub-btn" bind:tap="onSubscribe">前往订阅</view>
+    </view>
+  </view>
+
+  <!-- App 内通知 -->
+  <view class="ns-setting-card ca">
+    <view class="ns-setting-item">
+      <view class="ns-setting-icon amber">⚠</view>
+      <view class="ns-setting-body">
+        <view class="ns-stitle">行为异常提醒</view>
+        <view class="ns-sdesc">走神、姿态不良、离屏幕太近</view>
+      </view>
+      <switch checked="{{behaviorAlert}}" bind:change="onSwitchBehavior" color="#4F9A5F" />
+    </view>
+    <view class="ns-setting-item">
+      <view class="ns-setting-icon mint">★</view>
+      <view class="ns-setting-body">
+        <view class="ns-stitle">每日学习总结</view>
+        <view class="ns-sdesc">当天学习完成时推送</view>
+      </view>
+      <switch checked="{{dailySummary}}" bind:change="onSwitchDaily" color="#4F9A5F" />
+    </view>
+    <view class="ns-setting-item">
+      <view class="ns-setting-icon sky">📱</view>
+      <view class="ns-setting-body">
+        <view class="ns-stitle">设备状态变更</view>
+        <view class="ns-sdesc">设备离线、低电量时通知</view>
+      </view>
+      <switch checked="{{deviceStatus}}" bind:change="onSwitchDevice" color="#4F9A5F" />
+    </view>
+  </view>
+
+  <!-- 微信服务通知 -->
+  <view class="ns-setting-card ca">
+    <view class="ns-setting-item">
+      <view class="ns-setting-icon sky">📄</view>
+      <view class="ns-setting-body">
+        <view class="ns-stitle">周报生成通知</view>
+        <view class="ns-sdesc">每周一生成上周学习报告</view>
+      </view>
+      <switch checked="{{weeklyReport}}" bind:change="onSwitchWeekly" color="#4F9A5F" />
+    </view>
+    <view class="ns-setting-item">
+      <view class="ns-setting-icon amber">⚠</view>
+      <view class="ns-setting-body">
+        <view class="ns-stitle">行为异常实时提醒</view>
+        <view class="ns-sdesc">严重走神时立即推送</view>
+      </view>
+      <switch checked="{{realtimeAlert}}" bind:change="onSwitchRealtime" color="#4F9A5F" />
+    </view>
+    <view class="ns-setting-item">
+      <view class="ns-setting-icon rose">❤</view>
+      <view class="ns-setting-body">
+        <view class="ns-stitle">学习目标达成</view>
+        <view class="ns-sdesc">完成每日学习目标时通知</view>
+      </view>
+      <switch checked="{{goalAchieved}}" bind:change="onSwitchGoal" color="#4F9A5F" />
+    </view>
+  </view>
+
+  <!-- 免打扰时段 -->
+  <view class="ns-dnd-card ca">
+    <view class="ns-dnd-label">🔕 免打扰时段</view>
+    <view class="ns-dnd-row">
+      <text class="ns-dnd-label-text">从</text>
+      <view class="ns-time-chip" bind:tap="onPickDndStart">{{dndStart}}</view>
+      <text class="ns-dnd-label-text">至</text>
+      <view class="ns-time-chip" bind:tap="onPickDndEnd">{{dndEnd}}</view>
+    </view>
+  </view>
+
+  <!-- 提示 -->
+  <view class="illo-card ca" style="margin:0 var(--m) var(--g)">
+    <view class="illo-circle">
+      <danke-mascot size="sm" state="online" />
+    </view>
+    <view class="illo-body">
+      <view class="illo-title">通知已开启 5 项</view>
+      <view class="illo-sub">重要提醒一个都不会错过</view>
+    </view>
+  </view>
+
+</view>

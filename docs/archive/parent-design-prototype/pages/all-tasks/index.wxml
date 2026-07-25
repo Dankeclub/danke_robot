@@ -1,0 +1,19 @@
+<view class="page">
+  <nav-bar title="全部任务" />
+
+  <scroll-view scroll-y class="content" show-scrollbar="{{false}}">
+    <view class="task-card">
+      <view class="task-row" wx:for="{{tasks}}" wx:key="id">
+        <view class="task-left">
+          <text class="task-name">{{item.name}}</text>
+          <text class="task-desc">{{item.desc}}</text>
+        </view>
+        <view class="task-badge {{item.status}}">
+          <text class="badge-text">{{statusMap[item.status]}}</text>
+        </view>
+      </view>
+      <view class="row-divider" wx:if="{{index < tasks.length - 1}}"></view>
+    </view>
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

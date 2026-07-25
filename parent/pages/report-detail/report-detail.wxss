@@ -1,0 +1,375 @@
+/* ===== 行为挖掘报告详情 ===== */
+
+/* 眉页 */
+.rd-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx var(--m) 16rpx;
+  position: relative;
+}
+.rd-eyebrow-text {
+  font-size: var(--t5);
+  font-weight: 500;
+  color: var(--pa2);
+}
+.rd-eyebrow-share {
+  position: absolute;
+  right: var(--m);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.rd-eyebrow-share-icon {
+  width: 34rpx;
+  height: 34rpx;
+}
+
+/* 三大指标卡片 */
+.rd-m-row {
+  display: flex;
+  gap: 16rpx;
+  margin: 0 var(--m) var(--g);
+  box-sizing: border-box;
+}
+.rd-m-card {
+  flex: 1;
+  min-width: 0;
+  border-radius: 48rpx;
+  padding: 36rpx 20rpx 28rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.rd-m-card::after {
+  content: '';
+  position: absolute;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  bottom: -16rpx;
+  right: -16rpx;
+  background: rgba(255,255,255,0.3);
+}
+.rd-m-card:nth-child(1) { background: #e8ecf8; }
+.rd-m-card:nth-child(2) { background: var(--pg); }
+.rd-m-card:nth-child(3) { background: var(--pp); }
+
+.rd-m-label {
+  font-size: var(--t5);
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 1rpx;
+}
+.rd-m-card:nth-child(1) .rd-m-label { color: var(--pd); }
+.rd-m-card:nth-child(2) .rd-m-label { color: #4A7C59; }
+.rd-m-card:nth-child(3) .rd-m-label { color: #8B5A5E; }
+
+.rd-m-value {
+  font-size: 96rpx;
+  font-weight: 900;
+  color: #3D3D50;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  margin-top: 8rpx;
+}
+.rd-m-unit {
+  font-size: var(--t5);
+  font-weight: 600;
+  color: var(--pa2);
+  position: relative;
+  z-index: 1;
+  margin-top: 2rpx;
+}
+.rd-m-change {
+  font-size: var(--t6);
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  margin-top: 12rpx;
+  padding: 2rpx 14rpx;
+  border-radius: 16rpx;
+}
+
+.rd-m-change.down {
+  background: rgba(217,122,132,0.1);
+  color: #c97a80;
+}
+.rd-m-change.up {
+  background: rgba(79,154,95,0.1);
+  color: #4F9A5F;
+}
+.rd-m-change.stable {
+  background: rgba(151,151,156,0.08);
+  color: var(--pa2);
+}
+
+/* 分区标签 */
+.rd-sec {
+  margin: 0 var(--m) 16rpx;
+  font-size: var(--t5);
+  font-weight: 700;
+  color: var(--pd);
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  letter-spacing: 0.5rpx;
+}
+.rd-sec-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+/* 异常发现 — 单卡片 + amber 左色带 + 内部条目 */
+.rd-anom-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: 36rpx;
+  padding: 16rpx 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.02);
+  border-left: 6rpx solid var(--amber);
+  box-sizing: border-box;
+}
+.rd-anom-item {
+  display: flex;
+  gap: 22rpx;
+  align-items: flex-start;
+  padding: 22rpx 0;
+}
+.rd-anom-item + .rd-anom-item {
+  border-top: 1rpx solid rgba(0,0,0,0.06);
+}
+
+.rd-anom-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rd-anom-icon.focus   { background: rgba(119,140,205,0.12); }
+.rd-anom-icon.posture { background: rgba(217,122,132,0.1); }
+.rd-anom-icon-img {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.rd-anom-body {
+  flex: 1;
+  min-width: 0;
+}
+.rd-a-title {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+  margin-bottom: 8rpx;
+  line-height: 1.6;
+}
+.rd-a-desc {
+  font-size: var(--t6);
+  color: var(--pa1);
+  font-weight: 500;
+  line-height: 1.75;
+}
+.rd-tags {
+  display: flex;
+  gap: 8rpx;
+  margin-top: 18rpx;
+  flex-wrap: wrap;
+}
+.rd-tag {
+  font-size: var(--t6);
+  padding: 4rpx 14rpx;
+  border-radius: 10rpx;
+  font-weight: 700;
+}
+
+.tf { background: rgba(119,140,205,0.1); color: var(--pd); }
+.tp { background: rgba(217,122,132,0.1); color: #c97a80; }
+.tt { background: rgba(240,168,85,0.1); color: #B45309; }
+
+/* 图表卡片 */
+.rd-chart-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: 40rpx;
+  padding: 32rpx 32rpx 24rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.03);
+  box-sizing: border-box;
+}
+.rd-chart-label {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+  margin-bottom: 4rpx;
+}
+.rd-chart-hint {
+  font-size: var(--t6);
+  color: var(--pa2);
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+.rd-chart-wrap {
+  width: 100%;
+  height: 320rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.rd-chart-wrap-sm {
+  height: 260rpx;
+}
+.rd-canvas {
+  width: 100%;
+  height: 100%;
+}
+.rd-chart-legend {
+  display: flex;
+  gap: 28rpx;
+  margin-top: 10rpx;
+  font-size: var(--t6);
+  font-weight: 600;
+  color: var(--pa2);
+  flex-wrap: wrap;
+}
+.rd-lgd-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.rd-swatch {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 6rpx;
+  flex-shrink: 0;
+}
+.rd-swatch-dash {
+  border: 3rpx dashed var(--amber);
+  background: transparent;
+  border-radius: 0;
+}
+
+/* 洞察发现卡片 */
+.rd-disc-list {
+  margin: 0 var(--m) var(--g);
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.rd-disc-card {
+  background: var(--white);
+  border-radius: 40rpx;
+  padding: 32rpx 32rpx 32rpx 0;
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.03);
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  box-sizing: border-box;
+}
+.rd-disc-num {
+  width: 76rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.rd-num-circle {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--t3);
+  font-weight: 900;
+  color: var(--white);
+}
+.rd-num-line {
+  width: 4rpx;
+  flex: 1;
+  min-height: 14rpx;
+  margin-top: 6rpx;
+  border-radius: 2rpx;
+  opacity: 0.2;
+}
+.rd-disc-body { flex: 1; min-width: 0; padding-top: 4rpx; }
+.rd-d-title {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+  margin-bottom: 6rpx;
+}
+.rd-d-desc {
+  font-size: var(--t5);
+  color: var(--pa2);
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+/* AI 综合分析 */
+.rd-ai-card {
+  margin: 0 var(--m) 44rpx;
+  background: var(--pd);
+  border-radius: 48rpx;
+  padding: 40rpx 36rpx 40rpx 44rpx;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 28rpx;
+  box-sizing: border-box;
+}
+.rd-ai-card::after {
+  content: '';
+  position: absolute;
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  top: -70rpx;
+  right: -36rpx;
+  background: rgba(255,255,255,0.04);
+}
+.rd-ai-mascot {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.rd-ai-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+}
+.rd-ai-label {
+  font-size: var(--t5);
+  font-weight: 700;
+  margin-bottom: 10rpx;
+  opacity: 0.7;
+}
+.rd-ai-text {
+  font-size: var(--t4);
+  line-height: 1.7;
+  font-weight: 500;
+  opacity: 0.93;
+}

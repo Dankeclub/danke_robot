@@ -1,0 +1,42 @@
+<!-- 通知列表页 -->
+<view class="page-wrap">
+  <!-- 筛选栏 -->
+  <view class="notif-filter-row ca">
+    <view
+      wx:for="{{filters}}"
+      wx:key="*this"
+      class="notif-filter-chip {{activeFilter === item ? 'on' : ''}}"
+      bind:tap="onFilter"
+      data-filter="{{item}}"
+    >{{item}}</view>
+  </view>
+
+  <!-- 通知分组 -->
+  <block wx:for="{{groupedNotifs}}" wx:key="date">
+    <view class="notif-date-label">{{item.date}}</view>
+    <view class="notif-list">
+      <view
+        wx:for="{{item.items}}"
+        wx:key="id"
+        class="notif-item {{item.unread ? 'unread' : ''}} ca"
+        bind:tap="onTapNotif"
+        data-id="{{item.id}}"
+      >
+        <view class="notif-icon {{item.type}}">{{item.icon}}</view>
+        <view class="notif-body">
+          <view class="notif-ntitle">{{item.title}}</view>
+          <view class="notif-ndesc">{{item.desc}}</view>
+          <view class="notif-ntime">{{item.time}}</view>
+        </view>
+        <view wx:if="{{item.unread}}" class="notif-dot"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view wx:if="{{groupedNotifs.length === 0}}" class="notif-empty">
+    <view class="notif-e-icon">🔔</view>
+    <view class="notif-e-title">暂无通知</view>
+    <view class="notif-e-desc">当有新的行为提醒或学习报告时，会在这里显示</view>
+  </view>
+</view>

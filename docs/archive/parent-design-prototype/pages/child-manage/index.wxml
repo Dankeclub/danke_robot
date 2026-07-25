@@ -1,0 +1,71 @@
+<view class="page">
+  <nav-bar title="孩子管理" />
+
+  <scroll-view scroll-y class="content" show-scrollbar="{{false}}">
+    <view class="avatar-area" bindtap="onAvatarTap">
+      <view class="avatar-circle">
+        <image src="/assets/icons/user-white.svg" class="avatar-img" />
+      </view>
+      <view class="camera-badge">
+        <image src="/assets/icons/camera.svg" class="camera-icon" />
+      </view>
+    </view>
+
+    <view class="form-card">
+      <view class="field-row">
+        <view class="field-left">
+          <image src="/assets/icons/user.svg" class="field-icon" />
+          <view class="field-text">
+            <text class="field-label">孩子昵称</text>
+            <input class="field-inline-input" value="{{formData.childName}}" bindinput="onInput" data-field="childName" />
+          </view>
+        </view>
+      </view>
+      <view class="field-divider"></view>
+
+      <picker mode="selector" range="{{ages}}" bindchange="onAgeChange">
+        <view class="field-row">
+          <view class="field-left">
+            <image src="/assets/icons/clock.svg" class="field-icon" />
+            <view class="field-text">
+              <text class="field-label">年龄</text>
+              <text class="field-value">{{formData.childAge}}</text>
+            </view>
+          </view>
+          <image src="/assets/icons/chevron-right.svg" class="field-arrow" />
+        </view>
+      </picker>
+      <view class="field-divider"></view>
+
+      <picker mode="selector" range="{{grades}}" bindchange="onGradeChange">
+        <view class="field-row">
+          <view class="field-left">
+            <image src="/assets/icons/book.svg" class="field-icon" />
+            <view class="field-text">
+              <text class="field-label">年级</text>
+              <text class="field-value">{{formData.childGrade}}</text>
+            </view>
+          </view>
+          <image src="/assets/icons/chevron-right.svg" class="field-arrow" />
+        </view>
+      </picker>
+      <view class="field-divider"></view>
+
+      <view class="field-row">
+        <view class="field-left">
+          <image src="/assets/icons/info.svg" class="field-icon" />
+          <view class="field-text">
+            <text class="field-label">家长称呼</text>
+            <input class="field-inline-input" value="{{formData.parentName}}" bindinput="onInput" data-field="parentName" />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="save-btn" bindtap="onSave">
+      <text class="save-text">保存修改</text>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

@@ -1,0 +1,25 @@
+"""集中阈值/帧率/模型路径。所有调参在此一处完成。"""
+
+WINDOW_SEC = 30
+VOTE_RATIO_MIN = 0.6
+AVG_CONFIDENCE_MIN = 0.65
+SWITCH_AGREE_WINDOWS = 2
+
+HEAD_PITCH_READING = (15.0, 45.0)
+GAZE_VAR_LOCKED = 0.05
+HAND_MOTION_HZ_GAMING = 2.0
+HAND_MOTION_HZ_READING = 1.5
+HAND_MOTION_HZ_TV = 0.5
+TORSO_LEAN_FORWARD = 5.0
+AWAY_MISSING_FRAMES = 5
+
+INFER_FPS = 2
+
+YOLO_MODEL = "yolov8n.pt"
+YOLO_CLASSES = ["book", "tv", "laptop", "cell phone"]
+YOLO_CONFIDENCE = 0.35
+
+RTSP_RECONNECT_SEC = 3
+RTSP_MAX_CONSEC_FAIL = 30
+
+LABELS = ("reading", "gaming", "watching_tv", "uncertain", "away")

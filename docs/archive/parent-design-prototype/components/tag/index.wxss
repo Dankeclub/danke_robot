@@ -1,0 +1,21 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 24rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-tag-blue-bg);
+}
+
+.tag.green { background-color: var(--color-tag-green-bg); }
+.tag.warning { background-color: var(--color-tag-warning-bg); }
+.tag.danger { background-color: var(--color-tag-danger-bg); }
+
+.tag-text {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.tag.green .tag-text { color: #5B8C00; }
+.tag.warning .tag-text { color: #D48806; }
+.tag.danger .tag-text { color: var(--color-danger); }

@@ -1,0 +1,78 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: 16rpx 32rpx 0 32rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding-bottom: 24rpx;
+  display: block;
+}
+
+.log-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+  padding: 8rpx 0;
+}
+
+.log-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 28rpx 32rpx;
+}
+
+.log-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6rpx;
+}
+
+.log-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.log-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.log-subtitle {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+}
+
+.log-time {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.log-divider {
+  position: absolute;
+  bottom: 0;
+  left: 32rpx;
+  right: 32rpx;
+  height: 2rpx;
+  background-color: var(--color-divider);
+}

@@ -1,0 +1,151 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: 48rpx 32rpx 0 32rpx;
+}
+
+/* Illustration */
+.illust-area {
+  position: relative;
+  height: 300rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.wifi-circle {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 40rpx rgba(49,106,253,0.25);
+  position: relative;
+  z-index: 2;
+}
+
+.wifi-icon {
+  width: 80rpx;
+  height: 80rpx;
+  filter: brightness(0) invert(1);
+}
+
+.floor-shadow {
+  position: absolute;
+  bottom: 60rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background-color: var(--color-tag-blue-bg);
+}
+
+.dot {
+  position: absolute;
+  border-radius: 50%;
+}
+.dot-1 { width: 12rpx; height: 12rpx; background: var(--color-light-blue); top: 40rpx; right: 72rpx; }
+.dot-2 { width: 8rpx; height: 8rpx; background: var(--color-secondary); top: 20rpx; right: 48rpx; }
+.dot-3 { width: 10rpx; height: 10rpx; background: var(--color-primary); top: 12rpx; right: 70rpx; }
+.dot-4 { width: 6rpx; height: 6rpx; background: var(--color-light-blue); bottom: 50rpx; left: 55rpx; }
+
+/* Steps Card */
+.steps-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.04);
+  padding: 8rpx 0;
+  margin-bottom: 40rpx;
+}
+
+.step-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 28rpx 32rpx;
+}
+
+.step-num {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-num-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.step-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.step-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.step-desc {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.step-divider {
+  height: 2rpx;
+  background-color: var(--color-divider);
+  margin: 0 32rpx;
+}
+
+/* Pair Button */
+.pair-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  box-shadow: 0 8rpx 32rpx rgba(49,106,253,0.2);
+  margin-bottom: 24rpx;
+}
+
+.pair-btn-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+/* Help Link */
+.help-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-text {
+  font-size: 24rpx;
+  color: var(--color-light-blue);
+}

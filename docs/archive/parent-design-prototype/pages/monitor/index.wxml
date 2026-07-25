@@ -1,0 +1,127 @@
+<view class="page">
+  <!-- Video Section (Dark, fills available space) -->
+  <view class="video-section" style="padding-top: {{statusBarHeight}}px;">
+    <!-- Robot Status Bar (top-left) -->
+    <view class="robot-status-bar">
+      <view class="status-dot"></view>
+      <text class="status-text">蛋仔在线</text>
+      <text class="battery-text">🔋 {{batteryLevel}}%</text>
+    </view>
+
+    <!-- Top Actions (top-right) -->
+    <view class="top-actions">
+      <view class="circle-btn" bindtap="onScreenshot">
+        <image src="/assets/icons/camera.svg" class="action-icon" />
+      </view>
+      <view class="circle-btn" bindtap="onFullscreen">
+        <image src="/assets/icons/maximize.svg" class="action-icon" />
+      </view>
+    </view>
+
+    <!-- Video Placeholder (center) -->
+    <view class="video-center">
+      <image src="/assets/icons/video-active.svg" class="video-play-icon" />
+      <text class="video-placeholder-text">实时视频画面</text>
+    </view>
+  </view>
+
+  <!-- Control Panel (light bottom) -->
+  <view class="control-panel">
+    <view class="control-row">
+      <!-- Task Button -->
+      <view class="action-stack" bindtap="onSendTask">
+        <view class="action-circle primary">
+          <image src="/assets/icons/qi-send.svg" class="circle-icon" />
+        </view>
+        <text class="action-stack-label">派任务</text>
+      </view>
+
+      <!-- Joystick -->
+      <view class="joystick-control"
+        catchtouchstart="onJoystickStart"
+        catchtouchmove="onJoystickMove"
+        catchtouchend="onJoystickEnd"
+        catchtouchcancel="onJoystickEnd">
+        <view class="joystick-bg">
+          <view class="joy-arrow top {{joyDir === 'up' ? 'active' : ''}}">▲</view>
+          <view class="joy-arrow right {{joyDir === 'right' ? 'active' : ''}}">▶</view>
+          <view class="joy-arrow bottom {{joyDir === 'down' ? 'active' : ''}}">▼</view>
+          <view class="joy-arrow left {{joyDir === 'left' ? 'active' : ''}}">◀</view>
+          <view class="joystick-thumb" style="left: {{joyLeft}}rpx; top: {{joyTop}}rpx;"></view>
+        </view>
+      </view>
+
+      <!-- Voice Button -->
+      <view class="action-stack" bindtap="onVoice">
+        <view class="action-circle secondary">
+          <image src="/assets/icons/mic.svg" class="circle-icon" />
+        </view>
+        <text class="action-stack-label">语音</text>
+      </view>
+    </view>
+
+    <!-- Message Input -->
+    <view class="msg-input-bar">
+      <input class="msg-input" placeholder="输入消息给蛋仔..." placeholder-class="msg-placeholder" value="{{message}}" bindinput="onInputMessage" confirm-type="send" bindconfirm="onSendMessage" />
+      <view class="send-btn" bindtap="onSendMessage">
+        <image src="/assets/icons/send.svg" class="send-icon" />
+      </view>
+    </view>
+  </view>
+
+  <!-- Task Sheet Overlay -->
+  <view class="sheet-overlay" wx:if="{{showTaskSheet}}" bindtap="onSheetClose">
+    <view class="sheet-panel" catchtap="preventBubble">
+      <view class="sheet-handle">
+        <view class="handle-bar"></view>
+      </view>
+      <view class="sheet-header">
+        <text class="sheet-title">派任务</text>
+        <view class="sheet-close" bindtap="onSheetClose">
+          <image src="/assets/icons/chevron-left.svg" class="close-icon" />
+        </view>
+      </view>
+      <view class="sheet-tabs">
+        <view class="sheet-tab {{sheetTab === 'study' ? 'active' : ''}}" bindtap="onSheetTab" data-tab="study">
+          <text class="sheet-tab-text {{sheetTab === 'study' ? 'active' : ''}}">学习任务</text>
+          <view class="sheet-tab-bar" wx:if="{{sheetTab === 'study'}}"></view>
+        </view>
+        <view class="sheet-tab {{sheetTab === 'life' ? 'active' : ''}}" bindtap="onSheetTab" data-tab="life">
+          <text class="sheet-tab-text {{sheetTab === 'life' ? 'active' : ''}}">生活任务</text>
+          <view class="sheet-tab-bar" wx:if="{{sheetTab === 'life'}}"></view>
+        </view>
+        <view class="sheet-tab {{sheetTab === 'parent' ? 'active' : ''}}" bindtap="onSheetTab" data-tab="parent">
+          <text class="sheet-tab-text {{sheetTab === 'parent' ? 'active' : ''}}">亲子任务</text>
+          <view class="sheet-tab-bar" wx:if="{{sheetTab === 'parent'}}"></view>
+        </view>
+      </view>
+      <scroll-view scroll-y class="sheet-body" enhanced show-scrollbar="{{false}}">
+        <view class="sheet-task {{item.checked ? 'checked' : ''}}" wx:for="{{sheetTasks}}" wx:key="id" bindtap="onSheetToggle" data-id="{{item.id}}">
+          <view class="sheet-check {{item.checked ? 'checked' : ''}}">
+            <text wx:if="{{item.checked}}" class="sheet-check-mark">✓</text>
+          </view>
+          <view class="sheet-task-text">
+            <text class="sheet-task-name">{{item.name}}</text>
+            <text class="sheet-task-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="sheet-footer">
+        <view class="sheet-send-btn" bindtap="onSheetSend">
+          <image src="/assets/icons/send.svg" class="sheet-send-icon" />
+          <text class="sheet-send-text">发送任务</text>
+        </view>
+      </view>
+    </view>
+    <view class="sheet-toast" wx:if="{{showSheetToast}}">
+      <view class="sheet-toast-row">
+        <view class="sheet-toast-icon">
+          <image src="/assets/icons/check-circle.svg" class="sheet-toast-check" />
+        </view>
+        <text class="sheet-toast-title">任务已发送</text>
+      </view>
+      <text class="sheet-toast-sub">任务已发送到蛋仔机器人</text>
+      <view class="sheet-toast-bar"></view>
+    </view>
+  </view>
+</view>

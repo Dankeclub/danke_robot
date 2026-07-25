@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130">
+  <path d="M50 7C82 7 96 30 96 68C96 94 88 112 76 121C66 127 54 128 50 128C46 128 34 127 24 121C12 112 4 94 4 68C4 30 18 7 50 7Z" fill="#F0EFEC" stroke="#2D2D2D" stroke-width="3.2" opacity=".45"/>
+  <path d="M27 120Q50 131 73 120" fill="none" stroke="#2D2D2D" stroke-width="1.6" stroke-linecap="round" opacity=".15"/>
+  <path d="M41 17Q46 28 43 37" fill="none" stroke="#2D2D2D" stroke-width="2" stroke-linecap="round" opacity=".15"/>
+  <path d="M60 15Q64 26 59 33" fill="none" stroke="#2D2D2D" stroke-width="2" stroke-linecap="round" opacity=".15"/>
+  <path d="M24 68Q28 60 34 63Q40 54 47 61Q50 50 53 61Q60 54 66 63Q72 60 76 68C79 87 73 104 50 104C27 104 21 87 24 68Z" fill="#FADA5E" stroke="#2D2D2D" stroke-width="2.8" opacity=".45"/>
+  <line x1="16" y1="84" x2="25" y2="84" stroke="#2D2D2D" stroke-width="2" stroke-linecap="round" opacity=".15"/>
+  <line x1="14" y1="90" x2="23" y2="90" stroke="#2D2D2D" stroke-width="2" stroke-linecap="round" opacity=".15"/>
+  <line x1="84" y1="84" x2="75" y2="84" stroke="#2D2D2D" stroke-width="2" stroke-linecap="round" opacity=".15"/>
+  <line x1="86" y1="90" x2="77" y2="90" stroke="#2D2D2D" stroke-width="2" stroke-linecap="round" opacity=".15"/>
+  <ellipse cx="33" cy="86" rx="6.5" ry="4.5" fill="#FFB5A0" opacity=".25"/>
+  <ellipse cx="67" cy="86" rx="6.5" ry="4.5" fill="#FFB5A0" opacity=".25"/>
+  <!-- 闭眼 -->
+  <path d="M33 78Q38 82 43 78" stroke="#2D2D2D" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".6"/>
+  <path d="M57 78Q62 82 67 78" stroke="#2D2D2D" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".6"/>
+  <path d="M46 95Q50 93 54 95" stroke="#2D2D2D" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".6"/>
+</svg>

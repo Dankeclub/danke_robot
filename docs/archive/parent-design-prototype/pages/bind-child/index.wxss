@@ -1,0 +1,138 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+}
+
+.content {
+  flex: 1;
+  padding: 48rpx 32rpx 0 32rpx;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32rpx;
+  margin-bottom: 48rpx;
+}
+
+.hero-avatar {
+  width: 144rpx;
+  height: 144rpx;
+  border-radius: 50%;
+  background-color: var(--color-tag-blue-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-img {
+  width: 72rpx;
+  height: 72rpx;
+}
+
+.hero-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Card */
+.card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.04);
+  margin-bottom: 48rpx;
+}
+
+.cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20rpx;
+  padding: 32rpx;
+}
+
+.cell-icon {
+  width: 36rpx;
+  height: 36rpx;
+  flex-shrink: 0;
+}
+
+.cell-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.cell-label {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+}
+
+.cell-input {
+  font-size: 30rpx;
+  color: var(--color-text-primary);
+  height: 44rpx;
+  line-height: 44rpx;
+}
+
+.cell-placeholder {
+  font-size: 30rpx;
+  color: var(--color-disabled);
+}
+
+.cell-value {
+  font-size: 30rpx;
+  color: var(--color-text-primary);
+}
+
+.cell-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+.cell-divider {
+  height: 1rpx;
+  background-color: var(--color-divider);
+  margin-left: 88rpx;
+}
+
+/* Primary Button */
+.primary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  box-shadow: 0 8rpx 32rpx rgba(49,106,253,0.2);
+}
+
+.primary-btn-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+/* Skip */
+.skip-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28rpx;
+}
+
+.skip-text {
+  font-size: 26rpx;
+  color: var(--color-light-blue);
+}

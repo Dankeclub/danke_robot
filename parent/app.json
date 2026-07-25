@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/bind/bind",
+    "pages/child-info/child-info",
+    "pages/home/home",
+    "pages/report/report",
+    "pages/monitor/monitor",
+    "pages/learning/learning",
+    "pages/profile/profile",
+    "pages/device/device",
+    "pages/behavior/behavior",
+    "pages/usage/usage",
+    "pages/goal/goal",
+    "pages/notifications/notifications",
+    "pages/notification-settings/notification-settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#f8f6f2",
+    "navigationBarTitleText": "蛋仔家长端",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8f6f2"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#B6C2CF",
+    "selectedColor": "#778ccd",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/report/report",
+        "text": "报告"
+      },
+      {
+        "pagePath": "pages/monitor/monitor",
+        "text": "看护"
+      },
+      {
+        "pagePath": "pages/learning/learning",
+        "text": "学习"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

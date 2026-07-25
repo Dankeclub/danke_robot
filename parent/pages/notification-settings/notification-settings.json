@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "通知设置",
+  "navigationBarBackgroundColor": "#dff6e6",
+  "usingComponents": {
+    "danke-mascot": "/components/danke-mascot/danke-mascot"
+  }
+}

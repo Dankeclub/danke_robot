@@ -1,0 +1,51 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: 8rpx 32rpx 0 32rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 0 0 24rpx 0;
+  display: block;
+}
+
+.faq-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+  padding: 8rpx 0;
+}
+
+.faq-row {
+  padding: 28rpx 32rpx;
+}
+
+.faq-q {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 8rpx;
+}
+
+.faq-a {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.faq-divider {
+  height: 2rpx;
+  background-color: var(--color-divider);
+  margin: 0 32rpx;
+}

@@ -1,0 +1,5 @@
+<view class="mw {{size}} {{state==='offline'?'off':''}}">
+  <text wx:if="{{state==='tired'||state==='offline'}}" class="mz">Z</text>
+  <text wx:if="{{state==='tired'||state==='offline'}}" class="mz mz2">z</text>
+  <image class="mi" src="/icons/danke-{{state}}.svg" mode="aspectFit"/>
+</view>

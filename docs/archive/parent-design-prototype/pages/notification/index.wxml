@@ -1,0 +1,47 @@
+<view class="page">
+  <nav-bar title="通知中心" rightIcon="check-circle" bind:righttap="onMarkAllRead" />
+
+  <scroll-view scroll-x class="tabs-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="tabs-row">
+      <view class="tab-item {{activeTab === 'all' ? 'active' : ''}}" bindtap="onTabChange" data-tab="all">
+        <text class="tab-text {{activeTab === 'all' ? 'active' : ''}}">全部</text>
+      </view>
+      <view class="tab-item {{activeTab === 'study' ? 'active' : ''}}" bindtap="onTabChange" data-tab="study">
+        <text class="tab-text {{activeTab === 'study' ? 'active' : ''}}">学习</text>
+      </view>
+      <view class="tab-item {{activeTab === 'behavior' ? 'active' : ''}}" bindtap="onTabChange" data-tab="behavior">
+        <text class="tab-text {{activeTab === 'behavior' ? 'active' : ''}}">行为</text>
+      </view>
+      <view class="tab-item {{activeTab === 'device' ? 'active' : ''}}" bindtap="onTabChange" data-tab="device">
+        <text class="tab-text {{activeTab === 'device' ? 'active' : ''}}">设备</text>
+      </view>
+      <view class="tab-item {{activeTab === 'task' ? 'active' : ''}}" bindtap="onTabChange" data-tab="task">
+        <text class="tab-text {{activeTab === 'task' ? 'active' : ''}}">任务</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <view class="day-section" wx:for="{{filteredNotifs}}" wx:key="date">
+      <text class="day-label">{{item.dateLabel}}</text>
+
+      <view class="notif-card" wx:for="{{item.notifs}}" wx:for-item="notif" wx:key="id">
+        <view class="notif-top">
+          <view class="notif-icon-wrap" style="background-color: {{notif.iconBg}};">
+            <image src="/assets/icons/{{notif.icon}}.svg" class="notif-icon" />
+          </view>
+          <view class="notif-text">
+            <view class="notif-title-row">
+              <text class="notif-title">{{notif.title}}</text>
+              <text class="notif-time">{{notif.time}}</text>
+            </view>
+            <text class="notif-desc">{{notif.desc}}</text>
+          </view>
+        </view>
+        <view class="unread-dot" wx:if="{{!notif.read}}"></view>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

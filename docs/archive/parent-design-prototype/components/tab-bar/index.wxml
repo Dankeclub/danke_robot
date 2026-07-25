@@ -1,0 +1,26 @@
+<view class="tab-bar">
+  <view class="tab-item {{active === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0" data-path="/pages/index/index">
+    <view class="tab-icon">
+      <image src="{{active === 0 ? '/assets/icons/home-active.svg' : '/assets/icons/home.svg'}}" class="icon-img" />
+    </view>
+    <text class="tab-label">首页</text>
+  </view>
+  <view class="tab-item {{active === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1" data-path="/pages/monitor/index">
+    <view class="tab-icon">
+      <image src="{{active === 1 ? '/assets/icons/video-active.svg' : '/assets/icons/video.svg'}}" class="icon-img" />
+    </view>
+    <text class="tab-label">看护</text>
+  </view>
+  <view class="tab-item {{active === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2" data-path="/pages/report/index">
+    <view class="tab-icon">
+      <image src="{{active === 2 ? '/assets/icons/chart-active.svg' : '/assets/icons/chart.svg'}}" class="icon-img" />
+    </view>
+    <text class="tab-label">报告</text>
+  </view>
+  <view class="tab-item {{active === 3 ? 'active' : ''}}" bindtap="switchTab" data-index="3" data-path="/pages/mine/index">
+    <view class="tab-icon">
+      <image src="{{active === 3 ? '/assets/icons/user-active.svg' : '/assets/icons/user.svg'}}" class="icon-img" />
+    </view>
+    <text class="tab-label">我的</text>
+  </view>
+</view>

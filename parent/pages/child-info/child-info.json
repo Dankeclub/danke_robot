@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "编辑孩子信息",
+  "navigationBarBackgroundColor": "#FDEDDD",
+  "usingComponents": {
+    "danke-mascot": "/components/danke-mascot/danke-mascot"
+  }
+}

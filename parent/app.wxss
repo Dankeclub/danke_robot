@@ -1,0 +1,45 @@
+/* 蛋仔家长端 · 全局设计令牌（页面级有效，组件用硬编码） */
+page {
+  --pl: #c1d6f1;
+  --pd: #778ccd;
+  --pg: #dff6e6;
+  --pp: #fed4d8;
+  --pa1: #B6C2CF;
+  --pa2: #97979C;
+  --pa3: #DBDDDA;
+  --bg: #f8f6f2;
+  --white: #fff;
+  --warm: #F7E6D4;
+  --amber: #F0A855;
+  --r: 56rpx;
+  --m: 44rpx;
+  --g: 28rpx;
+  --t1: 44rpx;
+  --t2: 34rpx;
+  --t3: 30rpx;
+  --t4: 26rpx;
+  --t5: 24rpx;
+  --t6: 20rpx;
+  box-sizing: border-box;
+  background: #f8f6f2;
+  color: #3D3D50;
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 30rpx;
+  line-height: 1.5;
+}
+
+/* 卡片入场 */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ca { animation: fadeUp 0.35s ease-out backwards; }
+.ca:nth-child(1) { animation-delay: 0.02s; }
+.ca:nth-child(2) { animation-delay: 0.05s; }
+.ca:nth-child(3) { animation-delay: 0.08s; }
+.ca:nth-child(4) { animation-delay: 0.11s; }
+.ca:nth-child(5) { animation-delay: 0.14s; }
+.ca:nth-child(6) { animation-delay: 0.17s; }
+.ca:nth-child(7) { animation-delay: 0.20s; }
+.ca:nth-child(8) { animation-delay: 0.23s; }
+.ca:nth-child(9) { animation-delay: 0.26s; }

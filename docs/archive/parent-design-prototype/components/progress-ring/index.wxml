@@ -1,0 +1,10 @@
+<view class="progress-ring" style="width: {{size * 2}}rpx; height: {{size * 2}}rpx;">
+  <view class="ring-svg" style="width: {{size * 2}}rpx; height: {{size * 2}}rpx;">
+    <view class="ring-track" style="width: {{(size - strokeWidth) * 2}}rpx; height: {{(size - strokeWidth) * 2}}rpx; border-width: {{strokeWidth * 2}}rpx;"></view>
+    <view class="ring-fill" style="width: {{(size - strokeWidth) * 2}}rpx; height: {{(size - strokeWidth) * 2}}rpx; border-width: {{strokeWidth * 2}}rpx; --percent: {{percent}}; --color: {{color}};"></view>
+  </view>
+  <view class="ring-center">
+    <text class="ring-value">{{percent}}%</text>
+    <text class="ring-label" wx:if="{{label}}">{{label}}</text>
+  </view>
+</view>

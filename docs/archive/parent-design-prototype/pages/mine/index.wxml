@@ -1,0 +1,107 @@
+<view class="page">
+  <!-- Profile Card -->
+  <view class="profile-card" style="padding-top: {{statusBarHeight}}px;">
+    <view class="profile-top">
+      <view class="avatar-wrap">
+        <image src="/assets/icons/user-white.svg" class="avatar-icon" />
+      </view>
+      <view class="profile-text">
+        <text class="parent-name">{{userInfo.nickName}}</text>
+        <text class="welcome-text">欢迎回来，今天也一起陪伴宝贝成长</text>
+      </view>
+    </view>
+    <view class="edit-profile-btn" bindtap="goEditProfile">
+      <image src="/assets/icons/pencil-white.svg" class="edit-icon" />
+      <text class="edit-label">编辑资料</text>
+    </view>
+  </view>
+
+  <!-- Content -->
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <!-- Child Info Card -->
+    <view class="child-info-card" bindtap="goChildManage">
+      <view class="child-avatar">
+        <text class="child-emoji">🧒</text>
+      </view>
+      <view class="child-info">
+        <view class="child-name-row">
+          <text class="child-name">{{childInfo.name}}</text>
+          <view class="status-tag">
+            <text class="status-text">学习中</text>
+          </view>
+        </view>
+        <text class="child-detail">{{childInfo.age}}岁 · {{childInfo.grade}}</text>
+      </view>
+      <image src="/assets/icons/chevron-right.svg" class="arrow-icon" />
+    </view>
+
+    <!-- Device Status Card -->
+    <view class="device-card" bindtap="goDeviceManage">
+      <view class="device-header">
+        <view class="device-left">
+          <view class="device-icon-wrap">
+            <image src="/assets/icons/bot.svg" class="device-icon" />
+          </view>
+          <view class="device-text">
+            <text class="device-name">{{deviceInfo.name}}</text>
+            <text class="device-status online">在线</text>
+          </view>
+        </view>
+        <image src="/assets/icons/chevron-right.svg" class="arrow-icon" />
+      </view>
+      <view class="device-stats">
+        <view class="stat-item">
+          <image src="/assets/icons/battery-medium.svg" class="stat-icon" />
+          <text class="stat-value">{{deviceInfo.battery}}%</text>
+          <text class="stat-label">电量</text>
+        </view>
+        <view class="stat-item">
+          <image src="/assets/icons/wifi.svg" class="stat-icon" />
+          <text class="stat-value">良好</text>
+          <text class="stat-label">网络</text>
+        </view>
+        <view class="stat-item">
+          <image src="/assets/icons/hard-drive.svg" class="stat-icon" />
+          <text class="stat-value">2.1G</text>
+          <text class="stat-label">存储</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Function List -->
+    <view class="func-list-card">
+      <view class="func-item" wx:for="{{menuItems}}" wx:key="key" bindtap="onMenuTap" data-key="{{item.key}}">
+        <view class="func-icon-wrap">
+          <image src="/assets/icons/{{item.icon}}.svg" class="func-icon" />
+        </view>
+        <view class="func-text">
+          <text class="func-label">{{item.label}}</text>
+        </view>
+        <image src="/assets/icons/chevron-right.svg" class="func-arrow" />
+      </view>
+    </view>
+
+    <!-- Logout -->
+    <view class="logout-card" bindtap="showLogout">
+      <text class="logout-text">退出登录</text>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+
+  <!-- Logout Dialog -->
+  <view class="dialog-overlay" wx:if="{{showLogoutDialog}}" bindtap="onLogoutCancel">
+    <view class="dialog-box" catchtap="">
+      <text class="dialog-title">退出登录</text>
+      <text class="dialog-message">确定要退出登录吗？退出后需要重新登录</text>
+      <view class="dialog-buttons">
+        <view class="dialog-btn cancel" bindtap="onLogoutCancel">
+          <text class="cancel-text">取消</text>
+        </view>
+        <view class="dialog-btn confirm" bindtap="onLogoutConfirm">
+          <text class="confirm-text">确定退出</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

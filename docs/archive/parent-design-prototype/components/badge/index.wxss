@@ -1,0 +1,19 @@
+.badge {
+  min-width: 32rpx;
+  height: 32rpx;
+  padding: 0 8rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+}
+
+.badge-text {
+  font-size: 20rpx;
+  font-weight: 600;
+  color: var(--color-text-white);
+}

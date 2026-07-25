@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "首页",
+  "navigationBarBackgroundColor": "#f8f6f2",
+  "usingComponents": {
+    "danke-mascot": "/components/danke-mascot/danke-mascot",
+    "custom-tabbar": "/components/custom-tabbar/custom-tabbar"
+  }
+}

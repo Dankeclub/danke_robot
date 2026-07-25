@@ -1,0 +1,68 @@
+<view class="page">
+  <nav-bar title="行为分析" />
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <!-- Metrics Row: Focus + Posture -->
+    <view class="metrics-row">
+      <view class="metric-card">
+        <view class="metric-ring">
+          <view class="ring-bg"></view>
+          <view class="ring-fill focus"></view>
+          <view class="ring-center">
+            <text class="ring-value">85</text>
+            <text class="ring-unit">分</text>
+          </view>
+        </view>
+        <text class="metric-label">专注度</text>
+        <text class="metric-desc success">较上周提升 5%</text>
+      </view>
+
+      <view class="metric-card">
+        <view class="metric-ring">
+          <view class="ring-bg"></view>
+          <view class="ring-fill posture"></view>
+          <view class="ring-center">
+            <text class="ring-value">65</text>
+            <text class="ring-unit">分</text>
+          </view>
+        </view>
+        <text class="metric-label">坐姿评分</text>
+        <text class="metric-desc warning">需要改善</text>
+      </view>
+    </view>
+
+    <!-- Activity Area Card -->
+    <view class="activity-card">
+      <view class="activity-header">
+        <text class="activity-title">活动区域分布</text>
+        <text class="activity-period">今日</text>
+      </view>
+      <view class="activity-bars">
+        <view class="bar-row" wx:for="{{activityAreas}}" wx:key="name">
+          <text class="bar-name">{{item.name}}</text>
+          <view class="bar-track">
+            <view class="bar-fill" style="width: {{item.percent}}%; background-color: {{item.color}};"></view>
+          </view>
+          <text class="bar-pct">{{item.percent}}%</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- AI Suggestion Card -->
+    <view class="ai-card">
+      <view class="ai-header">
+        <view class="ai-icon-wrap">
+          <image src="/assets/icons/qi-brain.svg" class="ai-icon" />
+        </view>
+        <text class="ai-title">AI 建议</text>
+      </view>
+
+      <view class="suggestion-item" wx:for="{{suggestions}}" wx:key="id">
+        <view class="sug-dot" style="background-color: {{item.color}};"></view>
+        <text class="sug-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

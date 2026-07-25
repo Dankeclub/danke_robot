@@ -1,0 +1,52 @@
+.progress-ring {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-track {
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--color-divider);
+  box-sizing: border-box;
+}
+
+.ring-fill {
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--color) transparent transparent var(--color);
+  box-sizing: border-box;
+  transform: rotate(calc(-90deg + var(--percent) * 3.6deg * 0));
+  clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%);
+}
+
+.ring-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.ring-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.ring-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: 4rpx;
+}

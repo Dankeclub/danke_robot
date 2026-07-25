@@ -1,0 +1,74 @@
+<view class="page">
+  <nav-bar title="设备管理" />
+
+  <scroll-view scroll-y class="content" show-scrollbar="{{false}}">
+    <!-- Status Header -->
+    <view class="status-header" wx:if="{{!bound}}">
+      <text class="status-title">暂无已绑定设备</text>
+      <text class="status-sub">绑定 AI 陪伴机器人后，即可查看学习数据</text>
+    </view>
+    <view class="status-header success" wx:else>
+      <image src="/assets/icons/circle-check-green.svg" class="success-check" />
+      <text class="status-title success">绑定成功</text>
+      <text class="status-sub">AI陪伴机器人已成功绑定，现在可以开始使用了</text>
+    </view>
+
+    <!-- Illustration -->
+    <view class="illust-area">
+      <view class="robot-frame">
+        <image src="/assets/icons/bot.svg" class="robot-icon" />
+      </view>
+      <view class="floor-shadow"></view>
+      <view class="dot dot-1"></view>
+      <view class="dot dot-2"></view>
+      <view class="dot dot-3"></view>
+      <view class="dot dot-4"></view>
+    </view>
+
+    <!-- Guide Card -->
+    <view class="guide-card" wx:if="{{!bound}}">
+      <text class="guide-title">连接设备后，你可以：</text>
+      <view class="guide-item" wx:for="{{features}}" wx:key="id">
+        <image src="/assets/icons/check-circle.svg" class="guide-check" />
+        <text class="guide-text">{{item.text}}</text>
+      </view>
+    </view>
+    <view class="guide-card" wx:else>
+      <text class="guide-title">蛋仔·小智 已就绪</text>
+      <view class="guide-item" wx:for="{{successFeatures}}" wx:key="id">
+        <image src="/assets/icons/check-circle.svg" class="guide-check" />
+        <text class="guide-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <!-- Primary Button -->
+    <view class="primary-btn {{bound ? 'success' : ''}}" bindtap="onPrimaryTap">
+      <text class="primary-btn-text">{{bound ? '开始使用' : '立即绑定设备'}}</text>
+    </view>
+
+    <!-- Tutorial Link -->
+    <view class="tutorial-link" wx:if="{{!bound}}" bindtap="onTutorial">
+      <text class="tutorial-text">查看绑定教程</text>
+    </view>
+
+    <!-- Help Tip Card -->
+    <view class="tip-card {{bound ? 'green' : ''}}" wx:if="{{!bound}}">
+      <text class="tip-title">如果已经完成配网，请确认：</text>
+      <view class="tip-item" wx:for="{{tips}}" wx:key="id">
+        <view class="tip-dot"></view>
+        <text class="tip-text">{{item}}</text>
+      </view>
+      <text class="tip-contact">如仍无法连接，请联系客服</text>
+    </view>
+    <view class="tip-card green" wx:else>
+      <text class="tip-title success-color">接下来你可以：</text>
+      <view class="tip-item" wx:for="{{nextSteps}}" wx:key="id">
+        <view class="tip-dot"></view>
+        <text class="tip-text">{{item}}</text>
+      </view>
+      <text class="tip-contact success-color">随时在「我的」中调整设置</text>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

@@ -1,0 +1,240 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: 16rpx 32rpx 0 32rpx;
+}
+
+/* Status Header */
+.status-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 0;
+  margin-bottom: 8rpx;
+}
+
+.success-check {
+  width: 64rpx;
+  height: 64rpx;
+  margin-bottom: 4rpx;
+}
+
+.status-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.status-title.success {
+  color: var(--color-success);
+}
+
+.status-sub {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 16rpx;
+}
+
+/* Illustration */
+.illust-area {
+  position: relative;
+  height: 280rpx;
+  margin-bottom: 16rpx;
+}
+
+.robot-frame {
+  position: absolute;
+  top: 96rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 40rpx;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 40rpx rgba(49,106,253,0.25);
+}
+
+.robot-icon {
+  width: 80rpx;
+  height: 80rpx;
+  filter: brightness(0) invert(1);
+}
+
+.floor-shadow {
+  position: absolute;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background-color: var(--color-tag-blue-bg);
+}
+
+.dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.dot-1 {
+  width: 12rpx; height: 12rpx;
+  background-color: var(--color-light-blue);
+  top: 60rpx; right: 70rpx;
+}
+.dot-2 {
+  width: 8rpx; height: 8rpx;
+  background-color: var(--color-secondary);
+  top: 40rpx; right: 50rpx;
+}
+.dot-3 {
+  width: 10rpx; height: 10rpx;
+  background-color: var(--color-primary);
+  top: 30rpx; right: 72rpx;
+}
+.dot-4 {
+  width: 6rpx; height: 6rpx;
+  background-color: var(--color-light-blue);
+  top: 220rpx; left: 55rpx;
+}
+
+/* Guide Card */
+.guide-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.04);
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.guide-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.guide-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.guide-check {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+}
+
+.guide-text {
+  font-size: 26rpx;
+  color: var(--color-text-primary);
+}
+
+/* Primary Button */
+.primary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  box-shadow: 0 8rpx 32rpx rgba(49,106,253,0.2);
+  margin-bottom: 16rpx;
+}
+
+.primary-btn.success {
+  background-color: var(--color-success);
+}
+
+.primary-btn:active {
+  opacity: 0.9;
+}
+
+.primary-btn-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+/* Tutorial Link */
+.tutorial-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+
+.tutorial-text {
+  font-size: 26rpx;
+  color: var(--color-primary);
+}
+
+/* Tip Card */
+.tip-card {
+  background-color: var(--color-tag-blue-bg);
+  border-radius: var(--radius-lg);
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.tip-card.green {
+  background-color: var(--color-tag-green-bg);
+}
+
+.tip-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.tip-title.success-color {
+  color: var(--color-success);
+}
+
+.tip-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.tip-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background-color: var(--color-light-blue);
+  flex-shrink: 0;
+}
+
+.tip-text {
+  font-size: 22rpx;
+  color: var(--color-text-primary);
+}
+
+.tip-contact {
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
+}
+
+.tip-contact.success-color {
+  color: var(--color-success);
+}

@@ -1,0 +1,173 @@
+/* ===== 设备管理页 ===== */
+
+.dev-device-hero {
+  margin: 32rpx var(--m) 40rpx;
+  background: var(--pd);
+  border-radius: var(--r);
+  padding: 56rpx 44rpx 48rpx;
+  color: var(--white);
+}
+.dev-dh-top {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+  margin-bottom: 44rpx;
+}
+.dev-device-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 40rpx;
+  background: rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dev-da-text { font-size: 56rpx; }
+.dev-dh-right { flex: 1; }
+.dev-device-name { font-size: var(--t2); font-weight: 800; }
+.dev-device-status {
+  font-size: var(--t4);
+  font-weight: 600;
+  margin-top: 6rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  opacity: 0.85;
+}
+.dev-ds-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dev-ds-dot.online  { background: rgba(255,255,255,0.9); }
+.dev-ds-dot.offline { background: rgba(255,255,255,0.4); }
+
+.dev-dh-info {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8rpx;
+}
+.dev-dh-item {
+  width: 50%;
+  padding: 0 8rpx;
+  box-sizing: border-box;
+  margin-bottom: 8rpx;
+}
+.dev-dh-item > view {
+  background: rgba(255,255,255,0.1);
+  border-radius: 28rpx;
+  padding: 28rpx 24rpx;
+  text-align: center;
+}
+.dev-dhv { font-size: var(--t2); font-weight: 900; }
+.dev-dhl { font-size: var(--t5); font-weight: 500; opacity: 0.65; margin-top: 4rpx; }
+
+/* 设置项 */
+.dev-setting-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 40rpx;
+}
+.dev-setting-item {
+  margin: 0 var(--m);
+  border-radius: 44rpx;
+  padding: 36rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  position: relative;
+  overflow: hidden;
+}
+.dev-setting-item.blue  { background: var(--pl); }
+.dev-setting-item.amber { background: rgba(240,168,85,0.14); }
+.dev-setting-item.rose  { background: var(--pp); }
+
+.dev-setting-icon {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.65);
+  font-size: 40rpx;
+}
+
+.dev-setting-body { flex: 1; }
+.dev-stitle { font-size: var(--t3); font-weight: 700; color: #3D3D50; }
+.dev-ssub   { font-size: var(--t5); font-weight: 500; color: #6E6E76; margin-top: 2rpx; }
+
+.dev-setting-arrow {
+  font-size: var(--t2);
+  color: var(--pa2);
+  flex-shrink: 0;
+  font-weight: 400;
+}
+
+/* 添加设备 */
+.dev-add-card {
+  margin: 0 var(--m) 40rpx;
+  background: var(--white);
+  border: 3rpx dashed rgba(119,140,205,0.3);
+  border-radius: var(--r);
+  padding: 44rpx;
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+}
+.dev-add-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 32rpx;
+  background: rgba(119,140,205,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 44rpx;
+  font-weight: 700;
+  color: var(--pd);
+}
+.dev-add-info { flex: 1; }
+.dev-atitle { font-size: var(--t3); font-weight: 800; color: #3D3D50; }
+.dev-adesc  { font-size: var(--t5); font-weight: 500; color: var(--pa2); margin-top: 4rpx; }
+
+/* 空状态 */
+.ed-empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 120rpx var(--m) 80rpx;
+  text-align: center;
+}
+.ed-empty-mascot {
+  width: 320rpx;
+  height: 320rpx;
+  background: var(--pa3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 56rpx;
+  box-shadow: 0 16rpx 64rpx rgba(0,0,0,0.06);
+}
+.ed-empty-title { font-size: var(--t1); font-weight: 800; color: var(--pa2); margin-bottom: 20rpx; }
+.ed-empty-desc  { font-size: var(--t3); font-weight: 500; color: var(--pa1); margin-bottom: 56rpx; line-height: 1.55; }
+.ed-empty-btn {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 32rpx 92rpx;
+  background: var(--pd);
+  color: var(--white);
+  border-radius: 44rpx;
+  font-size: var(--t2);
+  font-weight: 700;
+  box-shadow: 0 8rpx 44rpx rgba(119,140,205,0.25);
+}

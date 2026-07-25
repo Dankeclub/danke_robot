@@ -1,0 +1,90 @@
+<view class="page">
+  <nav-bar title="学习追踪" />
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <!-- Learning Overview Card -->
+    <view class="card overview-card">
+      <view class="card-header-row">
+        <text class="card-title">今日学习概览</text>
+        <view class="period-tag"><text class="period-text">本周</text></view>
+      </view>
+      <view class="overview-body">
+        <view class="overview-ring">
+          <view class="ring-bg"></view>
+          <view class="ring-fill"></view>
+          <view class="ring-center">
+            <text class="ring-score">78</text>
+            <text class="ring-unit">分</text>
+          </view>
+        </view>
+        <view class="overview-stats">
+          <view class="o-stat">
+            <text class="o-stat-label">学习时长</text>
+            <text class="o-stat-value">45min</text>
+          </view>
+          <view class="o-stat">
+            <text class="o-stat-label">正确率</text>
+            <text class="o-stat-value">78%</text>
+          </view>
+          <view class="o-stat">
+            <text class="o-stat-label">完成课程</text>
+            <text class="o-stat-value">3节</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Learning Trend Card -->
+    <view class="card trend-card">
+      <view class="card-header-row">
+        <text class="card-title">学习趋势</text>
+        <text class="card-subtitle">最近7天</text>
+      </view>
+      <view class="chart-bars">
+        <view class="chart-day" wx:for="{{trendData}}" wx:key="day">
+          <view class="chart-bar" style="height: {{item.height}}rpx; background-color: {{item.color}};"></view>
+          <text class="chart-label">{{item.day}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Subject Progress Card -->
+    <view class="card subject-card">
+      <view class="card-header-row">
+        <text class="card-title">学科进度</text>
+        <text class="card-more">查看全部</text>
+      </view>
+      <view class="subject-item" wx:for="{{subjects}}" wx:key="name">
+        <view class="subject-top">
+          <text class="subject-name">{{item.name}}</text>
+          <text class="subject-pct" style="color: {{item.color}};">{{item.percent}}%</text>
+        </view>
+        <view class="subject-bar-track">
+          <view class="subject-bar-fill" style="width: {{item.percent}}%; background-color: {{item.color}};"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Recent Records -->
+    <view class="records-section">
+      <view class="card-header-row">
+        <text class="card-title">最近学习</text>
+        <text class="card-more">更多</text>
+      </view>
+      <view class="record-item" wx:for="{{recentRecords}}" wx:key="id">
+        <view class="record-icon-wrap">
+          <image src="/assets/icons/{{item.icon}}.svg" class="record-icon" />
+        </view>
+        <view class="record-text">
+          <text class="record-name">{{item.name}}</text>
+          <text class="record-time">{{item.time}}</text>
+        </view>
+        <view class="score-tag">
+          <text class="score-text">{{item.score}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

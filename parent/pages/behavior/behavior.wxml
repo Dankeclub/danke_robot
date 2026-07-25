@@ -1,0 +1,76 @@
+<!-- 行为分析页 -->
+<view class="page-wrap">
+
+  <!-- Tab 切换 -->
+  <view class="beh-tab-bar ca">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="beh-tab-btn {{activeTab === item.key ? 'on' : ''}}"
+      bind:tap="onSwitchTab"
+      data-tab="{{item.key}}"
+    >{{item.label}}</view>
+  </view>
+
+  <!-- 专注度 Tab -->
+  <block wx:if="{{activeTab === 'focus'}}">
+    <view class="beh-score-card purple ca">
+      <view class="beh-big-score">92<text class="beh-unit">分</text></view>
+      <view class="beh-slabel">今日专注度评分</view>
+      <view class="beh-sdelta">↑ 3 分 vs 昨日</view>
+    </view>
+    <view class="beh-stat-grid ca">
+      <view class="beh-sg-card mint"><view class="beh-sv">3</view><view class="beh-sl">走神次数</view></view>
+      <view class="beh-sg-card amber"><view class="beh-sv">25m</view><view class="beh-sl">最长专注</view></view>
+      <view class="beh-sg-card blue"><view class="beh-sv">87%</view><view class="beh-sl">专注占比</view></view>
+      <view class="beh-sg-card pink"><view class="beh-sv">4</view><view class="beh-sl">中断次数</view></view>
+    </view>
+  </block>
+
+  <!-- 姿态 Tab -->
+  <block wx:elif="{{activeTab === 'pose'}}">
+    <view class="beh-score-card mint ca">
+      <view class="beh-big-score">85<text class="beh-unit">分</text></view>
+      <view class="beh-slabel">坐姿健康评分</view>
+      <view class="beh-sdelta">↑ 2 分 vs 昨日</view>
+    </view>
+    <view class="beh-pose-card ca">
+      <view class="beh-phdr">🧍 今日姿态记录</view>
+      <view wx:for="{{poseRecords}}" wx:key="label" class="beh-pose-row {{item.type}}">
+        <view class="beh-pose-left-bar"></view>
+        <view class="beh-pose-info">
+          <view class="beh-pose-title">{{item.label}}</view>
+          <view class="beh-pose-desc">{{item.desc}}</view>
+        </view>
+        <view class="beh-pose-pct">{{item.pct}}%</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 位置 Tab -->
+  <block wx:elif="{{activeTab === 'location'}}">
+    <view class="beh-loc-card ca">
+      <view class="beh-phdr">📍 房间活动统计</view>
+      <view wx:for="{{locationRecords}}" wx:key="name" class="beh-loc-row">
+        <view class="beh-loc-icon {{item.key}}">{{item.icon}}</view>
+        <text class="beh-loc-name">{{item.name}}</text>
+        <view class="beh-loc-bar-wrap">
+          <view class="beh-loc-bar {{item.key}}" style="width:{{item.percent}}%"></view>
+        </view>
+        <text class="beh-loc-time">{{item.time}}</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 提示 -->
+  <view class="illo-card ca" style="margin:var(--g) var(--m)">
+    <view class="illo-circle">
+      <danke-mascot size="sm" state="online" />
+    </view>
+    <view class="illo-body">
+      <view class="illo-title">专注度 92 分，表现很棒</view>
+      <view class="illo-sub">今天的坚持正在累积成进步</view>
+    </view>
+  </view>
+
+</view>

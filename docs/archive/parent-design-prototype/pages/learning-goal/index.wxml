@@ -1,0 +1,107 @@
+<view class="page">
+  <nav-bar title="学习目标" />
+
+  <scroll-view scroll-y class="content" show-scrollbar="{{false}}">
+    <!-- Growth Card (Gradient) -->
+    <view class="growth-card">
+      <view class="growth-top">
+        <view class="growth-icon-wrap">
+          <text class="growth-emoji">🎯</text>
+        </view>
+        <text class="growth-title">学习目标</text>
+      </view>
+      <text class="growth-sub">一起制定每天的小目标，让成长看得见</text>
+    </view>
+
+    <!-- Daily Goal Card -->
+    <view class="daily-card">
+      <view class="daily-header">
+        <image src="/assets/icons/clock.svg" class="daily-icon" />
+        <text class="daily-title">每日学习时长</text>
+      </view>
+
+      <view class="stepper-row">
+        <view class="stepper-btn minus" bindtap="onMinus">
+          <text class="stepper-symbol minus">−</text>
+        </view>
+        <view class="stepper-display">
+          <view class="stepper-time">
+            <text class="stepper-value">{{dailyGoal}}</text>
+            <text class="stepper-unit">分钟</text>
+          </view>
+          <text class="stepper-hint">建议时长</text>
+        </view>
+        <view class="stepper-btn plus" bindtap="onPlus">
+          <text class="stepper-symbol plus">+</text>
+        </view>
+      </view>
+
+      <view class="progress-wrap"
+        catchtouchstart="onSliderStart"
+        catchtouchmove="onSliderMove"
+        catchtouchend="onSliderEnd">
+        <view class="progress-track"></view>
+        <view class="progress-fill" style="width: {{(dailyGoal - 15) / 105 * 100}}%;"></view>
+        <view class="progress-thumb" style="left: {{(dailyGoal - 15) / 105 * 100}}%;"></view>
+      </view>
+    </view>
+
+    <!-- Subject Goals Card -->
+    <view class="subj-card">
+      <view class="subj-header">
+        <text class="subj-title">学科目标</text>
+      </view>
+
+      <view class="subj-row" wx:for="{{subjectGoals}}" wx:key="name">
+        <view class="subj-left">
+          <view class="subj-icon-wrap">
+            <image src="/assets/icons/{{item.icon}}.svg" class="subj-icon" />
+          </view>
+          <text class="subj-name">{{item.name}}</text>
+        </view>
+        <view class="subj-right">
+          <text class="subj-min" style="color: {{item.color}};">{{item.minutes}}min</text>
+          <view class="subj-slider"
+            catchtouchstart="onSubSliderStart"
+            catchtouchmove="onSubSliderMove"
+            catchtouchend="onSubSliderEnd"
+            data-index="{{index}}">
+            <view class="subj-track"></view>
+            <view class="subj-fill" style="width: {{item.minutes / 30 * 100}}%; background-color: {{item.color}};"></view>
+            <view class="subj-thumb" style="left: {{item.minutes / 30 * 100}}%; border-color: {{item.color}};"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Weekly Goal Card -->
+    <view class="week-card">
+      <view class="week-left">
+        <image src="/assets/icons/clock.svg" class="week-icon" />
+        <view class="week-text">
+          <text class="week-label">本周学习目标</text>
+          <text class="week-sub">根据每日目标自动计算</text>
+        </view>
+      </view>
+      <text class="week-value">{{weeklyTotal}}h</text>
+    </view>
+
+    <!-- AI Recommend Card -->
+    <view class="ai-card">
+      <view class="ai-top">
+        <view class="ai-icon-wrap">
+          <image src="/assets/icons/bot.svg" class="ai-icon" />
+        </view>
+        <text class="ai-title">蛋仔推荐</text>
+      </view>
+      <text class="ai-desc">根据小明最近一周的学习情况，建议每天学习 45 分钟，其中阅读 15 分钟、英语 15 分钟、数学 15 分钟</text>
+    </view>
+
+    <!-- Save Button -->
+    <view class="save-btn" bindtap="onSave">
+      <text class="save-text">保存学习目标</text>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

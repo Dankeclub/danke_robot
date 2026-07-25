@@ -1,0 +1,11 @@
+.mw{position:relative;display:flex;align-items:center;justify-content:center;animation:db 2.4s ease-in-out infinite;transform-origin:center bottom}
+.mw.off{opacity:.45;animation:db 2.4s ease-in-out infinite,do .8s ease-in-out .4s}
+@keyframes db{0%,100%{transform:translateY(0) scale(1,1)}8%{transform:translateY(-18px) scale(1.06,.94)}16%{transform:translateY(0) scale(.95,1.05)}24%{transform:translateY(-8px) scale(1.03,.97)}32%{transform:translateY(0) scale(1,1)}}
+@keyframes do{0%,100%{filter:grayscale(.3)}50%{filter:grayscale(.5)}}
+.mw.sm .mi{width:80rpx;height:104rpx}
+.mw.md .mi{width:136rpx;height:176rpx}
+.mw.lg .mi{width:200rpx;height:260rpx}
+.mi{display:block}
+.mz{position:absolute;top:-6px;right:2px;z-index:5;font-size:18px;font-weight:900;color:#778ccd;animation:zf 2s ease-in-out infinite}
+.mz2{animation-delay:.6s;right:-10px;font-size:14px}
+@keyframes zf{0%,100%{opacity:0;transform:translateY(0)}50%{opacity:.8;transform:translateY(-10px)}}

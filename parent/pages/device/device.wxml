@@ -1,0 +1,103 @@
+<!-- 设备管理页 -->
+<view class="page-wrap">
+
+  <!-- 有设备时显示 -->
+  <block wx:if="{{hasDevice}}">
+    <!-- 设备信息卡片 -->
+    <view class="dev-device-hero ca">
+      <view class="dev-dh-top">
+        <view class="dev-device-avatar">
+          <text class="dev-da-text">📱</text>
+        </view>
+        <view class="dev-dh-right">
+          <view class="dev-device-name">{{device.name}}</view>
+          <view class="dev-device-status">
+            <view class="dev-ds-dot {{device.online ? 'online' : 'offline'}}"></view>
+            <text>{{device.online ? '在线' : '离线'}} · 电量 {{device.battery}}%</text>
+          </view>
+        </view>
+      </view>
+      <view class="dev-dh-info">
+        <view class="dev-dh-item">
+          <view class="dev-dhv">{{device.version}}</view>
+          <view class="dev-dhl">固件版本</view>
+        </view>
+        <view class="dev-dh-item">
+          <view class="dev-dhv">{{device.serial}}</view>
+          <view class="dev-dhl">设备编号</view>
+        </view>
+        <view class="dev-dh-item">
+          <view class="dev-dhv">WiFi</view>
+          <view class="dev-dhl">连接方式</view>
+        </view>
+        <view class="dev-dh-item">
+          <view class="dev-dhv">优</view>
+          <view class="dev-dhl">信号强度</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 设置项 -->
+    <view class="dev-setting-cards ca">
+      <view class="dev-setting-item blue">
+        <view class="dev-setting-icon"><text>📱</text></view>
+        <view class="dev-setting-body">
+          <view class="dev-stitle">设备名称</view>
+          <view class="dev-ssub">{{device.name}}</view>
+        </view>
+        <text class="dev-setting-arrow">›</text>
+      </view>
+      <view class="dev-setting-item amber">
+        <view class="dev-setting-icon"><text>🔄</text></view>
+        <view class="dev-setting-body">
+          <view class="dev-stitle">固件升级</view>
+          <view class="dev-ssub">当前 {{device.version}}，检查更新</view>
+        </view>
+        <text class="dev-setting-arrow">›</text>
+      </view>
+      <view class="dev-setting-item rose" bind:tap="onUnbind">
+        <view class="dev-setting-icon"><text>🔗</text></view>
+        <view class="dev-setting-body">
+          <view class="dev-stitle">解绑设备</view>
+          <view class="dev-ssub">移除设备并清除数据</view>
+        </view>
+        <text class="dev-setting-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 添加新设备 -->
+    <view class="dev-add-card ca" bind:tap="goBind">
+      <view class="dev-add-icon"><text>+</text></view>
+      <view class="dev-add-info">
+        <view class="dev-atitle">添加新设备</view>
+        <view class="dev-adesc">扫码或输入编号绑定新设备</view>
+      </view>
+    </view>
+
+    <!-- 蛋仔提示 -->
+    <view class="illo-card ca" style="margin:0 var(--m) var(--g)">
+      <view class="illo-circle">
+        <danke-mascot size="sm" state="online" />
+      </view>
+      <view class="illo-body">
+        <view class="illo-title">设备运行正常</view>
+        <view class="illo-sub">蛋仔机器人在线守护中</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 未绑定设备时显示 -->
+  <block wx:else>
+    <view class="ed-empty-wrap ca">
+      <view class="ed-empty-mascot">
+        <danke-mascot size="lg" state="offline" />
+      </view>
+      <view class="ed-empty-title">暂无设备</view>
+      <view class="ed-empty-desc">绑定蛋仔机器人后，即可实时看护和陪伴孩子</view>
+      <view class="ed-empty-btn" bind:tap="goBind">
+        <text>＋ 去绑定</text>
+      </view>
+    </view>
+  </block>
+
+</view>

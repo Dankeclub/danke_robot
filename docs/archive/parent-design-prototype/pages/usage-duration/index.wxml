@@ -1,0 +1,96 @@
+<view class="page">
+  <nav-bar title="使用时长" />
+
+  <!-- Period Tabs -->
+  <view class="period-tabs">
+    <view class="period-item {{activePeriod === 'today' ? 'active' : ''}}" bindtap="onPeriodChange" data-period="today">
+      <text class="period-text {{activePeriod === 'today' ? 'active' : ''}}">今日</text>
+      <view class="period-indicator" wx:if="{{activePeriod === 'today'}}"></view>
+    </view>
+    <view class="period-item {{activePeriod === 'week' ? 'active' : ''}}" bindtap="onPeriodChange" data-period="week">
+      <text class="period-text {{activePeriod === 'week' ? 'active' : ''}}">本周</text>
+      <view class="period-indicator" wx:if="{{activePeriod === 'week'}}"></view>
+    </view>
+    <view class="period-item {{activePeriod === 'month' ? 'active' : ''}}" bindtap="onPeriodChange" data-period="month">
+      <text class="period-text {{activePeriod === 'month' ? 'active' : ''}}">本月</text>
+      <view class="period-indicator" wx:if="{{activePeriod === 'month'}}"></view>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <!-- Today Overview Card -->
+    <view class="card">
+      <view class="today-top">
+        <view class="today-left">
+          <text class="today-title">今日使用时长</text>
+          <view class="time-row">
+            <text class="time-big">2</text>
+            <text class="time-unit">h </text>
+            <text class="time-big">15</text>
+            <text class="time-unit">m</text>
+          </view>
+          <text class="today-compare">比昨日多 15 分钟</text>
+        </view>
+        <view class="today-ring">
+          <view class="ring-sm-bg"></view>
+          <view class="ring-sm-fill"></view>
+          <view class="ring-sm-center">
+            <text class="ring-sm-pct">68%</text>
+          </view>
+        </view>
+      </view>
+      <view class="today-stats">
+        <view class="t-stat">
+          <image src="/assets/icons/qi-book.svg" class="t-stat-icon" />
+          <text class="t-stat-value">1h 30m</text>
+          <text class="t-stat-label">学习</text>
+        </view>
+        <view class="t-stat">
+          <image src="/assets/icons/message-circle-primary.svg" class="t-stat-icon" />
+          <text class="t-stat-value">30m</text>
+          <text class="t-stat-label">互动</text>
+        </view>
+        <view class="t-stat">
+          <image src="/assets/icons/clock.svg" class="t-stat-icon" />
+          <text class="t-stat-value">15m</text>
+          <text class="t-stat-label">休息</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Weekly Trend Card -->
+    <view class="card">
+      <view class="card-header-row">
+        <text class="card-title">本周趋势</text>
+        <view class="week-avg">
+          <text class="avg-label">日均</text>
+          <text class="avg-value">1h 52m</text>
+        </view>
+      </view>
+      <view class="chart-bars">
+        <view class="chart-day" wx:for="{{weekBars}}" wx:key="day">
+          <view class="chart-bar" style="height: {{item.height}}rpx; background-color: {{item.color}};"></view>
+          <text class="chart-label {{item.active ? 'active' : ''}}">{{item.day}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Usage Detail Card -->
+    <view class="card">
+      <view class="card-header-row">
+        <text class="card-title">使用明细</text>
+        <text class="card-more">查看全部</text>
+      </view>
+      <view class="detail-item" wx:for="{{usageDetails}}" wx:key="id">
+        <view class="detail-dot" style="background-color: {{item.color}};"></view>
+        <view class="detail-text">
+          <text class="detail-name">{{item.name}}</text>
+          <text class="detail-time">{{item.time}}</text>
+        </view>
+        <text class="detail-dur" style="color: {{item.color}};">{{item.duration}}</text>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

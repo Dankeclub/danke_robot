@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "看护",
+  "navigationBarBackgroundColor": "#F7E6D4",
+  "usingComponents": {
+    "danke-mascot": "/components/danke-mascot/danke-mascot",
+    "custom-tabbar": "/components/custom-tabbar/custom-tabbar"
+  }
+}

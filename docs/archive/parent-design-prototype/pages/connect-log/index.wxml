@@ -1,0 +1,21 @@
+<view class="page">
+  <nav-bar title="连接记录" />
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <text class="section-title">最近 7 天</text>
+
+    <view class="log-card">
+      <view class="log-row" wx:for="{{logList}}" wx:key="id">
+        <view class="log-dot" style="background-color: {{item.connected ? '#ACE828' : '#C4C9D4'}};"></view>
+        <view class="log-text">
+          <text class="log-title">{{item.title}}</text>
+          <text class="log-subtitle">{{item.subtitle}}</text>
+        </view>
+        <text class="log-time">{{item.time}}</text>
+        <view class="log-divider" wx:if="{{index < logList.length - 1}}"></view>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

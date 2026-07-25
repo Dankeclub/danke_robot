@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/monitor/index",
+    "pages/report/index",
+    "pages/mine/index",
+    "pages/learning-track/index",
+    "pages/notification/index",
+    "pages/usage-duration/index",
+    "pages/behavior-analysis/index",
+    "pages/device-manage/index",
+    "pages/notification-settings/index",
+    "pages/learning-goal/index",
+    "pages/device-unbind/index",
+    "pages/device-bindstep/index",
+    "pages/login/index",
+    "pages/onboarding/index",
+    "pages/bind-child/index",
+    "pages/edit-profile/index",
+    "pages/report-detail/index",
+    "pages/help-center/index",
+    "pages/about/index",
+    "pages/child-manage/index",
+    "pages/device-info/index",
+    "pages/connect-log/index",
+    "pages/firmware-update/index",
+    "pages/task-detail/index",
+    "pages/behavior-detail/index",
+    "pages/subject-detail/index",
+    "pages/learning-record/index",
+    "pages/score-detail/index",
+    "pages/all-tasks/index"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#F6F8FF",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#6B7280",
+    "selectedColor": "#316AFD",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/monitor/index", "text": "看护" },
+      { "pagePath": "pages/report/index", "text": "报告" },
+      { "pagePath": "pages/mine/index", "text": "我的" }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

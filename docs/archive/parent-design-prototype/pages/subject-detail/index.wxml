@@ -1,0 +1,40 @@
+<view class="page">
+  <nav-bar title="学科详情" showBack="{{true}}" />
+  <scroll-view class="content" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- Subject score card -->
+    <view class="card score-card">
+      <view class="score-label">{{subject.name}}</view>
+      <view class="score-value">{{subject.score}}%</view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width:{{subject.score}}%"></view>
+      </view>
+    </view>
+    <!-- Stats row -->
+    <view class="stats-row">
+      <view class="stat-card">
+        <view class="stat-value">{{subject.totalHours}}</view>
+        <view class="stat-label">学习总时长</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{subject.accuracy}}</view>
+        <view class="stat-label">正确率</view>
+      </view>
+      <view class="stat-card">
+        <view class="stat-value">{{subject.totalCount}}</view>
+        <view class="stat-label">完成次数</view>
+      </view>
+    </view>
+    <!-- Recent records -->
+    <view class="section-title">最近学习记录</view>
+    <view class="card record-card" wx:for="{{records}}" wx:key="title">
+      <view class="record-row">
+        <view class="record-info">
+          <view class="record-title">{{item.title}}</view>
+          <view class="record-time">{{item.time}}</view>
+        </view>
+        <view class="record-score">{{item.score}}</view>
+      </view>
+      <view class="record-divider" wx:if="{{index < records.length - 1}}"></view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,292 @@
+/* ===== 孩子信息页 ===== */
+
+.ci-page {
+  padding-bottom: 160rpx;
+}
+
+/* ===== 头像卡片 ===== */
+.ci-avatar-card {
+  background: var(--warmPeach);
+  border-radius: var(--r);
+  margin: 40rpx var(--m) var(--g);
+  padding: 44rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.ci-avatar-circle {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6rpx 24rpx rgba(0,0,0,0.06);
+  transition: background 0.35s ease;
+  position: relative;
+}
+.ci-avatar-icon {
+  width: 56rpx;
+  height: 56rpx;
+}
+.ci-avatar-tap-hint {
+  font-size: var(--t6);
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  margin-top: 4rpx;
+}
+
+.ci-avatar-info { flex: 1; min-width: 0; }
+.ci-aname {
+  font-size: var(--t1);
+  font-weight: 900;
+  color: #3D3D50;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ci-asub {
+  font-size: var(--t4);
+  color: rgba(61,61,80,0.45);
+  font-weight: 600;
+  margin-top: 6rpx;
+}
+
+/* ===== 表单卡片 ===== */
+.ci-form-card {
+  background: var(--white);
+  border-radius: var(--r);
+  margin: 0 var(--m) var(--g);
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.03);
+  overflow: hidden;
+}
+
+.ci-form-item {
+  display: flex;
+  align-items: center;
+  padding: 38rpx 40rpx;
+}
+.ci-form-item + .ci-form-item {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.ci-form-label {
+  font-size: var(--t3);
+  font-weight: 700;
+  color: #3D3D50;
+  flex-shrink: 0;
+  min-width: 140rpx;
+}
+
+.ci-form-input {
+  flex: 1;
+  min-height: 60rpx;
+  line-height: 60rpx;
+  background: transparent;
+  font-size: var(--t3);
+  font-weight: 600;
+  color: #3D3D50;
+  text-align: right;
+}
+
+/* 出生年月行 */
+.ci-birth-row {
+  justify-content: space-between;
+}
+.ci-birth-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+.ci-birth-year,
+.ci-birth-month {
+  font-size: 40rpx;
+  font-weight: 900;
+  color: #3D3D50;
+}
+.ci-birth-sep {
+  font-size: var(--t4);
+  font-weight: 600;
+  color: var(--pa2);
+  margin: 0 8rpx;
+}
+.ci-form-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  margin-left: 8rpx;
+  flex-shrink: 0;
+}
+
+/* 性别选择 */
+.ci-gender-pick {
+  display: flex;
+  gap: 16rpx;
+  flex: 1;
+  justify-content: flex-end;
+}
+.ci-goption {
+  padding: 18rpx 40rpx;
+  border-radius: 24rpx;
+  font-size: var(--t3);
+  font-weight: 700;
+  border: 3rpx solid var(--pa3);
+  color: var(--pa2);
+  background: var(--white);
+  transition: all 0.15s;
+}
+.ci-goption.selected {
+  border-color: var(--pd);
+  background: rgba(119,140,205,0.08);
+  color: var(--pd);
+}
+
+/* ===== 设备链接 ===== */
+.ci-device-link {
+  background: var(--white);
+  border-radius: var(--r);
+  margin: 0 var(--m) var(--g);
+  padding: 36rpx 40rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.02);
+}
+.ci-dl-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 24rpx;
+  background: rgba(168,159,128,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ci-dl-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+}
+.ci-dl-text {
+  flex: 1;
+  font-size: var(--t3);
+  font-weight: 700;
+  color: #3D3D50;
+}
+.ci-dl-stat {
+  font-size: var(--t4);
+  font-weight: 700;
+  color: #4F9A5F;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  flex-shrink: 0;
+}
+.ci-dl-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #4F9A5F;
+}
+
+/* ===== 保存按钮 ===== */
+.ci-submit-btn {
+  margin: 28rpx var(--m) 20rpx;
+  width: calc(100% - 88rpx);
+  height: 120rpx;
+  line-height: 120rpx;
+  text-align: center;
+  background: var(--pd);
+  color: var(--white);
+  border-radius: 40rpx;
+  font-size: 40rpx;
+  font-weight: 900;
+  letter-spacing: 6rpx;
+  box-shadow: 0 12rpx 40rpx rgba(119,140,205,0.4);
+}
+
+/* ===== 解绑按钮 ===== */
+.ci-danger-btn {
+  margin: 0 var(--m) 120rpx;
+  width: calc(100% - 88rpx);
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  border: 3rpx solid #C77974;
+  border-radius: 36rpx;
+  color: #C77974;
+  font-size: var(--t3);
+  font-weight: 700;
+}
+
+/* ===== 日期选择器弹出层 ===== */
+.ci-picker-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.ci-picker-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ci-picker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border-radius: 48rpx 48rpx 0 0;
+  z-index: 901;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.ci-picker.show {
+  transform: translateY(0);
+}
+
+.ci-picker-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 40rpx;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.ci-picker-cancel {
+  font-size: var(--t3);
+  font-weight: 600;
+  color: var(--pa2);
+}
+.ci-picker-title {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+}
+.ci-picker-confirm {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: var(--pd);
+}
+
+.ci-picker-view {
+  height: 420rpx;
+}
+.ci-picker-indicator {
+  height: 80rpx;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.ci-pv-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--t2);
+  font-weight: 700;
+  color: #3D3D50;
+}

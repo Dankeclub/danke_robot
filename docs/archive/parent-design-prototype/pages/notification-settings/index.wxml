@@ -1,0 +1,115 @@
+<view class="page">
+  <nav-bar title="通知设置" />
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <!-- Description Card -->
+    <view class="desc-card">
+      <view class="desc-header">
+        <view class="desc-icon-wrap">
+          <image src="/assets/icons/bell.svg" class="desc-icon" />
+        </view>
+        <text class="desc-title">重要消息不错过</text>
+      </view>
+      <text class="desc-text">开启重要通知，第一时间了解宝贝的学习成长和设备状态</text>
+    </view>
+
+    <!-- App Notification Card -->
+    <view class="section-card">
+      <view class="section-header">
+        <text class="section-title">App 内通知</text>
+      </view>
+
+      <view class="switch-row">
+        <view class="switch-text">
+          <text class="switch-label">行为异常提醒</text>
+          <text class="switch-desc">坐姿不当、动作异常</text>
+        </view>
+        <switch checked="{{appNotif.behavior}}" color="#316AFD" />
+      </view>
+      <view class="row-divider"></view>
+
+      <view class="switch-row">
+        <view class="switch-text">
+          <text class="switch-label">每日学习总结</text>
+          <text class="switch-desc">每日学习报告生成通知</text>
+        </view>
+        <switch checked="{{appNotif.studySummary}}" color="#316AFD" />
+      </view>
+      <view class="row-divider"></view>
+
+      <view class="switch-row">
+        <view class="switch-text">
+          <text class="switch-label">学习目标完成</text>
+          <text class="switch-desc">孩子完成当日目标时</text>
+        </view>
+        <switch checked="{{appNotif.goalComplete}}" color="#316AFD" />
+      </view>
+    </view>
+
+    <!-- WeChat Notification Card -->
+    <view class="section-card">
+      <view class="section-header">
+        <text class="section-title">微信通知</text>
+      </view>
+
+      <view class="switch-row">
+        <view class="switch-text">
+          <text class="switch-label">周报生成提醒</text>
+          <text class="switch-desc">每周一生成孩子成长周报</text>
+        </view>
+        <switch checked="{{wxNotif.weeklyReport}}" color="#316AFD" />
+      </view>
+      <view class="row-divider"></view>
+
+      <view class="switch-row">
+        <view class="switch-text">
+          <text class="switch-label">设备离线提醒</text>
+          <text class="switch-desc">蛋仔机器人超过30分钟离线</text>
+        </view>
+        <switch checked="{{wxNotif.deviceOffline}}" color="#316AFD" />
+      </view>
+      <view class="row-divider"></view>
+
+      <view class="switch-row">
+        <view class="switch-text">
+          <text class="switch-label">电量过低提醒</text>
+          <text class="switch-desc">电量低于20%时通知</text>
+        </view>
+        <switch checked="{{wxNotif.lowBattery}}" color="#316AFD" />
+      </view>
+      <view class="row-divider"></view>
+
+      <view class="auth-footer">
+        <text class="auth-text">开启微信服务通知，重要提醒不错过</text>
+        <view class="auth-btn">
+          <text class="auth-btn-text">去开启</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- DND Card -->
+    <view class="section-card">
+      <view class="switch-row">
+        <view class="switch-text">
+          <text class="switch-label dnd-main-label">免打扰模式</text>
+          <text class="switch-desc">开启后将在指定时间静音通知</text>
+        </view>
+        <switch checked="{{dnd.enabled}}" color="#316AFD" bindchange="onDndChange" />
+      </view>
+      <view class="row-divider"></view>
+
+      <view class="dnd-time-row">
+        <view class="dnd-time-left">
+          <image src="/assets/icons/info.svg" class="dnd-moon-icon" />
+          <text class="dnd-time-label">免打扰时段</text>
+        </view>
+        <view class="dnd-time-right">
+          <text class="dnd-time-value {{dnd.enabled ? '' : 'disabled'}}">22:00 - 08:00</text>
+          <image src="/assets/icons/chevron-right.svg" class="dnd-arrow {{dnd.enabled ? '' : 'disabled'}}" />
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

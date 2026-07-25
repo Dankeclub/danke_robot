@@ -1,0 +1,50 @@
+<view class="page">
+  <nav-bar title="任务详情" showBack="{{true}}" />
+  <scroll-view class="content" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- Header card -->
+    <view class="card header-card">
+      <view class="status-badge">{{task.status}}</view>
+      <view class="header-title">{{task.title}}</view>
+      <view class="header-desc">{{task.desc}}</view>
+    </view>
+    <!-- Score card -->
+    <view class="card score-card">
+      <view class="stat-row">
+        <view class="stat-item">
+          <view class="stat-value">{{task.accuracy}}</view>
+          <view class="stat-label">正确率</view>
+        </view>
+        <view class="stat-item">
+          <view class="stat-value">{{task.duration}}</view>
+          <view class="stat-label">用时</view>
+        </view>
+        <view class="stat-item">
+          <view class="stat-value">{{task.rank}}</view>
+          <view class="stat-label">排名</view>
+        </view>
+      </view>
+    </view>
+    <!-- Detail card -->
+    <view class="card detail-card">
+      <view class="detail-row">
+        <view class="detail-label">任务类型</view>
+        <view class="detail-value">{{task.taskType}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">难度</view>
+        <view class="detail-value">{{task.difficulty}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">截止时间</view>
+        <view class="detail-value">{{task.deadline}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">发布人</view>
+        <view class="detail-value">{{task.publisher}}</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,35 @@
+.tab-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  height: 100rpx;
+  padding: 16rpx 32rpx 48rpx;
+  background-color: #FFFFFF;
+  border-top: 1rpx solid #E8EDF7;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 4rpx;
+}
+
+.tab-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.tab-label {
+  font-size: 20rpx;
+  color: #6B7280;
+  font-weight: 400;
+}
+
+.tab-item.active .tab-label {
+  color: #316AFD;
+  font-weight: 600;
+}

@@ -1,0 +1,102 @@
+/* ===== 通知设置页 ===== */
+
+.ns-sub-card {
+  margin: 32rpx var(--m) 28rpx;
+  background: var(--pd);
+  border-radius: var(--r);
+  position: relative;
+  overflow: hidden;
+}
+.ns-sub-card::after {
+  content: '';
+  position: absolute;
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  bottom: -60rpx;
+  right: -40rpx;
+  background: rgba(255,255,255,0.05);
+}
+.ns-sub-card-inner {
+  position: relative;
+  z-index: 1;
+  padding: 48rpx 44rpx;
+  color: var(--white);
+}
+.ns-sub-title { font-size: var(--t2); font-weight: 800; margin-bottom: 12rpx; }
+.ns-sub-desc {
+  font-size: var(--t4);
+  opacity: 0.82;
+  line-height: 1.5;
+  margin-bottom: 32rpx;
+}
+.ns-sub-btn {
+  display: inline-block;
+  background: var(--white);
+  color: var(--pd);
+  padding: 22rpx 52rpx;
+  border-radius: 28rpx;
+  font-size: var(--t4);
+  font-weight: 700;
+}
+
+/* 设置卡片 */
+.ns-setting-card {
+  margin: 0 var(--m) 28rpx;
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 12rpx 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.02);
+}
+.ns-setting-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 30rpx 8rpx;
+}
+.ns-setting-item + .ns-setting-item {
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+.ns-setting-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 38rpx;
+}
+.ns-setting-icon.amber { background: rgba(240,168,85,0.12); }
+.ns-setting-icon.sky   { background: rgba(119,140,205,0.12); }
+.ns-setting-icon.mint  { background: rgba(109,175,125,0.14); }
+.ns-setting-icon.rose  { background: rgba(232,144,154,0.12); }
+
+.ns-setting-body { flex: 1; min-width: 0; }
+.ns-stitle { font-size: var(--t3); font-weight: 700; color: #3D3D50; }
+.ns-sdesc  { font-size: var(--t4); font-weight: 500; color: var(--pa2); margin-top: 4rpx; }
+
+/* 免打扰 */
+.ns-dnd-card {
+  margin: 0 var(--m) 28rpx;
+  background: #F7E6D4;
+  border-radius: var(--r);
+  padding: 40rpx;
+}
+.ns-dnd-label { font-size: var(--t3); font-weight: 700; color: #3D3D50; margin-bottom: 28rpx; }
+.ns-dnd-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+.ns-dnd-label-text { font-size: var(--t4); font-weight: 600; color: var(--pa2); flex-shrink: 0; }
+.ns-time-chip {
+  flex: 1;
+  padding: 28rpx 0;
+  text-align: center;
+  border-radius: 32rpx;
+  background: var(--white);
+  font-size: var(--t2);
+  font-weight: 800;
+  color: #3D3D50;
+}

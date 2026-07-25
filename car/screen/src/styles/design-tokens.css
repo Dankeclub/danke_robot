@@ -1,0 +1,209 @@
+/* ============================================================
+   蛋仔小车端 · 手绘绘本设计系统
+   7寸横屏 1024×600 · 8-12岁儿童 · Sketch Hand-Drawn
+   ============================================================ */
+
+:root {
+  /* Brand */
+  --brand-coral: #E8826B;
+
+  /* User Palette */
+  --color-green: #AACE7B;
+  --color-yellow: #FCF3B9;
+  --color-mint: #CCE7E3;
+  --color-sky: #C0E3F5;
+  --color-warm: #FFEC8E;
+
+  /* Paper & Background */
+  --bg-sky: #C0E3F5;
+  --bg-paper: #FCF3B9;
+  --bg-card: #FFFFFF;
+  --bg-cream: #FCF5D2;
+  --bg-grass: #AACE7B;
+  --bg-mint: #CCE7E3;
+
+  /* Ink & Pencil */
+  --ink-black: #2D2D2D;
+  --ink-brown: #5C3D2E;
+  --ink-muted: #8B7E74;
+
+  /* Marker Accents */
+  --marker-red: #FF4D4D;
+  --marker-blue: #2D5DA1;
+  --marker-yellow: #FFEC8E;
+  --marker-green: #AACE7B;
+  --marker-orange: #F97316;
+  --marker-purple: #8B5CF6;
+  --marker-pink: #EC4899;
+  --marker-mint: #CCE7E3;
+
+  /* Scene Colors */
+  --scene-task: #FFB300;
+  --scene-chat: #5BA4CF;
+  --scene-learn: #8BC34A;
+  --scene-qa: #7C6FF7;
+  --scene-message: #F06292;
+
+  /* Typography - Handwritten */
+  --font-heading: 'ZCOOL KuaiLe', cursive;
+  --font-body: 'ZCOOL KuaiLe', cursive;
+  --font-icon: 'Remix Icons';
+
+  /* Type Scale */
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-base: 18px;
+  --text-lg: 22px;
+  --text-xl: 28px;
+  --text-2xl: 36px;
+  --text-3xl: 48px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Border */
+  --border-w: 3px;
+  --shadow-offset: 4px 4px 0;
+
+  /* Touch */
+  --touch-min: 48px;
+  --touch-btn: 56px;
+
+  /* Layout */
+  --screen-w: 1024px;
+  --screen-h: 600px;
+  --status-bar-h: 36px;
+
+  /* Animation */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 150ms;
+  --dur-normal: 250ms;
+  --dur-slow: 400ms;
+
+  /* Z-Index */
+  --z-base: 0;
+  --z-card: 10;
+  --z-sticky: 20;
+  --z-modal: 40;
+  --z-pet: 100;
+  --z-bubble: 90;
+}
+
+/* ─── SVG Filters (injected in App.vue) ─── */
+/* filter: url(#hand-drawn) — applies wobbly border effect */
+
+/* ─── Base Reset ─── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: var(--screen-w);
+  height: var(--screen-h);
+  overflow: auto;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--ink-black);
+  background: var(--bg-sky);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: auto;
+}
+
+/* ─── Paper Texture Overlay ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ─── Component: Status Bar ─── */
+.status-bar {
+  height: var(--status-bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ─── Hand-drawn Card Base ─── */
+.card-sketch {
+  background: var(--bg-card);
+  border: var(--border-w) solid var(--ink-black);
+  box-shadow: var(--shadow-offset) var(--ink-black);
+  border-radius: 22px 18px 24px 16px;
+  position: relative;
+}
+
+/* ─── Hand-drawn Button ─── */
+.btn-sketch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--touch-btn);
+  padding: 0 var(--space-6);
+  border: var(--border-w) solid var(--ink-black);
+  border-radius: 18px 22px 16px 20px;
+  background: var(--bg-card);
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-black);
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink-black);
+  transition: transform var(--dur-fast) var(--ease-bounce),
+              box-shadow var(--dur-fast);
+  position: relative;
+}
+
+.btn-sketch:active {
+  transform: scale(0.93) translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink-black);
+}
+
+.btn-sketch--primary {
+  background: var(--brand-coral);
+  color: #fff;
+}
+
+/* ─── SVG Doodle: Tape piece ─── */
+.doodle-tape {
+  position: absolute;
+  width: 40px;
+  height: 18px;
+  opacity: 0.6;
+  transform: rotate(-12deg);
+}
+
+/* ─── Scrollable content area ─── */
+.scroll-y {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  min-height: 0;
+}
+
+/* ─── Wobbly Card Variants ─── */
+.card-tilt-1 { transform: rotate(-0.8deg); }
+.card-tilt-2 { transform: rotate(0.6deg); }
+.card-tilt-3 { transform: rotate(-0.5deg); }
+.card-tilt-4 { transform: rotate(0.7deg); }
+.card-tilt-5 { transform: rotate(-1deg); }

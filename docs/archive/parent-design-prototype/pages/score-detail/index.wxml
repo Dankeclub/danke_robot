@@ -1,0 +1,54 @@
+<view class="page">
+  <nav-bar title="评分维度详情" showBack="{{true}}" />
+  <scroll-view class="content" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- Score header card (centered) -->
+    <view class="card score-header-card">
+      <view class="header-label">{{score.dimension}}</view>
+      <view class="header-score">{{score.total}}</view>
+      <view class="header-change">{{score.change}}</view>
+    </view>
+    <!-- Comparison card -->
+    <view class="card comparison-card">
+      <view class="comparison-title">各维度对比</view>
+      <view class="detail-row">
+        <view class="detail-label">知识掌握</view>
+        <view class="detail-right">
+          <view class="detail-value">{{score.knowledge}}</view>
+          <view class="detail-change positive">{{score.knowledgeChange}}</view>
+        </view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">专注程度</view>
+        <view class="detail-right">
+          <view class="detail-value">{{score.focus}}</view>
+          <view class="detail-change positive">{{score.focusChange}}</view>
+        </view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">学习效率</view>
+        <view class="detail-right">
+          <view class="detail-value">{{score.efficiency}}</view>
+          <view class="detail-change positive">{{score.efficiencyChange}}</view>
+        </view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">进步速度</view>
+        <view class="detail-right">
+          <view class="detail-value">{{score.progress}}</view>
+          <view class="detail-change positive">{{score.progressChange}}</view>
+        </view>
+      </view>
+    </view>
+    <!-- AI suggestion box -->
+    <view class="ai-box">
+      <view class="ai-header">
+        <image class="ai-icon" src="/assets/icons/sparkles.svg" mode="aspectFit" />
+        <text class="ai-title">星云AI建议</text>
+      </view>
+      <view class="ai-text">{{score.aiSuggestion}}</view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,125 @@
+view, scroll-view, text, image {
+  box-sizing: border-box;
+}
+
+page {
+  /* Colors - Primary */
+  --color-primary: #316AFD;
+  --color-secondary: #4075FF;
+  --color-light-blue: #84A6FD;
+  --color-primary-dark: #2855CC;
+
+  /* Colors - Semantic */
+  --color-success: #ACE828;
+  --color-accent-green: #ACE828;
+  --color-warning: #FFB547;
+  --color-danger: #FF6B6B;
+  --color-disabled: #C4C9D4;
+
+  /* Colors - Background */
+  --color-background: #F6F8FF;
+  --color-card: #FFFFFF;
+  --color-overlay: rgba(0, 0, 0, 0.4);
+  --color-divider: #E8EDF7;
+  --color-skeleton: #E8EDF7;
+
+  /* Colors - Text */
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-text-white: #FFFFFF;
+
+  /* Colors - Tag */
+  --color-tag-blue-bg: #EBF0FF;
+  --color-tag-green-bg: #F0F9E0;
+  --color-tag-warning-bg: #FFF4E0;
+  --color-tag-danger-bg: #FFEDED;
+
+  /* Spacing (1px = 2rpx) */
+  --spacing-xs: 8rpx;
+  --spacing-sm: 16rpx;
+  --spacing-md: 24rpx;
+  --spacing-base: 32rpx;
+  --spacing-lg: 40rpx;
+  --spacing-xl: 48rpx;
+  --spacing-2xl: 64rpx;
+  --spacing-3xl: 80rpx;
+  --spacing-4xl: 96rpx;
+
+  /* Typography */
+  --font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-xs: 20rpx;
+  --font-size-sm: 24rpx;
+  --font-size-base: 28rpx;
+  --font-size-md: 32rpx;
+  --font-size-lg: 36rpx;
+  --font-size-xl: 40rpx;
+  --font-size-2xl: 48rpx;
+  --font-size-3xl: 56rpx;
+
+  /* Border Radius */
+  --radius-sm: 16rpx;
+  --radius-md: 32rpx;
+  --radius-lg: 48rpx;
+  --radius-pill: 200rpx;
+
+  /* Base Styles */
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  line-height: 1.5;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Shadow Utilities */
+.shadow-card {
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.shadow-button {
+  box-shadow: 0 8rpx 32rpx rgba(49, 106, 253, 0.2);
+}
+
+.shadow-sheet {
+  box-shadow: 0 -8rpx 40rpx rgba(0, 0, 0, 0.1);
+}
+
+.shadow-dialog {
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.1);
+}
+
+/* Layout Utilities */
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

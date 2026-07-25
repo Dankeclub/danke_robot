@@ -1,0 +1,48 @@
+<view class="page">
+  <nav-bar title="学习记录详情" showBack="{{true}}" />
+  <scroll-view class="content" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- Header card -->
+    <view class="card header-card">
+      <view class="header-score">{{record.score}} 分</view>
+      <view class="header-title">{{record.title}}</view>
+      <view class="header-meta">{{record.time}} · {{record.subject}} · {{record.duration}}</view>
+    </view>
+    <!-- Score breakdown -->
+    <view class="breakdown-row">
+      <view class="breakdown-card">
+        <view class="breakdown-value">{{record.earnedScore}}</view>
+        <view class="breakdown-label">得分</view>
+      </view>
+      <view class="breakdown-card">
+        <view class="breakdown-value">{{record.correct}}</view>
+        <view class="breakdown-label">正确</view>
+      </view>
+      <view class="breakdown-card">
+        <view class="breakdown-value">{{record.timeUsed}}</view>
+        <view class="breakdown-label">用时</view>
+      </view>
+    </view>
+    <!-- Detail card -->
+    <view class="card detail-card">
+      <view class="detail-row">
+        <view class="detail-label">题目数量</view>
+        <view class="detail-value">{{record.questionCount}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">错题</view>
+        <view class="detail-value detail-danger">{{record.wrongQuestion}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">薄弱点</view>
+        <view class="detail-value detail-warning">{{record.weakPoint}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">建议</view>
+        <view class="detail-value">{{record.suggestion}}</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

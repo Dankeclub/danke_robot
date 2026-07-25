@@ -1,0 +1,202 @@
+/* ===== 学习追踪页 ===== */
+
+/* 页面底部留白 */
+.lrn-page {
+  padding-bottom: 180rpx;
+}
+
+/* 分区标题 */
+.lrn-sect-title {
+  font-size: var(--t2);
+  font-weight: 800;
+  color: var(--pd);
+  margin: 20rpx var(--m) 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.lrn-sect-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+/* 六模块进度环网格 */
+.lrn-rings-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 var(--m) var(--g);
+}
+.lrn-ring-card {
+  width: calc(33.33% - 8rpx);
+  margin: 4rpx;
+  border-radius: 40rpx;
+  padding: 32rpx 12rpx 28rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+.lrn-ring-card.math   { background: rgba(119,140,205,0.1); }
+.lrn-ring-card.sci    { background: rgba(109,175,125,0.1); }
+.lrn-ring-card.eng    { background: rgba(216,122,130,0.1); }
+.lrn-ring-card.poem   { background: rgba(151,151,156,0.1); }
+.lrn-ring-card.music  { background: rgba(240,168,85,0.1); }
+.lrn-ring-card.puzzle { background: rgba(109,175,125,0.1); }
+
+/* 进度环 SVG */
+.lrn-ring-wrap {
+  width: 112rpx;
+  height: 112rpx;
+  margin: 0 auto 16rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lrn-ring-svg {
+  width: 112rpx;
+  height: 112rpx;
+  position: absolute;
+  inset: 0;
+}
+.lrn-ring-center {
+  font-size: var(--t5);
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+}
+.lrn-ring-card.math   .lrn-ring-center { color: var(--pd); }
+.lrn-ring-card.sci    .lrn-ring-center { color: #4F9A5F; }
+.lrn-ring-card.eng    .lrn-ring-center { color: #D97A84; }
+.lrn-ring-card.poem   .lrn-ring-center { color: var(--pa2); }
+.lrn-ring-card.music  .lrn-ring-center { color: #D4892E; }
+.lrn-ring-card.puzzle .lrn-ring-center { color: #4F9A5F; }
+
+.lrn-ring-label { font-size: var(--t5); font-weight: 700; color: #3D3D50; }
+.lrn-ring-sub   { font-size: var(--t6); font-weight: 500; color: var(--pa2); margin-top: 4rpx; }
+
+/* 打卡天数卡片 */
+.lrn-rank-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--pd);
+  border-radius: var(--r);
+  padding: 32rpx 40rpx;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+}
+.lrn-rank-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 28rpx;
+  background: rgba(255,255,255,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.lrn-rank-icon-img {
+  width: 48rpx;
+  height: 48rpx;
+}
+.lrn-rank-body { flex: 1; }
+.lrn-rank-title { font-size: var(--t3); font-weight: 800; }
+.lrn-rank-desc  { font-size: var(--t4); opacity: 0.82; margin-top: 4rpx; }
+
+/* 最近完成 */
+.lrn-recent-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 36rpx 40rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.03);
+}
+.lrn-recent-hdr {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+  margin-bottom: 24rpx;
+}
+.lrn-recent-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 0;
+}
+.lrn-recent-row + .lrn-recent-row { border-top: 1px solid rgba(0,0,0,0.04); }
+.lrn-recent-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.lrn-recent-dot.math { background: var(--pd); }
+.lrn-recent-dot.sci  { background: #4F9A5F; }
+.lrn-recent-dot.eng  { background: #D97A84; }
+.lrn-recent-name {
+  font-size: var(--t4);
+  font-weight: 700;
+  color: #3D3D50;
+  width: 72rpx;
+  flex-shrink: 0;
+}
+.lrn-recent-bar-wrap {
+  flex: 1;
+  height: 12rpx;
+  background: rgba(0,0,0,0.04);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+.lrn-recent-bar {
+  height: 100%;
+  border-radius: 6rpx;
+}
+.lrn-recent-bar.math  { background: var(--pd); }
+.lrn-recent-bar.sci   { background: #4F9A5F; }
+.lrn-recent-bar.eng   { background: #D97A84; }
+.lrn-recent-score {
+  font-size: var(--t4);
+  font-weight: 800;
+  color: #5A5A62;
+  width: 64rpx;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 学习目标设置卡片 */
+.illo-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 32rpx 36rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.03);
+}
+.illo-circle {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: var(--warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.illo-body { flex: 1; }
+.illo-title {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+}
+.illo-sub {
+  font-size: var(--t5);
+  font-weight: 500;
+  color: var(--pa2);
+  margin-top: 6rpx;
+}
+.illo-arrow {
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+}

@@ -1,0 +1,1424 @@
+openapi: 3.0.3
+info:
+  title: 儿童车机学习与互动 API
+  version: 0.1.0-draft
+  description: 车机端 API，统一前缀 /v1/api/car。普通 JSON 响应使用 {code,msg,data}；聊天 completions
+    为 SSE。
+servers:
+- url: https://api.example.com
+  description: 示例域名，路径已包含 /v1/api/car 前缀
+tags:
+- name: Auth
+  description: 手机号登录与 JWT
+- name: Learning Park
+  description: 学习乐园和今日任务
+- name: Learning Sessions
+  description: 六个学习模块会话与批次
+- name: Files
+  description: 文件上传和私有访问
+- name: Chat
+  description: 蛋仔聊天、ASR 和 SSE
+- name: Parent Messages
+  description: 家长消息轻量接口
+- name: Telemetry
+  description: 学习过程数据上报
+- name: WebSocket
+  description: WS 通知协议说明
+paths:
+  /v1/api/car/auth/login:
+    post:
+      tags:
+      - Auth
+      summary: 手机号登录，自动关联家长和孩子
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+        description: 幂等键，写接口建议传 UUID。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              phone: '13800138000'
+              device:
+                device_id: car_device_001
+                device_name: 儿童车机 A
+                platform: android_car
+                app_version: 1.0.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  token_type: Bearer
+                  access_token: eyJhbGciOi...
+                  expires_in: 7200
+                  refresh_token: rt_01J...
+                  refresh_expires_in: 2592000
+                  child_profile:
+                    nickname: 小明
+                    avatar_url: https://...
+                  family_profile:
+                    parent_phone_masked: 138****8000
+                    relationship_label: 妈妈
+        '404':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              example:
+                code: 41001
+                msg: phone_not_bound
+                data:
+                  phone_masked: 138****8000
+  /v1/api/car/auth/token/refresh:
+    post:
+      tags:
+      - Auth
+      summary: 刷新 JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+            example:
+              refresh_token: rt_01J...
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  token_type: Bearer
+                  access_token: eyJhbGciOi...
+                  expires_in: 7200
+                  refresh_token: rt_01K...
+                  refresh_expires_in: 2592000
+  /v1/api/car/auth/logout:
+    post:
+      tags:
+      - Auth
+      summary: 退出登录并作废 refresh token
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+            example:
+              refresh_token: rt_01K...
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data: null
+  /v1/api/car/learning/park:
+    get:
+      tags:
+      - Learning Park
+      summary: 学习乐园首页
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  modules:
+                  - module: science
+                    module_label: 科学探索
+                    enabled_for_today_task: true
+                    effective_config:
+                      difficulty: beginner
+                      difficulty_label: 初级
+                      batch_size: 3
+                      min_repeat_interval_seconds: 604800
+                      config_version: 7
+                    active_session_id: null
+  /v1/api/car/today-tasks:
+    get:
+      tags:
+      - Learning Park
+      summary: 获取今日任务摘要
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  business_date: '2026-07-16'
+                  timezone: Asia/Shanghai
+                  items:
+                  - task_id: task_01J...
+                    module: math
+                    module_label: 数学妙算
+                    status: assigned
+                    title: 今日数学妙算
+                    progress:
+                      completed_count: 0
+                      total_count: 10
+                    expires_at: '2026-07-17T00:00:00+08:00'
+  /v1/api/car/today-tasks/{task_id}:
+    get:
+      tags:
+      - Learning Park
+      summary: 获取任务详情
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  task_id: task_01J...
+                  module: math
+                  module_label: 数学妙算
+                  status: assigned
+                  config_snapshot:
+                    difficulty: within_10_add_subtract
+                    difficulty_label: 十以内加减法
+                    batch_size: 10
+                    min_repeat_interval_seconds: 604800
+                    config_version: 7
+                  progress:
+                    completed_count: 0
+                    total_count: 10
+                    accuracy: null
+                    is_final: false
+                  expires_at: '2026-07-17T00:00:00+08:00'
+  /v1/api/car/today-tasks/{task_id}/claim:
+    post:
+      tags:
+      - Learning Park
+      summary: 领取任务
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 幂等键，写接口建议传 UUID。
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  task_id: task_01J...
+                  status: claimed
+                  claimed_at: '2026-07-16T09:00:00+08:00'
+  /v1/api/car/learning/{module}/sessions:
+    post:
+      tags:
+      - Learning Sessions
+      summary: 创建或恢复学习会话（六个模块通用）
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: module
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Module'
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+        description: 幂等键，写接口建议传 UUID。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionRequest'
+            example:
+              source: today_task
+              task_id: task_01J...
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  session_id: ls_01J...
+                  module: math
+                  source: today_task
+                  task_id: task_01J...
+                  status: active
+                  config_snapshot:
+                    difficulty: within_10_add_subtract
+                    difficulty_label: 十以内加减法
+                    batch_size: 10
+                    min_repeat_interval_seconds: 604800
+                    config_version: 7
+  /v1/api/car/learning/{module}/sessions/{session_id}/batches:
+    post:
+      tags:
+      - Learning Sessions
+      summary: 创建或恢复内容批次（六个模块通用）
+      description: 请求体为空；前端不传难度、题量、最小重复时间。响应 data.config_snapshot 返回本次实际配置，items 按模块不同。
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: module
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Module'
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 幂等键，写接口建议传 UUID。
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  batch_id: batch_01J...
+                  session_id: ls_01J...
+                  module: math
+                  difficulty: within_10_add_subtract
+                  difficulty_label: 十以内加减法
+                  config_snapshot:
+                    difficulty: within_10_add_subtract
+                    difficulty_label: 十以内加减法
+                    batch_size: 10
+                    min_repeat_interval_seconds: 604800
+                    config_version: 7
+                  items:
+                  - question_id: math_001
+                    question: 3 + 4 = ?
+                    options:
+                    - option_id: A
+                      text: '6'
+                    - option_id: B
+                      text: '7'
+                    - option_id: C
+                      text: '8'
+                    - option_id: D
+                      text: '9'
+                    correct_option_id: B
+        '409':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              example:
+                code: 42001
+                msg: content_pool_exhausted
+                data:
+                  required_count: 10
+                  available_count: 6
+                  min_repeat_interval_seconds: 604800
+                  next_available_at: '2026-07-18T09:00:00+08:00'
+  /v1/api/car/files/uploads:
+    post:
+      tags:
+      - Files
+      summary: 初始化文件上传
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadInitRequest'
+            example:
+              purpose: poem_recording
+              file_name: poem.m4a
+              content_type: audio/mp4
+              size_bytes: 182400
+              sha256: <hex>
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  upload_id: upload_01J...
+                  upload_url: https://...
+                  method: PUT
+                  headers:
+                    Content-Type: audio/mp4
+                  expires_at: '2026-07-16T15:35:00+08:00'
+  /v1/api/car/files/uploads/{upload_id}/complete:
+    post:
+      tags:
+      - Files
+      summary: 确认文件上传完成
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: upload_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadCompleteRequest'
+            example:
+              size_bytes: 182400
+              sha256: <hex>
+              etag: object-storage-etag
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  file_id: file_01J...
+                  purpose: poem_recording
+                  status: available
+  /v1/api/car/files/{file_id}/access:
+    get:
+      tags:
+      - Files
+      summary: 获取私有文件访问地址
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  file_id: file_01J...
+                  url: https://...
+                  expires_at: '2026-07-16T15:35:00+08:00'
+  /v1/api/car/chat/sessions:
+    post:
+      tags:
+      - Chat
+      summary: 创建或获取当天聊天 Session
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  session_id: chat_session_01J...
+                  business_date: '2026-07-16'
+                  timezone: Asia/Shanghai
+                  status: active
+                  expires_at: '2026-07-17T00:00:00+08:00'
+  /v1/api/car/chat/sessions/{session_id}/messages:
+    get:
+      tags:
+      - Chat
+      summary: 获取当天聊天消息
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  session_id: chat_session_01J...
+                  messages:
+                  - message_id: cm_001
+                    role: user
+                    content: 蛋仔，你好。
+                    status: completed
+                    created_at: '2026-07-16T09:00:00+08:00'
+  /v1/api/car/asr/transcriptions:
+    post:
+      tags:
+      - Chat
+      summary: 语音识别
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AsrRequest'
+            example:
+              file_id: file_01J...
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  transcription_id: trans_01J...
+                  file_id: file_01J...
+                  text: 蛋仔，为什么天空是蓝色的？
+                  duration_ms: 4280
+  /v1/api/car/chat/completions:
+    post:
+      tags:
+      - Chat
+      summary: Chat Completions SSE
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 幂等键，写接口建议传 UUID。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+            example:
+              session_id: chat_session_01J...
+              messages:
+              - role: user
+                content: 蛋仔，你好。
+              - role: assistant
+                content: 你好呀！今天想聊什么？
+              - role: user
+                content: 为什么天空是蓝色的？
+              stream: true
+      responses:
+        '200':
+          description: 'SSE stream，Chat Completions chunk 格式，最后 data: [DONE]'
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              example: 'data: {"id":"chatcmpl_01J...","object":"chat.completion.chunk","choices":[{"index":0,"delta":{"content":"你好呀"},"finish_reason":null}]}
+
+
+                data: [DONE]
+
+                '
+        '400':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              example:
+                code: 43006
+                msg: chat_history_conflict
+                data: {}
+  /v1/api/car/parent-messages:
+    get:
+      tags:
+      - Parent Messages
+      summary: 获取最近家长消息
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  items:
+                  - message_id: pm_001
+                    type: text
+                    content:
+                      text: 记得完成今天的数学任务哦。
+                    created_at: '2026-07-16T15:00:00+08:00'
+                    replies: []
+  /v1/api/car/parent-messages/{message_id}/replies:
+    post:
+      tags:
+      - Parent Messages
+      summary: 回复家长消息
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: message_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+        description: 幂等键，写接口建议传 UUID。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParentReplyRequest'
+            example:
+              type: preset_text
+              preset_code: got_it
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  reply_id: reply_01J...
+                  message_id: pm_001
+                  type: preset_text
+                  preset_code: got_it
+                  text: 知道了
+                  created_at: '2026-07-16T15:05:00+08:00'
+  /v1/api/car/telemetry/events:batch:
+    post:
+      tags:
+      - Telemetry
+      summary: 批量上报学习过程事件
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 幂等键，写接口建议传 UUID。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryBatchRequest'
+            example:
+              events:
+              - event_id: evt_answer_001
+                type: answer_submitted
+                session_id: ls_01J...
+                batch_id: batch_01J...
+                module: math
+                question_id: math_001
+                selected_option_id: B
+                answer_duration_ms: 4200
+                occurred_at: '2026-07-16T10:00:00+08:00'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  accepted_event_ids:
+                  - evt_answer_001
+                  duplicate_event_ids: []
+                  rejected: []
+  /v1/api/car/telemetry/sessions/{session_id}/complete:
+    post:
+      tags:
+      - Telemetry
+      summary: 请求完成判定
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  session_id: ls_01J...
+                  status: completed
+                  task:
+                    task_id: task_01J...
+                    status: completed
+                  summary:
+                    module: math
+                    completed_count: 10
+                    total_count: 10
+                    accuracy: 0.8
+                    correct_count: 8
+                    wrong_count: 2
+                    total_active_duration_ms: 52000
+                    is_final: true
+        '409':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              example:
+                code: 43020
+                msg: learning_not_complete
+                data:
+                  session_id: ls_01J...
+                  missing:
+                  - type: unanswered_questions
+                    count: 2
+  /v1/api/car/telemetry/sessions/{session_id}/summary:
+    get:
+      tags:
+      - Telemetry
+      summary: 查询会话汇总
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+              example:
+                code: 0
+                msg: ok
+                data:
+                  session_id: ls_01J...
+                  module: math
+                  status: active
+                  completed_count: 8
+                  total_count: 10
+                  accuracy: 0.75
+                  correct_count: 6
+                  wrong_count: 2
+                  total_active_duration_ms: 41200
+                  is_final: false
+  /v1/api/car/ws:
+    get:
+      tags:
+      - WebSocket
+      summary: WebSocket 连接地址说明
+      description: 实际协议为 wss://<host>/v1/api/car/ws。建立连接后第一包发送 {type:'auth', data:{access_token}}。服务端推送
+        notification.popup、navigation.requested、parent_message.refresh、today_task.refresh。OpenAPI
+        仅作索引，详细事件见 Markdown 文档。
+      responses:
+        '101':
+          description: Switching Protocols
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApiEnvelope:
+      type: object
+      required:
+      - code
+      - msg
+      - data
+      properties:
+        code:
+          type: integer
+          example: 0
+        msg:
+          type: string
+          example: ok
+        data:
+          nullable: true
+          description: 具体接口正文
+    ErrorEnvelope:
+      type: object
+      required:
+      - code
+      - msg
+      - data
+      properties:
+        code:
+          type: integer
+          example: 42001
+        msg:
+          type: string
+          example: content_pool_exhausted
+        data:
+          nullable: true
+          type: object
+    DeviceInfo:
+      type: object
+      required:
+      - device_id
+      - platform
+      - app_version
+      properties:
+        device_id:
+          type: string
+        device_name:
+          type: string
+        platform:
+          type: string
+          enum:
+          - android_car
+        app_version:
+          type: string
+    LoginRequest:
+      type: object
+      required:
+      - phone
+      - device
+      properties:
+        phone:
+          type: string
+          example: '13800138000'
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+    LoginData:
+      type: object
+      properties:
+        token_type:
+          type: string
+          example: Bearer
+        access_token:
+          type: string
+        expires_in:
+          type: integer
+          example: 7200
+        refresh_token:
+          type: string
+        refresh_expires_in:
+          type: integer
+          example: 2592000
+        child_profile:
+          type: object
+          properties:
+            nickname:
+              type: string
+            avatar_url:
+              type: string
+              nullable: true
+        family_profile:
+          type: object
+          properties:
+            parent_phone_masked:
+              type: string
+            relationship_label:
+              type: string
+    RefreshTokenRequest:
+      type: object
+      required:
+      - refresh_token
+      properties:
+        refresh_token:
+          type: string
+    Module:
+      type: string
+      enum:
+      - science
+      - math
+      - english
+      - poems
+      - music
+      - quiz
+    ConfigSnapshot:
+      type: object
+      properties:
+        difficulty:
+          type: string
+          nullable: true
+          description: 模块难度枚举值。science/math/english/poems/quiz 分别使用对应 Difficulty 枚举；music
+            使用 category。
+        difficulty_label:
+          type: string
+          nullable: true
+        category:
+          type: string
+          nullable: true
+          description: 音乐律动类别枚举，见 MusicCategory。
+        category_label:
+          type: string
+          nullable: true
+        batch_size:
+          type: integer
+        min_repeat_interval_seconds:
+          type: integer
+        config_version:
+          type: integer
+    LearningParkModule:
+      type: object
+      properties:
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+        enabled_for_today_task:
+          type: boolean
+        effective_config:
+          $ref: '#/components/schemas/ConfigSnapshot'
+        active_session_id:
+          type: string
+          nullable: true
+    TaskStatus:
+      type: string
+      enum:
+      - assigned
+      - claimed
+      - in_progress
+      - completed
+      - expired
+    TodayTask:
+      type: object
+      properties:
+        task_id:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        module_label:
+          type: string
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        title:
+          type: string
+        progress:
+          type: object
+          properties:
+            completed_count:
+              type: integer
+            total_count:
+              type: integer
+            accuracy:
+              type: number
+              nullable: true
+            is_final:
+              type: boolean
+              nullable: true
+        expires_at:
+          type: string
+          format: date-time
+    SessionRequest:
+      type: object
+      required:
+      - source
+      properties:
+        source:
+          type: string
+          enum:
+          - today_task
+          - free_learning
+          - task_extension
+          - ws_navigation
+        task_id:
+          type: string
+          nullable: true
+        navigation_id:
+          type: string
+          nullable: true
+    SessionData:
+      type: object
+      properties:
+        session_id:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        source:
+          type: string
+        task_id:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+          - active
+          - completed
+          - expired
+        config_snapshot:
+          $ref: '#/components/schemas/ConfigSnapshot'
+    Option:
+      type: object
+      properties:
+        option_id:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          - D
+        text:
+          type: string
+    QuestionItem:
+      type: object
+      properties:
+        question_id:
+          type: string
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+        correct_option_id:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          - D
+    BatchData:
+      type: object
+      description: 不同模块 items 字段不同；见文档中的六个模块示例。
+      properties:
+        batch_id:
+          type: string
+        session_id:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        difficulty:
+          type: string
+          nullable: true
+        difficulty_label:
+          type: string
+          nullable: true
+        category:
+          type: string
+          nullable: true
+        category_label:
+          type: string
+          nullable: true
+        config_snapshot:
+          $ref: '#/components/schemas/ConfigSnapshot'
+        items:
+          type: array
+          items:
+            type: object
+    UploadInitRequest:
+      type: object
+      required:
+      - purpose
+      - file_name
+      - content_type
+      - size_bytes
+      - sha256
+      properties:
+        purpose:
+          type: string
+          enum:
+          - poem_recording
+          - chat_asr
+          - parent_message_voice_reply
+        file_name:
+          type: string
+        content_type:
+          type: string
+        size_bytes:
+          type: integer
+        sha256:
+          type: string
+    UploadCompleteRequest:
+      type: object
+      properties:
+        size_bytes:
+          type: integer
+        sha256:
+          type: string
+        etag:
+          type: string
+          nullable: true
+    ChatSessionData:
+      type: object
+      properties:
+        session_id:
+          type: string
+        business_date:
+          type: string
+          format: date
+        timezone:
+          type: string
+        status:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+    ChatMessage:
+      type: object
+      required:
+      - role
+      - content
+      properties:
+        message_id:
+          type: string
+          nullable: true
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+        content:
+          type: string
+        status:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+    AsrRequest:
+      type: object
+      required:
+      - file_id
+      properties:
+        file_id:
+          type: string
+    ChatCompletionRequest:
+      type: object
+      required:
+      - session_id
+      - messages
+      - stream
+      properties:
+        session_id:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        stream:
+          type: boolean
+          enum:
+          - true
+    ParentReplyRequest:
+      oneOf:
+      - type: object
+        required:
+        - type
+        - preset_code
+        properties:
+          type:
+            type: string
+            enum:
+            - preset_text
+          preset_code:
+            type: string
+            enum:
+            - got_it
+            - will_do_now
+            - done
+            - later
+            - thank_you
+      - type: object
+        required:
+        - type
+        - file_id
+        - duration_ms
+        properties:
+          type:
+            type: string
+            enum:
+            - voice
+          file_id:
+            type: string
+          duration_ms:
+            type: integer
+    TelemetryEvent:
+      type: object
+      required:
+      - event_id
+      - type
+      - session_id
+      - batch_id
+      - module
+      - occurred_at
+      properties:
+        event_id:
+          type: string
+        type:
+          type: string
+          enum:
+          - answer_submitted
+          - active_reading
+          - word_studied
+          - audio_playback
+          - recording_uploaded
+        session_id:
+          type: string
+        batch_id:
+          type: string
+        module:
+          $ref: '#/components/schemas/Module'
+        question_id:
+          type: string
+          nullable: true
+        selected_option_id:
+          type: string
+          nullable: true
+        answer_duration_ms:
+          type: integer
+          nullable: true
+        article_id:
+          type: string
+          nullable: true
+        poem_id:
+          type: string
+          nullable: true
+        word_id:
+          type: string
+          nullable: true
+        song_id:
+          type: string
+          nullable: true
+        active_duration_ms:
+          type: integer
+          nullable: true
+        played_ranges_ms:
+          type: array
+          items:
+            type: array
+            items:
+              type: integer
+          nullable: true
+        file_id:
+          type: string
+          nullable: true
+        duration_ms:
+          type: integer
+          nullable: true
+        occurred_at:
+          type: string
+          format: date-time
+    TelemetryBatchRequest:
+      type: object
+      required:
+      - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelemetryEvent'
+    CompleteSessionData:
+      type: object
+      properties:
+        session_id:
+          type: string
+        status:
+          type: string
+        task:
+          type: object
+          nullable: true
+        summary:
+          type: object
+    ScienceDifficulty:
+      type: string
+      enum:
+      - beginner
+      - intermediate
+      - advanced
+      description: 科学探索难度：初级/中级/高级
+    MathDifficulty:
+      type: string
+      enum:
+      - within_10_add_subtract
+      - within_10_multiply_divide
+      - two_digit_add_subtract
+      - two_digit_multiply_divide
+      - three_digit_four_operations
+      - mixed_four_operations
+      description: 数学妙算难度
+    EnglishDifficulty:
+      type: string
+      enum:
+      - grade_3
+      - grade_4
+      - grade_5
+      - grade_6
+      description: 英语乐园年级
+    PoemsDifficulty:
+      type: string
+      enum:
+      - enlightenment
+      - beginner
+      - intermediate
+      - advanced
+      description: 诗词儿歌难度：启蒙/初级/中级/高级
+    MusicCategory:
+      type: string
+      enum:
+      - children_song
+      - popular_music
+      - classical_music
+      - classic_music
+      - patriotic_music
+      - mixed
+      description: 音乐律动类别
+    QuizDifficulty:
+      type: string
+      enum:
+      - beginner
+      - intermediate
+      - advanced
+      description: 益智问答难度：初级/中级/高级

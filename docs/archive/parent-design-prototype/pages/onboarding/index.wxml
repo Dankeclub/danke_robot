@@ -1,0 +1,35 @@
+<view class="page" style="padding-top: {{statusBarHeight}}px;">
+  <view class="onboard-content">
+    <!-- DanZai + Title -->
+    <view class="danzai-wrap">
+      <image src="/assets/icons/bot.svg" class="danzai-img" />
+    </view>
+    <view class="title-area">
+      <text class="welcome-title">欢迎来到AI陪伴</text>
+      <text class="welcome-sub">为宝贝选择一个聪明的伙伴</text>
+    </view>
+
+    <!-- Feature Cards -->
+    <view class="feature-list">
+      <view class="feature-item" wx:for="{{features}}" wx:key="title">
+        <view class="feature-icon-wrap">
+          <image src="/assets/icons/{{item.icon}}.svg" class="feature-icon" />
+        </view>
+        <view class="feature-text">
+          <text class="feature-title">{{item.title}}</text>
+          <text class="feature-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Page Dots -->
+    <view class="page-dots">
+      <view class="dot {{index === 0 ? 'active' : ''}}" wx:for="{{3}}" wx:key="*this"></view>
+    </view>
+  </view>
+
+  <!-- Start Button -->
+  <view class="start-btn" bindtap="onTapStart">
+    <text class="start-text">开始使用</text>
+  </view>
+</view>

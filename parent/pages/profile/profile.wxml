@@ -1,0 +1,50 @@
+<!-- 我的页 -->
+<view class="page-wrap pro-page">
+
+  <!-- 家庭卡片 -->
+  <view class="pro-family-card ca" bind:tap="goChildInfo">
+    <view class="pro-family-avatar">
+      <image class="pro-avatar-icon" src="/icons/ic-user-pg.svg" mode="aspectFit"/>
+    </view>
+    <view class="pro-family-info">
+      <view class="pro-fname">{{childName}} · {{ageText}}</view>
+      <view class="pro-fid">{{childName}}妈妈管理</view>
+    </view>
+    <view class="pro-family-mascot">
+      <view class="pro-fm-avatar">
+        <danke-mascot size="sm" state="online" />
+      </view>
+      <text class="pro-fm-label">蛋仔</text>
+      <text class="pro-fm-sub">在线</text>
+    </view>
+  </view>
+
+  <!-- 设置列表 -->
+  <view class="pro-setting-card ca">
+    <view class="pro-setting-item" bind:tap="goDevice">
+      <view class="pro-si-icon">
+        <image class="pro-si-icon-img" src="/icons/ic-device-pg.svg" mode="aspectFit"/>
+      </view>
+      <text class="pro-si-body">设备管理</text>
+      <image class="pro-si-arrow" src="/icons/ic-chevron-pg.svg" mode="aspectFit"/>
+    </view>
+    <view class="pro-setting-item" bind:tap="goNotifSettings">
+      <view class="pro-si-icon">
+        <image class="pro-si-icon-img" src="/icons/ic-bell-pg.svg" mode="aspectFit"/>
+      </view>
+      <text class="pro-si-body">通知设置</text>
+      <image class="pro-si-arrow" src="/icons/ic-chevron-pg.svg" mode="aspectFit"/>
+    </view>
+    <view class="pro-setting-item" bind:tap="goChildInfo">
+      <view class="pro-si-icon">
+        <image class="pro-si-icon-img" src="/icons/ic-child-pg.svg" mode="aspectFit"/>
+      </view>
+      <text class="pro-si-body">孩子信息</text>
+      <image class="pro-si-arrow" src="/icons/ic-chevron-pg.svg" mode="aspectFit"/>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="pro-bottom-card ca" bind:tap="onLogout">退出登录</view>
+  <custom-tabbar />
+</view>

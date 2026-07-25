@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "行为挖掘报告",
+  "navigationBarBackgroundColor": "#f8f6f2",
+  "usingComponents": {
+    "danke-mascot": "/components/danke-mascot/danke-mascot"
+  }
+}

@@ -1,0 +1,65 @@
+<view class="page">
+  <!-- Header -->
+  <view class="header" style="padding-top: {{statusBarHeight}}px;">
+    <view class="header-row">
+      <text class="header-title">成长报告</text>
+      <view class="share-btn">
+        <image src="/assets/icons/share.svg" class="share-icon" />
+        <text class="share-text">分享</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab Switch -->
+  <view class="tab-switch">
+    <view class="tab-item {{activeTab === 'daily' ? 'active' : ''}}" bindtap="onTabChange" data-tab="daily">
+      <text class="tab-label {{activeTab === 'daily' ? 'active' : ''}}">日报</text>
+      <view class="tab-underline" wx:if="{{activeTab === 'daily'}}"></view>
+    </view>
+    <view class="tab-item {{activeTab === 'weekly' ? 'active' : ''}}" bindtap="onTabChange" data-tab="weekly">
+      <text class="tab-label {{activeTab === 'weekly' ? 'active' : ''}}">周报</text>
+      <view class="tab-underline" wx:if="{{activeTab === 'weekly'}}"></view>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="content" show-scrollbar="{{false}}">
+    <!-- AI Summary Card -->
+    <view class="ai-card">
+      <view class="ai-header">
+        <image src="/assets/icons/qi-brain.svg" class="ai-sparkle" />
+        <text class="ai-title">{{aiTitle}}</text>
+      </view>
+      <text class="ai-text">{{aiText}}</text>
+    </view>
+
+    <!-- Score Section -->
+    <view class="score-section">
+      <text class="section-title">各维度评分</text>
+      <view class="score-grid">
+        <view class="score-card" wx:for="{{scores}}" wx:key="label">
+          <text class="score-val" style="color: {{item.color}};">{{item.val}}</text>
+          <text class="score-lbl">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- History Section -->
+    <view class="history-section">
+      <text class="section-title">历史报告</text>
+      <view class="history-list">
+        <view class="history-card" wx:for="{{filteredHistory}}" wx:key="id" bindtap="onHistoryTap" data-id="{{item.id}}">
+          <view class="hist-left">
+            <view class="hist-date-row">
+              <view class="hist-tag">{{item.tag}}</view>
+              <text class="hist-date">{{item.date}}</text>
+            </view>
+            <text class="hist-desc">{{item.desc}}</text>
+          </view>
+          <image src="/assets/icons/chevron-right.svg" class="hist-arrow" />
+        </view>
+      </view>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

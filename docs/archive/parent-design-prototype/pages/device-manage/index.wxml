@@ -1,0 +1,123 @@
+<view class="page">
+  <nav-bar title="设备管理" />
+
+  <scroll-view scroll-y class="content" show-scrollbar="{{false}}">
+    <!-- Device Hero Card (Dark Gradient) -->
+    <view class="hero-card">
+      <view class="hero-top">
+        <view class="hero-info">
+          <text class="hero-label">AI陪伴机器人</text>
+          <view class="hero-name-row">
+            <text class="hero-name">蛋仔·小智</text>
+            <view class="online-badge">
+              <view class="online-dot"></view>
+              <text class="online-text">在线</text>
+            </view>
+          </view>
+          <text class="hero-sn">SN: EGG-2026-0815</text>
+        </view>
+        <view class="hero-icon-wrap">
+          <image src="/assets/icons/bot.svg" class="hero-icon" />
+        </view>
+      </view>
+      <view class="hero-bottom">
+        <text class="hero-sync">最后同步：刚刚</text>
+        <text class="hero-detail" bindtap="onViewDetail">查看详情</text>
+      </view>
+    </view>
+
+    <!-- Status Grid Card -->
+    <view class="status-grid-card">
+      <view class="status-row">
+        <view class="status-cell">
+          <view class="cell-top">
+            <image src="/assets/icons/battery.svg" class="cell-icon" />
+            <text class="cell-label">电量</text>
+          </view>
+          <text class="cell-value">86%</text>
+          <text class="cell-sub">充电状态良好</text>
+        </view>
+        <view class="cell-divider-v"></view>
+        <view class="status-cell">
+          <view class="cell-top">
+            <image src="/assets/icons/wifi.svg" class="cell-icon" />
+            <text class="cell-label">Wi-Fi</text>
+          </view>
+          <text class="cell-value">连接正常</text>
+          <text class="cell-sub">信号强度 强</text>
+        </view>
+      </view>
+
+      <view class="cell-divider-h"></view>
+
+      <view class="status-row">
+        <view class="status-cell">
+          <view class="cell-top">
+            <image src="/assets/icons/qi-brain.svg" class="cell-icon" />
+            <text class="cell-label">固件版本</text>
+          </view>
+          <text class="cell-value">v1.2.0</text>
+          <text class="cell-sub">已是最新</text>
+        </view>
+        <view class="cell-divider-v"></view>
+        <view class="status-cell">
+          <view class="cell-top">
+            <image src="/assets/icons/clock.svg" class="cell-icon" />
+            <text class="cell-label">最后同步</text>
+          </view>
+          <text class="cell-value">14:30</text>
+          <text class="cell-sub">今日已同步 8 次</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Operations Card -->
+    <view class="ops-card">
+      <view class="op-row" bindtap="onOpTap" data-key="firmware">
+        <view class="op-icon-wrap"><image src="/assets/icons/qi-brain.svg" class="op-icon" /></view>
+        <view class="op-text">
+          <text class="op-label">检查更新</text>
+          <text class="op-desc">当前 v1.2.0</text>
+        </view>
+        <image src="/assets/icons/chevron-right.svg" class="op-arrow" />
+      </view>
+      <view class="op-divider"></view>
+
+      <view class="op-row" bindtap="onOpTap" data-key="reconnect">
+        <view class="op-icon-wrap"><image src="/assets/icons/wifi.svg" class="op-icon" /></view>
+        <view class="op-text">
+          <text class="op-label">重新连接设备</text>
+          <text class="op-desc">Wi-Fi 直连</text>
+        </view>
+        <image src="/assets/icons/chevron-right.svg" class="op-arrow" />
+      </view>
+      <view class="op-divider"></view>
+
+      <view class="op-row" bindtap="onOpTap" data-key="info">
+        <view class="op-icon-wrap"><image src="/assets/icons/info-blue.svg" class="op-icon" /></view>
+        <view class="op-text">
+          <text class="op-label">查看设备信息</text>
+          <text class="op-desc">型号、序列号、MAC</text>
+        </view>
+        <image src="/assets/icons/chevron-right.svg" class="op-arrow" />
+      </view>
+      <view class="op-divider"></view>
+
+      <view class="op-row" bindtap="onOpTap" data-key="connect">
+        <view class="op-icon-wrap"><image src="/assets/icons/clock.svg" class="op-icon" /></view>
+        <view class="op-text">
+          <text class="op-label">查看连接记录</text>
+          <text class="op-desc">最近 7 天</text>
+        </view>
+        <image src="/assets/icons/chevron-right.svg" class="op-arrow" />
+      </view>
+    </view>
+
+    <!-- Unbind Button -->
+    <view class="unbind-btn" bindtap="onUnbind">
+      <text class="unbind-text">解绑设备</text>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

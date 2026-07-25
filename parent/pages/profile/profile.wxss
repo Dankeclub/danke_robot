@@ -1,0 +1,171 @@
+/* ===== 我的页 ===== */
+
+/* 页面底部留白 */
+.pro-page {
+  padding-bottom: 180rpx;
+}
+
+/* 家庭卡片 */
+.pro-family-card {
+  margin: 24rpx var(--m) var(--g);
+  background: var(--pl);
+  border-radius: var(--r);
+  padding: 40rpx 36rpx;
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  position: relative;
+  overflow: hidden;
+}
+.pro-family-card::after {
+  content: '';
+  position: absolute;
+  width: 180rpx;
+  height: 180rpx;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  top: -48rpx;
+  right: -32rpx;
+}
+
+/* 家庭头像 */
+.pro-family-avatar {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.pro-avatar-icon {
+  width: 52rpx;
+  height: 52rpx;
+}
+
+/* 家庭信息 */
+.pro-family-info {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.pro-fname {
+  font-size: var(--t2);
+  font-weight: 800;
+  color: #5A6FB4;
+}
+.pro-fid {
+  font-size: var(--t5);
+  font-weight: 600;
+  color: rgba(90,111,180,0.6);
+  margin-top: 6rpx;
+}
+
+/* 蛋仔状态胶囊 */
+.pro-family-mascot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  position: relative;
+  z-index: 1;
+}
+.pro-fm-avatar {
+  width: 104rpx;
+  height: 104rpx;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 24rpx rgba(0,0,0,0.06);
+}
+.pro-fm-label {
+  font-size: var(--t4);
+  font-weight: 800;
+  color: #5A6FB4;
+}
+.pro-fm-sub {
+  font-size: var(--t5);
+  font-weight: 500;
+  color: rgba(90,111,180,0.55);
+}
+
+/* 设置列表卡片 */
+.pro-setting-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--pg);
+  border-radius: var(--r);
+  padding: 28rpx 36rpx 16rpx;
+  position: relative;
+  overflow: hidden;
+}
+.pro-setting-card::after {
+  content: '';
+  position: absolute;
+  width: 160rpx;
+  height: 160rpx;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  top: -60rpx;
+  right: -20rpx;
+}
+
+/* 设置列表项 */
+.pro-setting-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 0;
+  position: relative;
+  z-index: 1;
+}
+.pro-setting-item + .pro-setting-item {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* 设置图标 */
+.pro-si-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 22rpx;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pro-si-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+/* 设置文字 */
+.pro-si-body {
+  flex: 1;
+  font-size: var(--t3);
+  font-weight: 700;
+  color: #2D5A3D;
+}
+
+/* 箭头 */
+.pro-si-arrow {
+  width: 36rpx;
+  height: 36rpx;
+  flex-shrink: 0;
+}
+
+/* 退出按钮 */
+.pro-bottom-card {
+  margin: 8rpx var(--m) var(--g);
+  background: var(--pp);
+  border-radius: var(--r);
+  padding: 32rpx 36rpx;
+  text-align: center;
+  font-size: var(--t3);
+  font-weight: 700;
+  color: #C77974;
+}

@@ -1,0 +1,58 @@
+.nav-bar {
+  background-color: var(--color-card);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-bar.transparent {
+  background-color: transparent;
+}
+
+.nav-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx;
+  padding: 0 32rpx;
+}
+
+.nav-left, .nav-right {
+  width: 80rpx;
+  display: flex;
+  align-items: center;
+}
+
+.nav-right {
+  justify-content: flex-end;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-title text {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.back-icon {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-24 {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.placeholder {
+  width: 48rpx;
+  height: 48rpx;
+}

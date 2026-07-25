@@ -1,0 +1,7 @@
+<!-- 通用图标组件 -->
+<image
+  class="icon-img {{colorClass}}"
+  src="/icons/{{name}}.svg"
+  style="width:{{size}}rpx;height:{{size}}rpx"
+  mode="aspectFit"
+/>

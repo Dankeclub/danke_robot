@@ -1,0 +1,3 @@
+<view class="tag {{color}}">
+  <text class="tag-text">{{text}}</text>
+</view>

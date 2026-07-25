@@ -1,0 +1,48 @@
+<view class="page">
+  <nav-bar title="行为详情" showBack="{{true}}" />
+  <scroll-view class="content" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- Header card -->
+    <view class="card header-card">
+      <view class="header-icon-row">
+        <image class="header-icon" src="/assets/icons/check-circle.svg" mode="aspectFit" />
+      </view>
+      <view class="header-title">{{behavior.title}}</view>
+      <view class="header-meta">{{behavior.time}} · {{behavior.duration}}</view>
+    </view>
+    <!-- Detail card -->
+    <view class="card detail-card">
+      <view class="detail-row">
+        <view class="detail-label">行为类型</view>
+        <view class="detail-value">{{behavior.behaviorType}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">学科</view>
+        <view class="detail-value">{{behavior.subject}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">正确率</view>
+        <view class="detail-value">{{behavior.accuracy}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">专注度</view>
+        <view class="detail-value">{{behavior.focus}}</view>
+      </view>
+      <view class="detail-divider"></view>
+      <view class="detail-row">
+        <view class="detail-label">姿势评分</view>
+        <view class="detail-value">{{behavior.posture}}</view>
+      </view>
+    </view>
+    <!-- AI comment box -->
+    <view class="ai-box">
+      <view class="ai-header">
+        <image class="ai-icon" src="/assets/icons/sparkles.svg" mode="aspectFit" />
+        <text class="ai-title">星云AI点评</text>
+      </view>
+      <view class="ai-text">{{behavior.aiComment}}</view>
+    </view>
+  </scroll-view>
+</view>

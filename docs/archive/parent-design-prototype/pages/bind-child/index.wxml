@@ -1,0 +1,61 @@
+<view class="page">
+  <nav-bar title="绑定孩子信息" />
+
+  <scroll-view scroll-y class="content" enhanced show-scrollbar="{{false}}">
+    <!-- Mascot + Title -->
+    <view class="hero">
+      <view class="hero-avatar">
+        <image src="/assets/icons/bot.svg" class="hero-img" />
+      </view>
+      <text class="hero-title">让我们认识一下你的宝贝</text>
+    </view>
+
+    <!-- Form Card -->
+    <view class="card">
+      <view class="cell">
+        <image src="/assets/icons/user.svg" class="cell-icon" />
+        <view class="cell-body">
+          <text class="cell-label">孩子昵称</text>
+          <input class="cell-input" placeholder="例如：小明" value="{{childName}}" bindinput="onChildNameInput" />
+        </view>
+      </view>
+
+      <view class="cell-divider"></view>
+
+      <picker mode="selector" range="{{ages}}" bindchange="onAgeChange">
+        <view class="cell">
+          <image src="/assets/icons/clock.svg" class="cell-icon" />
+          <view class="cell-body">
+            <text class="cell-label">年龄</text>
+            <text class="{{selectedAge ? 'cell-value' : 'cell-placeholder'}}">{{selectedAge || '选择年龄'}}</text>
+          </view>
+          <image src="/assets/icons/chevron-right.svg" class="cell-arrow" />
+        </view>
+      </picker>
+
+      <view class="cell-divider"></view>
+
+      <picker mode="selector" range="{{grades}}" bindchange="onGradeChange">
+        <view class="cell">
+          <image src="/assets/icons/book.svg" class="cell-icon" />
+          <view class="cell-body">
+            <text class="cell-label">年级</text>
+            <text class="{{selectedGrade ? 'cell-value' : 'cell-placeholder'}}">{{selectedGrade || '选择年级'}}</text>
+          </view>
+          <image src="/assets/icons/chevron-right.svg" class="cell-arrow" />
+        </view>
+      </picker>
+    </view>
+
+    <!-- Buttons -->
+    <view class="primary-btn" bindtap="onBind">
+      <text class="primary-btn-text">确认绑定</text>
+    </view>
+
+    <view class="skip-link" bindtap="onSkip">
+      <text class="skip-text">稍后设置</text>
+    </view>
+
+    <view style="height: 120rpx;"></view>
+  </scroll-view>
+</view>

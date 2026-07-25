@@ -1,0 +1,26 @@
+<view class="tb" style="padding-bottom:{{sb}}px">
+  <view class="tbi">
+    <view class="ti {{s===0?'on':''}}" data-i="0" bind:tap="go">
+      <image class="ti-ic" src="/icons/tab-home{{s===0?'-on':''}}.svg" mode="aspectFit"/>
+      <text class="ti-lb">首页</text>
+    </view>
+    <view class="ti {{s===1?'on':''}}" data-i="1" bind:tap="go">
+      <image class="ti-ic" src="/icons/tab-report{{s===1?'-on':''}}.svg" mode="aspectFit"/>
+      <text class="ti-lb">报告</text>
+    </view>
+    <view class="tcw">
+      <view class="tc" data-i="2" bind:tap="go">
+        <image class="tc-ic" src="/icons/tab-monitor.svg" mode="aspectFit"/>
+      </view>
+      <text class="tcl">看护</text>
+    </view>
+    <view class="ti {{s===3?'on':''}}" data-i="3" bind:tap="go">
+      <image class="ti-ic" src="/icons/tab-learn{{s===3?'-on':''}}.svg" mode="aspectFit"/>
+      <text class="ti-lb">学习</text>
+    </view>
+    <view class="ti {{s===4?'on':''}}" data-i="4" bind:tap="go">
+      <image class="ti-ic" src="/icons/tab-mine{{s===4?'-on':''}}.svg" mode="aspectFit"/>
+      <text class="ti-lb">我的</text>
+    </view>
+  </view>
+</view>

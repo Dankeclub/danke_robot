@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Robot Remote Control</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui;background:#1a1a2e;color:#eee;overflow:hidden;touch-action:none;height:100vh}
+#app{display:flex;flex-direction:column;height:100vh}
+#status-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#16213e;font-size:12px}
+#status-bar .conn{width:10px;height:10px;border-radius:50%;background:#e74c3c}
+#status-bar .conn.on{background:#2ecc71}
+#main{flex:1;display:flex;position:relative}
+#joystick-zone{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+#omega-zone{width:60px;display:flex;align-items:center;justify-content:center;position:relative}
+#omega-slider{writing-mode:vertical-lr;width:40px;height:200px;appearance:none;background:#16213e;border-radius:20px;outline:none}
+#omega-slider::-webkit-slider-thumb{appearance:none;width:30px;height:30px;border-radius:50%;background:#e94560;cursor:pointer}
+#info-panel{padding:8px 12px;background:#16213e;font-size:11px;display:flex;gap:16px;flex-wrap:wrap}
+#controls{display:flex;gap:8px;padding:8px 12px;background:#0f3460;overflow-x:auto}
+#controls button{padding:6px 12px;border:none;border-radius:4px;background:#e94560;color:#fff;font-size:12px;white-space:nowrap;cursor:pointer}
+#controls button:active{background:#c0392b}
+#controls button.secondary{background:#16213e;border:1px solid #e94560}
+#controls select{padding:4px 8px;border-radius:4px;background:#16213e;color:#eee;border:1px solid #e94560;font-size:12px}
+#controls input{padding:4px 8px;border-radius:4px;background:#16213e;color:#eee;border:1px solid #555;font-size:12px;width:60px}
+.mode-badge{padding:2px 8px;border-radius:10px;background:#e94560;font-size:10px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="status-bar">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="conn" id="conn-dot"></div>
+      <span id="conn-text">Disconnected</span>
+    </div>
+    <span class="mode-badge" id="mode-badge">idle</span>
+    <span id="pose-text">x:0.00 y:0.00 θ:0°</span>
+  </div>
+  <div id="main">
+    <div id="joystick-zone"></div>
+    <div id="omega-zone">
+      <input type="range" id="omega-slider" min="-100" max="100" value="0" orient="vertical">
+    </div>
+  </div>
+  <div id="info-panel">
+    <span>Motors: <span id="motor-text">0 0 0 0</span></span>
+    <span>Vel: <span id="vel-text">vx:0 vy:0 ω:0</span></span>
+  </div>
+  <div id="controls">
+    <button id="btn-rec-start">Rec</button>
+    <button id="btn-rec-stop" class="secondary">Stop Rec</button>
+    <input id="rec-name" placeholder="name">
+    <button id="btn-rec-save" class="secondary">Save</button>
+    <select id="route-select"><option value="">-- route --</option></select>
+    <button id="btn-play">Play</button>
+    <button id="btn-play-stop" class="secondary">Stop</button>
+    <button id="btn-reset-odo" class="secondary">Reset Odo</button>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.2/nipplejs.min.js"></script>
+<script>
+(function(){
+  const WS_URL = `ws://${location.host}/ws`;
+  let ws = null;
+  let vx = 0, vy = 0, omega = 0;
+  let sendInterval = null;
+
+  const connDot = document.getElementById('conn-dot');
+  const connText = document.getElementById('conn-text');
+  const modeBadge = document.getElementById('mode-badge');
+  const poseText = document.getElementById('pose-text');
+  const motorText = document.getElementById('motor-text');
+  const velText = document.getElementById('vel-text');
+  const omegaSlider = document.getElementById('omega-slider');
+  const routeSelect = document.getElementById('route-select');
+
+  function connect() {
+    ws = new WebSocket(WS_URL);
+    ws.onopen = () => {
+      connDot.classList.add('on');
+      connText.textContent = 'Connected';
+      startSending();
+      ws.send(JSON.stringify({type:'list_routes'}));
+    };
+    ws.onclose = () => {
+      connDot.classList.remove('on');
+      connText.textContent = 'Disconnected';
+      stopSending();
+      setTimeout(connect, 2000);
+    };
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type === 'state') {
+        const p = msg.pose;
+        poseText.textContent = `x:${p.x.toFixed(2)} y:${p.y.toFixed(2)} θ:${(p.theta*180/Math.PI).toFixed(0)}°`;
+        modeBadge.textContent = msg.mode;
+        const m = msg.motors;
+        motorText.textContent = `${m.m1.toFixed(2)} ${m.m2.toFixed(2)} ${m.m3.toFixed(2)} ${m.m4.toFixed(2)}`;
+        const v = msg.velocity;
+        velText.textContent = `vx:${v.vx.toFixed(2)} vy:${v.vy.toFixed(2)} ω:${v.omega.toFixed(2)}`;
+      } else if (msg.type === 'routes_list') {
+        routeSelect.innerHTML = '<option value="">-- route --</option>';
+        msg.routes.forEach(r => {
+          const opt = document.createElement('option');
+          opt.value = r.name; opt.textContent = r.name;
+          routeSelect.appendChild(opt);
+        });
+      }
+    };
+  }
+
+  function startSending() {
+    if (sendInterval) return;
+    sendInterval = setInterval(() => {
+      if (ws && ws.readyState === 1) {
+        omega = -omegaSlider.value / 100;
+        if (Math.abs(vx) < 0.01 && Math.abs(vy) < 0.01 && Math.abs(omega) < 0.01) return;
+        ws.send(JSON.stringify({type:'move', vx, vy, omega}));
+      }
+    }, 50);
+  }
+
+  function stopSending() {
+    if (sendInterval) { clearInterval(sendInterval); sendInterval = null; }
+  }
+
+  // Joystick
+  const joystick = nipplejs.create({
+    zone: document.getElementById('joystick-zone'),
+    mode: 'static',
+    position: {left:'50%', top:'50%'},
+    size: 150,
+    color: '#e94560'
+  });
+
+  joystick.on('move', (e, data) => {
+    const force = Math.min(data.force, 2) / 2;
+    const angle = data.angle.radian;
+    vx = force * Math.sin(angle);
+    vy = force * Math.cos(angle);
+  });
+
+  joystick.on('end', () => {
+    vx = 0; vy = 0;
+    if (ws && ws.readyState === 1) ws.send(JSON.stringify({type:'stop'}));
+  });
+
+  omegaSlider.addEventListener('touchend', () => { omegaSlider.value = 0; });
+  omegaSlider.addEventListener('mouseup', () => { omegaSlider.value = 0; });
+
+  // Controls
+  document.getElementById('btn-rec-start').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'record', action:'start'}));
+  };
+  document.getElementById('btn-rec-stop').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'record', action:'stop'}));
+  };
+  document.getElementById('btn-rec-save').onclick = () => {
+    const name = document.getElementById('rec-name').value || 'unnamed';
+    if (ws) {
+      ws.send(JSON.stringify({type:'record', action:'save', name}));
+      setTimeout(() => ws.send(JSON.stringify({type:'list_routes'})), 500);
+    }
+  };
+  document.getElementById('btn-play').onclick = () => {
+    const name = routeSelect.value;
+    if (name && ws) ws.send(JSON.stringify({type:'playback', action:'start', name}));
+  };
+  document.getElementById('btn-play-stop').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'playback', action:'stop'}));
+  };
+  document.getElementById('btn-reset-odo').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'reset_odometry'}));
+  };
+
+  connect();
+})();
+</script>
+</body>
+</html>

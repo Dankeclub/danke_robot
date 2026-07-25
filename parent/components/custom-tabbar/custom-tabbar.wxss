@@ -1,0 +1,10 @@
+.tb{position:fixed;bottom:0;left:0;right:0;z-index:999;background:#fff;border-top:1px solid rgba(0,0,0,.04);box-shadow:0 -1px 6px rgba(0,0,0,.02);padding-top:8px}
+.tbi{display:flex;justify-content:space-around;align-items:flex-end}
+.ti{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;width:50px}
+.ti-lb{font-size:10px;font-weight:600;color:#B6C2CF}
+.ti.on .ti-lb{color:#778ccd}
+.ti-ic{width:24px;height:24px}
+.tcw{margin-top:-28px;text-align:center;width:50px}
+.tc{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#778ccd;box-shadow:0 4px 18px rgba(119,140,205,.3)}
+.tc-ic{width:24px;height:24px}
+.tcl{font-size:10px;font-weight:700;color:#778ccd;margin-top:2px;display:block}

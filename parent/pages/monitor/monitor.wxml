@@ -1,0 +1,123 @@
+<!-- 看护/监控页 -->
+<view class="page-wrap mon-page">
+
+  <!-- 视频区 -->
+  <view class="mon-video-zone ca">
+    <view class="mon-video-mascot">
+      <danke-mascot size="lg" state="{{dankeState}}" />
+      <text class="mon-vm-label">实时画面连接中…</text>
+    </view>
+    <!-- 状态胶囊 -->
+    <view class="mon-video-status">
+      <view class="mon-vs-dot {{dankeState}}"></view>
+      <text>{{statusLabel}}</text>
+    </view>
+    <!-- 清晰度 -->
+    <view class="mon-video-quality">高清</view>
+    <!-- 状态切换 -->
+    <view class="mon-video-states">
+      <view wx:for="{{states}}" wx:key="*this" class="mon-vs-btn {{dankeState === item ? item : ''}}" data-state="{{item}}" bind:tap="onSwitchState"></view>
+    </view>
+  </view>
+
+  <!-- 网络提示 -->
+  <view class="mon-net-warn ca">
+    <image class="mon-net-warn-icon" src="/icons/ic-alert-amber.svg" mode="aspectFit"/>
+    <text>网络较慢 · 已自动降低清晰度</text>
+  </view>
+
+  <!-- 蛋仔状态 -->
+  <view class="mon-mascot-status ca">
+    <view class="mon-ms-avatar">
+      <danke-mascot size="sm" state="{{dankeState}}" />
+    </view>
+    <view class="mon-ms-info">
+      <view class="mon-ms-name">{{childName}} · {{dankeState === 'online' ? '在线' : dankeState === 'focused' ? '专注' : dankeState === 'tired' ? '有点累了' : '离线'}}</view>
+      <view class="mon-ms-detail">{{statusDetail}}</view>
+    </view>
+  </view>
+
+  <!-- 摇杆控制区 -->
+  <view class="mon-joy-card ca" bindtouchmove="onJoyMove" bindtouchend="onJoyEnd">
+    <view class="mon-joy-label">方向控制</view>
+    <view class="mon-joy-base"
+      catchtouchstart="onJoyStart"
+    >
+      <view class="mon-joy-crosshair"></view>
+      <view class="mon-joy-thumb-wrap">
+        <view class="mon-joy-thumb {{isDragging ? 'dragging' : ''}}" style="transform: translate({{thumbX}}px, {{thumbY}}px)"></view>
+      </view>
+    </view>
+    <view class="mon-joy-dir {{isMoving ? 'active' : ''}}">{{directionText}}</view>
+    <view class="mon-joy-stop" bind:tap="onStop">停止</view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="mon-quick-row ca">
+    <view class="mon-quick-btn praise" bind:tap="onPresetTap" data-text="真棒！">
+      <image class="mon-q-icon" src="/icons/ic-star-amber.svg" mode="aspectFit"/>
+      <text class="mon-qn">表扬</text>
+    </view>
+    <view class="mon-quick-btn love" bind:tap="onPresetTap" data-text="加油！">
+      <image class="mon-q-icon" src="/icons/ic-heart-rose.svg" mode="aspectFit"/>
+      <text class="mon-qn">鼓励</text>
+    </view>
+    <view class="mon-quick-btn camera">
+      <image class="mon-q-icon" src="/icons/ic-camera.svg" mode="aspectFit"/>
+      <text class="mon-qn">拍照</text>
+    </view>
+    <view class="mon-quick-btn task" bind:tap="openTask">
+      <image class="mon-q-icon" src="/icons/ic-edit-amber.svg" mode="aspectFit"/>
+      <text class="mon-qn">派任务</text>
+    </view>
+  </view>
+
+  <!-- 消息区 -->
+  <view class="mon-msg-card ca">
+    <view class="mon-preset-row">
+      <text wx:for="{{presets}}" wx:key="*this" class="mon-preset-chip" bind:tap="onPresetTap" data-text="{{item}}">{{item}}</text>
+    </view>
+    <view class="mon-msg-input-row">
+      <input class="mon-msg-input" value="{{msgText}}" placeholder="发消息给蛋仔…" bind:input="onMsgInput" confirm-type="send" bind:confirm="onSend" />
+      <view class="mon-msg-send" bind:tap="onSend">
+        <image class="mon-msg-send-icon" src="/icons/ic-send-white.svg" mode="aspectFit"/>
+      </view>
+    </view>
+  </view>
+
+  <custom-tabbar />
+
+  <!-- ===== 派任务底部弹出面板 ===== -->
+  <view class="task-sheet-mask {{showTaskSheet ? 'show' : ''}}" bind:tap="closeTaskSheet"></view>
+  <view class="task-sheet {{showTaskSheet ? 'show' : ''}}">
+    <view class="ts-handle" catch:tap="noop">
+      <view class="ts-handle-bar"></view>
+    </view>
+    <view class="ts-title">派任务给蛋仔</view>
+
+    <!-- 分类 tabs -->
+    <scroll-view class="ts-tabs" scroll-x>
+      <view wx:for="{{taskTabs}}" wx:key="*this" class="ts-tab {{activeTaskTab === index ? 'active' : ''}}" bind:tap="onTaskTabTap" data-index="{{index}}">{{item}}</view>
+    </scroll-view>
+
+    <!-- 任务列表 -->
+    <view class="ts-list">
+      <view wx:for="{{taskItems[activeTaskTab]}}" wx:key="name" class="ts-item {{selectedTask === index ? 'selected' : ''}}" bind:tap="onTaskSelect" data-index="{{index}}">
+        <view class="ts-item-left">
+          <image class="ts-item-icon" src="/icons/{{item.icon}}.svg" mode="aspectFit"/>
+          <text class="ts-item-name">{{item.name}}</text>
+        </view>
+        <view class="ts-item-check {{selectedTask === index ? 'on' : ''}}">
+          <image wx:if="{{selectedTask === index}}" class="ts-check-icon" src="/icons/ic-check-white.svg" mode="aspectFit"/>
+        </view>
+      </view>
+    </view>
+
+    <!-- 发送按钮 -->
+    <view class="ts-send-btn" bind:tap="onSendTask">
+      <image class="ts-send-icon" src="/icons/ic-send-white.svg" mode="aspectFit"/>
+      <text>发送任务</text>
+    </view>
+  </view>
+
+</view>

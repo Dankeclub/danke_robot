@@ -1,0 +1,58 @@
+<!-- 学习追踪页 -->
+<view class="page-wrap lrn-page">
+
+  <!-- 今日学习进展 -->
+  <view class="lrn-sect-title ca">
+    <image class="lrn-sect-icon" src="/icons/ic-star-pd.svg" mode="aspectFit"/>
+    <text>今日学习进展</text>
+  </view>
+
+  <!-- 六模块进度环 -->
+  <view class="lrn-rings-grid ca">
+    <view wx:for="{{modules}}" wx:key="key" class="lrn-ring-card {{item.key}}">
+      <view class="lrn-ring-wrap">
+        <image class="lrn-ring-svg" src="/icons/lrn-ring-{{item.key}}.svg" mode="aspectFit"/>
+        <text class="lrn-ring-center">{{item.percent}}%</text>
+      </view>
+      <view class="lrn-ring-label">{{item.label}}</view>
+      <view class="lrn-ring-sub">{{item.done}}/{{item.total}} {{item.unit}}</view>
+    </view>
+  </view>
+
+  <!-- 打卡天数 -->
+  <view class="lrn-rank-card ca">
+    <view class="lrn-rank-icon">
+      <image class="lrn-rank-icon-img" src="/icons/ic-calendar-white.svg" mode="aspectFit"/>
+    </view>
+    <view class="lrn-rank-body">
+      <view class="lrn-rank-title">已坚持学习 12 天</view>
+      <view class="lrn-rank-desc">本周连续 7 天全勤，保持好习惯</view>
+    </view>
+  </view>
+
+  <!-- 最近完成 -->
+  <view class="lrn-recent-card ca">
+    <view class="lrn-recent-hdr">最近完成</view>
+    <view wx:for="{{recentItems}}" wx:key="name" class="lrn-recent-row">
+      <view class="lrn-recent-dot {{item.key}}"></view>
+      <text class="lrn-recent-name">{{item.name}}</text>
+      <view class="lrn-recent-bar-wrap">
+        <view class="lrn-recent-bar {{item.key}}" style="width:{{item.percent}}%"></view>
+      </view>
+      <text class="lrn-recent-score">{{item.percent}}%</text>
+    </view>
+  </view>
+
+  <!-- 跳转学习目标 -->
+  <view class="illo-card ca" bind:tap="goGoal">
+    <view class="illo-circle">
+      <danke-mascot size="sm" state="online" />
+    </view>
+    <view class="illo-body">
+      <view class="illo-title">学习目标设置</view>
+      <view class="illo-sub">调整每日学习任务和目标时长</view>
+    </view>
+    <image class="illo-arrow" src="/icons/ic-chevron-pa2.svg" mode="aspectFit"/>
+  </view>
+  <custom-tabbar />
+</view>

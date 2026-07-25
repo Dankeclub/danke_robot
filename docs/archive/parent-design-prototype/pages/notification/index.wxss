@@ -1,0 +1,130 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.tabs-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.tabs-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16rpx;
+  padding: 0 32rpx 24rpx 32rpx;
+}
+
+.tab-item {
+  padding: 12rpx 28rpx;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-card);
+  flex-shrink: 0;
+}
+
+.tab-item.active {
+  background-color: var(--color-primary);
+}
+
+.tab-text {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+}
+
+.tab-text.active {
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.content {
+  flex: 1;
+  padding: 0 32rpx 0 32rpx;
+}
+
+.day-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 32rpx;
+}
+
+.day-label {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.notif-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  padding: 28rpx;
+  position: relative;
+}
+
+.notif-top {
+  display: flex;
+  flex-direction: row;
+  gap: 20rpx;
+}
+
+.notif-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notif-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.notif-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.notif-title-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notif-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.notif-time {
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.notif-desc {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.unread-dot {
+  position: absolute;
+  top: 12rpx;
+  left: 12rpx;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: var(--color-danger);
+}

@@ -1,0 +1,33 @@
+<!-- 设备绑定引导页 -->
+<view class="page-wrap">
+  <view class="page-body">
+
+    <!-- 步骤条 -->
+    <view class="bind-steps ca">
+      <view class="bind-step active"></view>
+      <view class="bind-step"></view>
+      <view class="bind-step"></view>
+    </view>
+
+    <!-- 引导卡片 -->
+    <view class="bind-hero ca">
+      <view class="bind-mascot-ring">
+        <danke-mascot size="lg" state="online" />
+      </view>
+      <view class="bind-hero-title">连接蛋仔机器人</view>
+      <view class="bind-hero-desc">扫描机器人底部的二维码
+或手动输入设备编号完成绑定</view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="bind-btn-row ca">
+      <button class="bind-scan-btn" bind:tap="onScan">扫码绑定</button>
+      <button class="bind-manual-btn" bind:tap="onManual">手动输入编号</button>
+    </view>
+
+    <!-- 跳过 -->
+    <view class="bind-skip ca">
+      <text bind:tap="onSkip">先跳过，之后可在我的中绑定</text>
+    </view>
+  </view>
+</view>

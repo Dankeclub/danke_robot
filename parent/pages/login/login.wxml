@@ -1,0 +1,26 @@
+<!-- 登录/授权页 -->
+<view class="page-wrap">
+  <view class="login-body">
+    <!-- 蛋仔吉祥物 -->
+    <view class="login-mascot-circle">
+      <danke-mascot size="lg" state="online" />
+    </view>
+
+    <!-- 应用名 -->
+    <view class="login-app-name">蛋仔家长端</view>
+    <view class="login-app-tag">陪伴孩子每一步成长</view>
+
+    <!-- 微信登录按钮 -->
+    <button class="login-wx-btn" bind:tap="onWechatLogin">
+      <text>微信一键登录</text>
+    </button>
+
+    <!-- 隐私协议 -->
+    <view class="login-privacy">
+      <view class="login-pcheck {{checked ? 'checked' : ''}}" bind:tap="toggleCheck">
+        <text wx:if="{{checked}}" class="login-check-icon">✓</text>
+      </view>
+      <text class="login-ptext">登录即表示同意《用户协议》和《隐私政策》</text>
+    </view>
+  </view>
+</view>

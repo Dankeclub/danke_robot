@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>RC Robot</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui;background:#1a1a2e;color:#eee;overflow:hidden;touch-action:none;height:100vh}
+#app{display:flex;flex-direction:column;height:100vh}
+#status-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#16213e;font-size:12px;gap:8px}
+#status-bar .conn{width:10px;height:10px;border-radius:50%;background:#e74c3c;flex-shrink:0}
+#status-bar .conn.on{background:#2ecc71}
+.conn-btn{padding:4px 10px;border:1px solid #e94560;border-radius:4px;background:#16213e;color:#eee;font-size:11px;cursor:pointer;white-space:nowrap}
+.conn-btn:active{background:#e94560}
+#main{flex:1;display:flex}
+#joystick-right{flex:1;position:relative}
+#info-panel{padding:8px 12px;background:#16213e;font-size:11px;display:flex;gap:16px;flex-wrap:wrap}
+#controls{display:flex;gap:8px;padding:8px 12px;background:#0f3460;overflow-x:auto}
+#controls button{padding:6px 12px;border:none;border-radius:4px;background:#e94560;color:#fff;font-size:12px;white-space:nowrap;cursor:pointer}
+#controls button:active{background:#c0392b}
+#controls button.secondary{background:#16213e;border:1px solid #e94560}
+#controls select{padding:4px 8px;border-radius:4px;background:#16213e;color:#eee;border:1px solid #e94560;font-size:12px}
+#controls input{padding:4px 8px;border-radius:4px;background:#16213e;color:#eee;border:1px solid #555;font-size:12px;width:60px}
+.mode-badge{padding:2px 8px;border-radius:10px;background:#e94560;font-size:10px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="status-bar">
+    <div style="display:flex;align-items:center;gap:6px">
+      <div class="conn" id="conn-dot"></div>
+      <span id="conn-text">断开</span>
+    </div>
+    <button id="btn-conn" class="conn-btn">断开</button>
+    <span class="mode-badge" id="mode-badge">idle</span>
+    <span id="pose-text">x:0.00 y:0.00 θ:0°</span>
+  </div>
+  <div id="main">
+    <div id="joystick-right"></div>
+  </div>
+  <div id="info-panel">
+    <span>Motors: <span id="motor-text">0 0 0 0</span></span>
+    <span>Vel: <span id="vel-text">vx:0 vy:0 ω:0</span></span>
+  </div>
+  <div id="controls">
+    <button id="btn-rec-start">Rec</button>
+    <button id="btn-rec-stop" class="secondary">Stop Rec</button>
+    <input id="rec-name" placeholder="name">
+    <button id="btn-rec-save" class="secondary">Save</button>
+    <select id="route-select"><option value="">-- route --</option></select>
+    <button id="btn-play">Play</button>
+    <button id="btn-play-stop" class="secondary">Stop</button>
+    <button id="btn-reset-odo" class="secondary">Reset Odo</button>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.10.2/nipplejs.min.js"></script>
+<script>
+(function(){
+  const WS_URL = `ws://${location.host}/ws`;
+  let ws = null;
+  let vx = 0, vy = 0, omega = 0;
+  let targetVx = 0, targetOmega = 0;
+  let sendInterval = null;
+  let smoothInterval = null;
+  let autoReconnect = true;
+
+  const DEADZONE = 0.12;
+  const EXPO_K = 0.6;
+  const OMEGA_MAX = 0.6;
+  const SMOOTH_ALPHA = 0.35;
+  const SEND_MS = 33;
+  const SMOOTH_MS = 16;
+
+  const connDot = document.getElementById('conn-dot');
+  const connText = document.getElementById('conn-text');
+  const btnConn = document.getElementById('btn-conn');
+  const modeBadge = document.getElementById('mode-badge');
+  const poseText = document.getElementById('pose-text');
+  const motorText = document.getElementById('motor-text');
+  const velText = document.getElementById('vel-text');
+  const routeSelect = document.getElementById('route-select');
+
+  function updateConnUI(state) {
+    if (state === 'connected') {
+      connDot.classList.add('on');
+      connText.textContent = '已连接';
+      btnConn.textContent = '断开';
+    } else {
+      connDot.classList.remove('on');
+      connText.textContent = '已断开';
+      btnConn.textContent = '连接';
+    }
+  }
+
+  function connect() {
+    ws = new WebSocket(WS_URL);
+    ws.onopen = () => {
+      updateConnUI('connected');
+      startSending();
+      ws.send(JSON.stringify({type:'list_routes'}));
+    };
+    ws.onclose = () => {
+      updateConnUI('disconnected');
+      stopSending();
+      if (autoReconnect) setTimeout(connect, 2000);
+    };
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type === 'state') {
+        const p = msg.pose;
+        poseText.textContent = `x:${p.x.toFixed(2)} y:${p.y.toFixed(2)} θ:${(p.theta*180/Math.PI).toFixed(0)}°`;
+        modeBadge.textContent = msg.mode;
+        const m = msg.motors;
+        motorText.textContent = `${m.m1.toFixed(2)} ${m.m2.toFixed(2)} ${m.m3.toFixed(2)} ${m.m4.toFixed(2)}`;
+        const v = msg.velocity;
+        velText.textContent = `vx:${v.vx.toFixed(2)} vy:${v.vy.toFixed(2)} ω:${v.omega.toFixed(2)}`;
+      } else if (msg.type === 'routes_list') {
+        routeSelect.innerHTML = '<option value="">-- route --</option>';
+        msg.routes.forEach(r => {
+          const opt = document.createElement('option');
+          opt.value = r.name; opt.textContent = r.name;
+          routeSelect.appendChild(opt);
+        });
+      }
+    };
+  }
+
+  btnConn.onclick = () => {
+    if (ws && ws.readyState === 1) {
+      autoReconnect = false;
+      ws.close();
+    } else {
+      autoReconnect = true;
+      connect();
+    }
+  };
+
+  function startSending() {
+    if (!smoothInterval) {
+      smoothInterval = setInterval(() => {
+        vx += (targetVx - vx) * SMOOTH_ALPHA;
+        omega += (targetOmega - omega) * SMOOTH_ALPHA;
+        if (Math.abs(vx) < 1e-3) vx = 0;
+        if (Math.abs(omega) < 1e-3) omega = 0;
+      }, SMOOTH_MS);
+    }
+    if (sendInterval) return;
+    sendInterval = setInterval(() => {
+      if (ws && ws.readyState === 1) {
+        ws.send(JSON.stringify({type:'move', vx, vy, omega}));
+      }
+    }, SEND_MS);
+  }
+
+  function stopSending() {
+    if (sendInterval) { clearInterval(sendInterval); sendInterval = null; }
+    if (smoothInterval) { clearInterval(smoothInterval); smoothInterval = null; }
+    vx = 0; omega = 0; targetVx = 0; targetOmega = 0;
+  }
+
+  function shapeAxis(raw) {
+    const a = Math.abs(raw);
+    if (a <= DEADZONE) return 0;
+    const norm = Math.min(1, (a - DEADZONE) / (1 - DEADZONE));
+    const curved = (1 - EXPO_K) * norm + EXPO_K * norm * norm * norm;
+    return Math.sign(raw) * curved;
+  }
+
+  // Right joystick: Y → vx (forward/back), X → omega (rotation)
+  nipplejs.create({
+    zone: document.getElementById('joystick-right'),
+    mode: 'static',
+    position: {left:'50%', top:'50%'},
+    size: 160,
+    color: '#3498db'
+  }).on('move', (e, data) => {
+    const fy = data.force * Math.sin(data.angle.radian);
+    const fx = data.force * Math.cos(data.angle.radian);
+    targetVx = shapeAxis(fy);
+    targetOmega = shapeAxis(fx) * OMEGA_MAX;
+  }).on('end', () => {
+    targetVx = 0;
+    targetOmega = 0;
+  });
+
+  // Controls
+  document.getElementById('btn-rec-start').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'record', action:'start'}));
+  };
+  document.getElementById('btn-rec-stop').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'record', action:'stop'}));
+  };
+  document.getElementById('btn-rec-save').onclick = () => {
+    const name = document.getElementById('rec-name').value || 'unnamed';
+    if (ws) {
+      ws.send(JSON.stringify({type:'record', action:'save', name}));
+      setTimeout(() => ws.send(JSON.stringify({type:'list_routes'})), 500);
+    }
+  };
+  document.getElementById('btn-play').onclick = () => {
+    const name = routeSelect.value;
+    if (name && ws) ws.send(JSON.stringify({type:'playback', action:'start', name}));
+  };
+  document.getElementById('btn-play-stop').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'playback', action:'stop'}));
+  };
+  document.getElementById('btn-reset-odo').onclick = () => {
+    if (ws) ws.send(JSON.stringify({type:'reset_odometry'}));
+  };
+
+  connect();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.pt
+*.task
+models/
+samples/
+mediamtx.exe
+mediamtx.yml
+.pytest_cache/
