@@ -1,4 +1,4 @@
-# 蛋可/Danke — AI 陪伴机器人系统
+# 蛋壳/Danke — AI 陪伴机器人系统
 
 基于端云协同的多模态儿童行为感知与移动早教智能体系统。
 
@@ -176,7 +176,6 @@ uvicorn app:app --reload
 
 | 文档 | 位置 |
 |------|------|
-| 系统参赛文档（完整） | `docs/design/` (历史文档在 danke_doc 中) |
 | 家长端 PRD | `docs/design/AI陪伴机器人家长端小程序 PRD.md` |
 | 行为分析专项 | `docs/design/行为分析专项.md` |
 | 家长端 API | `cloud/backend/docs/parent-api-design.md` |
