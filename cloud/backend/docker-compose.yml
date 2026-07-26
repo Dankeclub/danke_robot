@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: parent
+      POSTGRES_PASSWORD: parent
+      POSTGRES_DB: parent_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U parent -d parent_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - APP_ENV=dev
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql+asyncpg://parent:parent@db:5432/parent_db
+      - JWT_SECRET=dev-secret-change-in-production
+      - WX_APPID=
+      - WX_SECRET=
+
+volumes:
+  pgdata:
