@@ -3,16 +3,19 @@ Component({
   data: { s: 0, sb: 0 },
   lifetimes: {
     attached() {
-      this.setData({ sb: app.globalData.safeBottom })
-      const p = getCurrentPages()
-      const m = { 'pages/home/home':0,'pages/report/report':1,'pages/monitor/monitor':2,'pages/learning/learning':3,'pages/profile/profile':4 }
-      this.setData({ s: m[(p.slice(-1)[0]||{}).route]??0 })
+      this._sync()
     }
   },
-  pageLifetimes: { show() { this.lifetimes.attached() } },
+  pageLifetimes: { show() { this._sync() } },
   methods: {
+    _sync() {
+      this.setData({ sb: app.globalData.safeBottom })
+      const p = getCurrentPages()
+      const m = { 'pages/home/home': 0, 'pages/monitor/monitor': 1, 'pages/profile/profile': 2 }
+      this.setData({ s: m[(p.slice(-1)[0] || {}).route] ?? 0 })
+    },
     go(e) {
-      wx.switchTab({ url: ['/pages/home/home','/pages/report/report','/pages/monitor/monitor','/pages/learning/learning','/pages/profile/profile'][Number(e.currentTarget.dataset.i)] })
+      wx.switchTab({ url: ['/pages/home/home', '/pages/monitor/monitor', '/pages/profile/profile'][Number(e.currentTarget.dataset.i)] })
     }
   }
 })

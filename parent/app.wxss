@@ -14,18 +14,52 @@ page {
   --r: 56rpx;
   --m: 44rpx;
   --g: 28rpx;
-  --t1: 44rpx;
-  --t2: 34rpx;
-  --t3: 30rpx;
-  --t4: 26rpx;
-  --t5: 24rpx;
-  --t6: 20rpx;
+  --t1: 48rpx;
+  --t2: 38rpx;
+  --t3: 34rpx;
+  --t4: 30rpx;
+  --t5: 28rpx;
+  --t6: 24rpx;
   box-sizing: border-box;
   background: #f8f6f2;
   color: #3D3D50;
   font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: 30rpx;
+  font-size: 34rpx;
   line-height: 1.5;
+}
+
+/* 全局 illo 卡片 */
+.illo-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 32rpx 36rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.03);
+}
+.illo-circle {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: var(--warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.illo-body { flex: 1; }
+.illo-title {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+}
+.illo-sub {
+  font-size: var(--t5);
+  font-weight: 500;
+  color: var(--pa2);
+  margin-top: 6rpx;
 }
 
 /* 卡片入场 */

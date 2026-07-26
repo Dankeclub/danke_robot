@@ -1,17 +1,14 @@
 """FastAPI dependencies for auth — extract identity from Bearer token."""
 
 import jwt as pyjwt
-from fastapi import Depends, HTTPException, Request
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import HTTPException, Request
 
 from app.auth.security import decode_token
-from app.db import get_db
 from app.schemas.common import error
 
 
 async def get_current_device(
     request: Request,
-    db: AsyncSession = Depends(get_db),
 ) -> dict[str, str]:
     """Extract device identity from Bearer token in Authorization header.
 
@@ -43,7 +40,6 @@ async def get_current_device(
 
 async def get_current_parent(
     request: Request,
-    db: AsyncSession = Depends(get_db),
 ) -> str:
     """Extract parent identity from Bearer token.
 

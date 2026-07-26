@@ -1,93 +1,92 @@
-<!-- 报告页 -->
+<!-- 报告中心 -->
 <view class="page-wrap">
 
-  <!-- 周切换器 -->
-  <view class="rpt-week-switcher ca">
-    <view class="rpt-arrow" bind:tap="onPrevWeek">
-      <image class="rpt-arrow-icon" src="/icons/chevron-left.svg" mode="aspectFit"/>
+  <!-- 副标题 -->
+  <view class="rc-subhead ca">小车监测自动分析，每周生成挖掘报告</view>
+
+  <!-- 周选择行 -->
+  <scroll-view class="rc-week-strip" scroll-x="true" enhanced="{{true}}" show-scrollbar="{{false}}" scroll-into-view="{{activeWeekId}}" scroll-with-animation="{{true}}">
+    <view class="rc-week-inner">
+      <view
+        wx:for="{{weeks}}"
+        wx:key="key"
+        id="ws-{{item.key}}"
+        class="rc-ws-pill {{currentWeekKey === item.key ? 'rc-ws-active' : ''}}"
+        bind:tap="onWeekTap"
+        data-key="{{item.key}}"
+      >
+        <view class="rc-ws-badge" wx:if="{{item.hasNew}}">NEW</view>
+        <text class="rc-ws-label">{{item.shortLabel}}</text>
+      </view>
     </view>
-    <text class="rpt-week-label" bind:tap="onWeekLabelTap">{{weekLabel}}</text>
-    <view class="rpt-arrow" bind:tap="onNextWeek">
-      <image class="rpt-arrow-icon" src="/icons/chevron-right.svg" mode="aspectFit"/>
+  </scroll-view>
+
+  <!-- Hero 推荐卡片 -->
+  <view class="rc-hero ca">
+    <view class="rc-hero-eyebrow">
+      <image class="rc-hero-eyebrow-icon" src="/icons/ic-star-pd.svg" mode="aspectFit"/>
+      <text>本周重点推荐</text>
+    </view>
+    <view class="rc-hero-card" bind:tap="goReportDetail">
+      <view class="rc-h-week">{{weekData.weekNum}} · {{weekData.label}}</view>
+      <view class="rc-h-title">行为挖掘报告</view>
+      <view class="rc-h-insights">
+        <view class="rc-h-insight-item" wx:if="{{weekData.anomalyCount > 0}}">
+          <view class="rc-dot rc-dot-warn"></view>
+          <text>{{weekData.anomalyCount}}个异常</text>
+        </view>
+        <view class="rc-h-insight-item">
+          <view class="rc-dot rc-dot-trend"></view>
+          <text>专注{{weekData.focusTrend}}</text>
+        </view>
+        <view class="rc-h-insight-item">
+          <view class="rc-dot rc-dot-link"></view>
+          <text>{{weekData.discoveryCount}}个关联</text>
+        </view>
+      </view>
+      <text class="rc-hero-arrow">→</text>
     </view>
   </view>
 
-  <!-- 亮点 & 建议 -->
-  <view class="rpt-hl-row ca">
-    <view class="rpt-hl-card good">
-      <view class="rpt-hl-title">表现亮点</view>
-      <view wx:for="{{highlights}}" wx:key="*this" class="rpt-hl-item">{{item}}</view>
+  <!-- 快速入口 -->
+  <view class="rc-quick-row ca">
+    <view class="rc-quick-card" bind:tap="goReportDetail">
+      <view class="rc-q-icon rc-q-mining">
+        <image class="rc-q-icon-img" src="/icons/ic-chart-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="rc-q-title">挖掘分析</view>
+      <view class="rc-q-sub">本周最新</view>
     </view>
-    <view class="rpt-hl-card tip">
-      <view class="rpt-hl-title">改善建议</view>
-      <view wx:for="{{tips}}" wx:key="*this" class="rpt-hl-item">{{item}}</view>
-    </view>
-  </view>
-
-  <!-- AI 总结 -->
-  <view class="rpt-ai-summary ca">
-    <view class="rpt-ai-svg">
-      <image class="rpt-ai-icon" src="/icons/ic-edit-white.svg" mode="aspectFit"/>
-    </view>
-    <view class="rpt-ai-body">
-      <text style="font-weight:800">AI 周报总结：</text>{{aiSummary}}
+    <view class="rc-quick-card" bind:tap="goBehavior">
+      <view class="rc-q-icon rc-q-behavior">
+        <image class="rc-q-icon-img" src="/icons/ic-clipboard-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="rc-q-title">行为分析</view>
+      <view class="rc-q-sub">专注·坐姿·位置</view>
     </view>
   </view>
 
-  <!-- 核心数据 -->
-  <view class="rpt-section ca">
-    <image class="rpt-section-icon" src="/icons/ic-chart-pd.svg" mode="aspectFit"/>
-    <text>核心数据</text>
+  <!-- 历史报告标题 -->
+  <view class="rc-sec ca">
+    <image class="rc-sec-icon" src="/icons/ic-clock-pd.svg" mode="aspectFit"/>
+    <text>历史报告</text>
   </view>
-  <view class="rpt-metric-row ca">
-    <view class="rpt-metric-card" bind:tap="goUsage">
-      <view class="rpt-m-icon blue">
-        <image class="rpt-m-icon-img" src="/icons/ic-clock-pd.svg" mode="aspectFit"/>
+
+  <!-- 历史报告列表 -->
+  <view class="rc-hist ca">
+    <view wx:for="{{weekData.history}}" wx:key="id" class="rc-hist-item {{item.faded ? 'rc-hist-faded' : ''}}" bind:tap="goReportDetail" data-key="{{item.key}}">
+      <view class="rc-hi-icon {{item.type === 'mining' ? 'rc-hi-mining' : 'rc-hi-weekly'}}">
+        <image class="rc-hi-icon-img" src="/icons/{{item.type === 'mining' ? 'ic-chart-pd' : 'ic-clipboard-pd'}}.svg" mode="aspectFit"/>
       </view>
-      <view class="rpt-m-val">{{metrics.dailyUsage}}<text class="rpt-munit">m</text></view>
-      <view class="rpt-m-label">日均使用</view>
-      <view class="rpt-m-spark blue">
-        <view wx:for="{{sparkBars.dailyUsage}}" wx:key="*this" class="rpt-sbar {{item.hi ? 'hi' : ''}}" style="height:{{item.h}}rpx"></view>
+      <view class="rc-hi-info">
+        <view class="rc-hi-week">{{item.title}}</view>
+        <view class="rc-hi-sub">
+          <view wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag" class="rc-hi-tag {{tag.cls}}">{{tag.text}}</view>
+          <text>{{item.subtitle}}</text>
+        </view>
       </view>
-    </view>
-    <view class="rpt-metric-card">
-      <view class="rpt-m-icon rose">
-        <image class="rpt-m-icon-img" src="/icons/ic-check-rose.svg" mode="aspectFit"/>
-      </view>
-      <view class="rpt-m-val">{{metrics.accuracy}}<text class="rpt-munit">%</text></view>
-      <view class="rpt-m-label">正确率</view>
-      <view class="rpt-m-spark rose">
-        <view wx:for="{{sparkBars.accuracy}}" wx:key="*this" class="rpt-sbar r {{item.hi ? 'hi' : ''}}" style="height:{{item.h}}rpx"></view>
-      </view>
-    </view>
-    <view class="rpt-metric-card">
-      <view class="rpt-m-icon mint">
-        <image class="rpt-m-icon-img" src="/icons/ic-star-pd.svg" mode="aspectFit"/>
-      </view>
-      <view class="rpt-m-val">{{metrics.knowledge}}</view>
-      <view class="rpt-m-label">掌握知识点</view>
-      <view class="rpt-m-spark mint">
-        <view wx:for="{{sparkBars.knowledge}}" wx:key="*this" class="rpt-sbar s {{item.hi ? 'hi' : ''}}" style="height:{{item.h}}rpx"></view>
-      </view>
+      <image class="rc-hi-arrow" src="/icons/chevron-right.svg" mode="aspectFit"/>
     </view>
   </view>
 
-  <!-- 历史周报 -->
-  <view class="rpt-section ca">
-    <image class="rpt-section-icon" src="/icons/clipboard.svg" mode="aspectFit"/>
-    <text>历史周报</text>
-  </view>
-  <view class="rpt-history-list ca">
-    <view wx:for="{{historyWeeks}}" wx:key="key" class="rpt-history-item {{item.active ? 'active' : ''}}" bind:tap="onSelectWeek" data-index="{{index}}">
-      <view class="rpt-hdot"></view>
-      <view class="rpt-hinfo">
-        <view class="rpt-hweek">{{item.label}}</view>
-        <view class="rpt-hdate">{{item.date}}</view>
-      </view>
-      <view class="rpt-harrow">
-        <image class="rpt-harrow-icon" src="/icons/chevron-right.svg" mode="aspectFit"/>
-      </view>
-    </view>
-  </view>
-  <custom-tabbar />
 </view>

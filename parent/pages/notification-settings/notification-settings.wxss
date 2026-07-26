@@ -65,7 +65,10 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 38rpx;
+}
+.ns-setting-icon-img {
+  width: 44rpx;
+  height: 44rpx;
 }
 .ns-setting-icon.amber { background: rgba(240,168,85,0.12); }
 .ns-setting-icon.sky   { background: rgba(119,140,205,0.12); }
@@ -83,7 +86,19 @@
   border-radius: var(--r);
   padding: 40rpx;
 }
-.ns-dnd-label { font-size: var(--t3); font-weight: 700; color: #3D3D50; margin-bottom: 28rpx; }
+.ns-dnd-label {
+  font-size: var(--t3);
+  font-weight: 700;
+  color: #3D3D50;
+  margin-bottom: 28rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.ns-dnd-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
 .ns-dnd-row {
   display: flex;
   align-items: center;
@@ -98,5 +113,76 @@
   background: var(--white);
   font-size: var(--t2);
   font-weight: 800;
+  color: #3D3D50;
+}
+
+/* ===== 时间选择器弹出层 ===== */
+.ns-picker-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.ns-picker-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ns-picker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border-radius: 48rpx 48rpx 0 0;
+  z-index: 901;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.ns-picker.show {
+  transform: translateY(0);
+}
+
+.ns-picker-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 40rpx;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.ns-picker-cancel {
+  font-size: var(--t3);
+  font-weight: 600;
+  color: var(--pa2);
+}
+.ns-picker-title {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: #3D3D50;
+}
+.ns-picker-confirm {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: var(--pd);
+}
+
+.ns-picker-view {
+  height: 420rpx;
+}
+.ns-picker-indicator {
+  height: 80rpx;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.ns-pv-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--t1);
+  font-weight: 700;
   color: #3D3D50;
 }

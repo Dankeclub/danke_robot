@@ -1,10 +1,5 @@
 /* ===== 学习追踪页 ===== */
 
-/* 页面底部留白 */
-.lrn-page {
-  padding-bottom: 180rpx;
-}
-
 /* 分区标题 */
 .lrn-sect-title {
   font-size: var(--t2);
@@ -160,40 +155,6 @@
   width: 64rpx;
   text-align: right;
   flex-shrink: 0;
-}
-
-/* 学习目标设置卡片 */
-.illo-card {
-  margin: 0 var(--m) var(--g);
-  background: var(--white);
-  border-radius: var(--r);
-  padding: 32rpx 36rpx;
-  display: flex;
-  align-items: center;
-  gap: 24rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.03);
-}
-.illo-circle {
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 50%;
-  background: var(--warm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.illo-body { flex: 1; }
-.illo-title {
-  font-size: var(--t3);
-  font-weight: 800;
-  color: #3D3D50;
-}
-.illo-sub {
-  font-size: var(--t5);
-  font-weight: 500;
-  color: var(--pa2);
-  margin-top: 6rpx;
 }
 .illo-arrow {
   width: 40rpx;

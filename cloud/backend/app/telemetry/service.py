@@ -17,30 +17,30 @@ async def insert_events(
     Uses PostgreSQL ON CONFLICT DO NOTHING for idempotent inserts.
     Duplicate (device_id, event_id) pairs are silently skipped.
     """
-    accepted = 0
-    duplicates = 0
+    if not events:
+        return 0, 0
 
-    for event in events:
-        stmt = (
-            pg_insert(LearningEvent)
-            .values(
-                device_id=device_id,
-                child_id=child_id,
-                event_id=event["event_id"],
-                event_type=event["event_type"],
-                module=event.get("module"),
-                timestamp=event["timestamp"],
-                payload=event.get("payload", {}),
-            )
-            .on_conflict_do_nothing(
-                index_elements=["device_id", "event_id"],
-            )
-        )
-        result = await db.execute(stmt)
-        if result.rowcount and result.rowcount > 0:
-            accepted += 1
-        else:
-            duplicates += 1
+    values = [
+        {
+            "device_id": device_id,
+            "child_id": child_id,
+            "event_id": e["event_id"],
+            "event_type": e["event_type"],
+            "module": e.get("module"),
+            "timestamp": e["timestamp"],
+            "payload": e.get("payload", {}),
+        }
+        for e in events
+    ]
 
+    stmt = (
+        pg_insert(LearningEvent)
+        .values(values)
+        .on_conflict_do_nothing(index_elements=["device_id", "event_id"])
+    )
+    result = await db.execute(stmt)
+    # ON CONFLICT DO NOTHING: rowcount counts only inserted rows
+    accepted = result.rowcount or 0
+    duplicates = len(events) - accepted
     await db.flush()
     return accepted, duplicates

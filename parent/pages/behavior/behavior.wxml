@@ -2,75 +2,173 @@
 <view class="page-wrap">
 
   <!-- Tab 切换 -->
-  <view class="beh-tab-bar ca">
+  <view class="bh-tab-bar ca">
     <view
       wx:for="{{tabs}}"
       wx:key="key"
-      class="beh-tab-btn {{activeTab === item.key ? 'on' : ''}}"
+      class="bh-tab-btn {{activeTab === item.key ? 'on' : ''}}"
       bind:tap="onSwitchTab"
       data-tab="{{item.key}}"
     >{{item.label}}</view>
   </view>
 
   <!-- 专注度 Tab -->
-  <block wx:if="{{activeTab === 'focus'}}">
-    <view class="beh-score-card purple ca">
-      <view class="beh-big-score">92<text class="beh-unit">分</text></view>
-      <view class="beh-slabel">今日专注度评分</view>
-      <view class="beh-sdelta">↑ 3 分 vs 昨日</view>
-    </view>
-    <view class="beh-stat-grid ca">
-      <view class="beh-sg-card mint"><view class="beh-sv">3</view><view class="beh-sl">走神次数</view></view>
-      <view class="beh-sg-card amber"><view class="beh-sv">25m</view><view class="beh-sl">最长专注</view></view>
-      <view class="beh-sg-card blue"><view class="beh-sv">87%</view><view class="beh-sl">专注占比</view></view>
-      <view class="beh-sg-card pink"><view class="beh-sv">4</view><view class="beh-sl">中断次数</view></view>
-    </view>
-  </block>
-
-  <!-- 姿态 Tab -->
-  <block wx:elif="{{activeTab === 'pose'}}">
-    <view class="beh-score-card mint ca">
-      <view class="beh-big-score">85<text class="beh-unit">分</text></view>
-      <view class="beh-slabel">坐姿健康评分</view>
-      <view class="beh-sdelta">↑ 2 分 vs 昨日</view>
-    </view>
-    <view class="beh-pose-card ca">
-      <view class="beh-phdr">🧍 今日姿态记录</view>
-      <view wx:for="{{poseRecords}}" wx:key="label" class="beh-pose-row {{item.type}}">
-        <view class="beh-pose-left-bar"></view>
-        <view class="beh-pose-info">
-          <view class="beh-pose-title">{{item.label}}</view>
-          <view class="beh-pose-desc">{{item.desc}}</view>
-        </view>
-        <view class="beh-pose-pct">{{item.pct}}%</view>
+  <view wx:if="{{activeTab === 'focus'}}" class="bh-tab-content">
+    <view class="bh-score-card focus-bg ca">
+      <view class="bh-sc-left">
+        <view class="bh-sc-label">专注度</view>
+        <view class="bh-sc-value">89</view>
+        <view class="bh-sc-change">↓ 3% 较上周</view>
+      </view>
+      <view class="bh-sc-right">
+        <view class="bh-sc-unit-label">评分</view>
+        <view class="bh-sc-big-unit">分</view>
       </view>
     </view>
-  </block>
 
-  <!-- 位置 Tab -->
-  <block wx:elif="{{activeTab === 'location'}}">
-    <view class="beh-loc-card ca">
-      <view class="beh-phdr">📍 房间活动统计</view>
-      <view wx:for="{{locationRecords}}" wx:key="name" class="beh-loc-row">
-        <view class="beh-loc-icon {{item.key}}">{{item.icon}}</view>
-        <text class="beh-loc-name">{{item.name}}</text>
-        <view class="beh-loc-bar-wrap">
-          <view class="beh-loc-bar {{item.key}}" style="width:{{item.percent}}%"></view>
+    <view class="bh-stats-grid ca">
+      <view class="bh-stat-item"><view class="bh-sv">3<text class="bh-su"> 次</text></view><view class="bh-sl">分散次数</view></view>
+      <view class="bh-stat-item"><view class="bh-sv">25<text class="bh-su"> min</text></view><view class="bh-sl">最长专注</view></view>
+      <view class="bh-stat-item bh-stat-bar"><view class="bh-sv">87<text class="bh-su">%</text></view><view class="bh-sl">专注占比</view><view class="bh-bar-wrap"><view class="bh-bar-fill bh-bar-f" style="width:87%"></view></view></view>
+      <view class="bh-stat-item"><view class="bh-sv">4<text class="bh-su"> 次</text></view><view class="bh-sl">打断次数</view></view>
+    </view>
+
+    <view class="bh-sec ca">
+      <image class="bh-sec-icon" src="/icons/ic-alert-amber.svg" mode="aspectFit"/>
+      <text>挖掘发现</text>
+    </view>
+    <view class="bh-insight ca">
+      <view class="bh-mi-icon focus-icon">
+        <image class="bh-mi-icon-img" src="/icons/ic-chart-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="bh-mi-body">
+        <view class="bh-mi-title">周三下午骤降至 62 分</view>
+        <view class="bh-mi-desc">"思维游戏"新内容上线后中断次数为平时 3.2 倍</view>
+        <view class="bh-mi-tags">
+          <view class="bh-mt mt-f">专注度</view>
+          <view class="bh-mt mt-t">使用时长</view>
         </view>
-        <text class="beh-loc-time">{{item.time}}</text>
       </view>
     </view>
-  </block>
-
-  <!-- 提示 -->
-  <view class="illo-card ca" style="margin:var(--g) var(--m)">
-    <view class="illo-circle">
-      <danke-mascot size="sm" state="online" />
-    </view>
-    <view class="illo-body">
-      <view class="illo-title">专注度 92 分，表现很棒</view>
-      <view class="illo-sub">今天的坚持正在累积成进步</view>
+    <view class="bh-insight ca">
+      <view class="bh-mi-icon focus-icon">
+        <image class="bh-mi-icon-img" src="/icons/ic-star-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="bh-mi-body">
+        <view class="bh-mi-title">早晨专注比晚上高 35%</view>
+        <view class="bh-mi-desc">早 8-10 点平均 94 分，晚 7-9 点降至 70 分</view>
+        <view class="bh-mi-tags">
+          <view class="bh-mt mt-f">专注度</view>
+          <view class="bh-mt mt-t">时段</view>
+        </view>
+      </view>
     </view>
   </view>
 
+  <!-- 姿态 Tab -->
+  <view wx:if="{{activeTab === 'posture'}}" class="bh-tab-content">
+    <view class="bh-score-card posture-bg ca">
+      <view class="bh-sc-left">
+        <view class="bh-sc-label">坐姿</view>
+        <view class="bh-sc-value">82</view>
+        <view class="bh-sc-change">↑ 5% 较上周</view>
+      </view>
+      <view class="bh-sc-right">
+        <view class="bh-sc-unit-label">评分</view>
+        <view class="bh-sc-big-unit">分</view>
+      </view>
+    </view>
+
+    <view class="bh-stats-grid ca">
+      <view class="bh-stat-item bh-stat-bar"><view class="bh-sv">78<text class="bh-su">%</text></view><view class="bh-sl">标准坐姿</view><view class="bh-bar-wrap"><view class="bh-bar-fill bh-bar-l" style="width:78%"></view></view></view>
+      <view class="bh-stat-item"><view class="bh-sv">15<text class="bh-su">%</text></view><view class="bh-sl">轻微倾斜</view></view>
+      <view class="bh-stat-item"><view class="bh-sv">7<text class="bh-su">%</text></view><view class="bh-sl">明显歪斜</view></view>
+      <view class="bh-stat-item"><view class="bh-sv">6<text class="bh-su"> 次</text></view><view class="bh-sl">坐姿提醒</view></view>
+    </view>
+
+    <view class="bh-sec ca">
+      <image class="bh-sec-icon" src="/icons/ic-alert-amber.svg" mode="aspectFit"/>
+      <text>挖掘发现</text>
+    </view>
+    <view class="bh-insight ca">
+      <view class="bh-mi-icon posture-icon">
+        <image class="bh-mi-icon-img" src="/icons/ic-chart-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="bh-mi-body">
+        <view class="bh-mi-title">周四连续坐姿异常 40 分钟</view>
+        <view class="bh-mi-desc">当日使用 95 分钟（本周最高），长时间使用后坐姿问题 ×2.5</view>
+        <view class="bh-mi-tags">
+          <view class="bh-mt mt-p">姿态</view>
+          <view class="bh-mt mt-t">使用时长</view>
+        </view>
+      </view>
+    </view>
+    <view class="bh-insight ca">
+      <view class="bh-mi-icon posture-icon">
+        <image class="bh-mi-icon-img" src="/icons/ic-star-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="bh-mi-body">
+        <view class="bh-mi-title">坐姿变差后 15 分钟专注降 8%</view>
+        <view class="bh-mi-desc">本周 6 次坐姿变差中 5 次在随后 15 分钟内专注度下降</view>
+        <view class="bh-mi-tags">
+          <view class="bh-mt mt-p">姿态</view>
+          <view class="bh-mt mt-f">专注度</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 位置 Tab -->
+  <view wx:if="{{activeTab === 'location'}}" class="bh-tab-content">
+    <view class="bh-score-card location-bg ca">
+      <view class="bh-sc-left">
+        <view class="bh-sc-label">位置</view>
+        <view class="bh-sc-value">3</view>
+        <view class="bh-sc-change">书房为主 · 本周稳定</view>
+      </view>
+      <view class="bh-sc-right">
+        <view class="bh-sc-unit-label">活跃</view>
+        <view class="bh-sc-big-unit">区域</view>
+      </view>
+    </view>
+
+    <view class="bh-stats-grid ca">
+      <view class="bh-stat-item bh-stat-bar"><view class="bh-sv">65<text class="bh-su">%</text></view><view class="bh-sl">客厅</view><view class="bh-bar-wrap"><view class="bh-bar-fill bh-bar-l" style="width:65%"></view></view></view>
+      <view class="bh-stat-item bh-stat-bar"><view class="bh-sv">25<text class="bh-su">%</text></view><view class="bh-sl">书房</view><view class="bh-bar-wrap"><view class="bh-bar-fill bh-bar-f" style="width:25%"></view></view></view>
+      <view class="bh-stat-item"><view class="bh-sv">10<text class="bh-su">%</text></view><view class="bh-sl">卧室</view></view>
+      <view class="bh-stat-item"><view class="bh-sv bh-sv-green">正常</view><view class="bh-sl">异常检测</view></view>
+    </view>
+
+    <view class="bh-sec ca">
+      <image class="bh-sec-icon" src="/icons/ic-alert-amber.svg" mode="aspectFit"/>
+      <text>挖掘发现</text>
+    </view>
+    <view class="bh-insight ca">
+      <view class="bh-mi-icon location-icon">
+        <image class="bh-mi-icon-img" src="/icons/ic-chart-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="bh-mi-body">
+        <view class="bh-mi-title">客厅专注度比书房低 12%</view>
+        <view class="bh-mi-desc">书房 92 分 vs 客厅 80 分。周二、四在客厅时专注度均低于警戒线</view>
+        <view class="bh-mi-tags">
+          <view class="bh-mt mt-l">位置</view>
+          <view class="bh-mt mt-f">专注度</view>
+        </view>
+      </view>
+    </view>
+    <view class="bh-insight ca">
+      <view class="bh-mi-icon location-icon">
+        <image class="bh-mi-icon-img" src="/icons/ic-star-pd.svg" mode="aspectFit"/>
+      </view>
+      <view class="bh-mi-body">
+        <view class="bh-mi-title">书房使用率较上周提升 5%</view>
+        <view class="bh-mi-desc">活动范围稳定，无异常位置变化</view>
+        <view class="bh-mi-tags">
+          <view class="bh-mt mt-l">位置</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view style="height:48rpx"></view>
 </view>

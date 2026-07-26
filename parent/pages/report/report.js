@@ -1,192 +1,161 @@
-// 报告页 — 周报
+// 报告中心
 
-// 获取周一的日期字符串 (YYYY-MM-DD)
 function getMonday(d) {
-  const date = new Date(d)
-  const day = date.getDay()
-  const diff = day === 0 ? -6 : 1 - day
+  var date = new Date(d)
+  var day = date.getDay()
+  var diff = day === 0 ? -6 : 1 - day
   date.setDate(date.getDate() + diff)
   return formatDateKey(date)
 }
 
 function formatDateKey(d) {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
+  var y = d.getFullYear()
+  var m = String(d.getMonth() + 1).padStart(2, '0')
+  var day = String(d.getDate()).padStart(2, '0')
+  return y + '-' + m + '-' + day
 }
 
 function formatWeekLabel(mondayStr) {
-  const [y, m, d] = mondayStr.split('-').map(Number)
-  const mon = new Date(y, m - 1, d)
-  const sun = new Date(y, m - 1, d + 6)
-  const fmt = (dt) => `${dt.getMonth() + 1} 月 ${dt.getDate()} 日`
-  return `${fmt(mon)} — ${fmt(sun)}`
+  var parts = mondayStr.split('-').map(Number)
+  var mon = new Date(parts[0], parts[1] - 1, parts[2])
+  var sun = new Date(parts[0], parts[1] - 1, parts[2] + 6)
+  return (mon.getMonth() + 1) + '月' + mon.getDate() + '日—' + (sun.getMonth() + 1) + '月' + sun.getDate() + '日'
 }
 
-function formatShortLabel(mondayStr) {
-  const [y, m, d] = mondayStr.split('-').map(Number)
-  return `${m} 月第${Math.ceil(d / 7)}周`
+function shortLabel(mondayStr) {
+  var parts = mondayStr.split('-').map(Number)
+  var mon = new Date(parts[0], parts[1] - 1, parts[2])
+  var sun = new Date(parts[0], parts[1] - 1, parts[2] + 6)
+  return (mon.getMonth() + 1) + '/' + mon.getDate() + '—' + (sun.getMonth() + 1) + '/' + sun.getDate()
 }
 
-// 生成迷你柱状图 (确定性, 基于 seed, 返回 rpx 值)
-function generateSparkBars(count, minH, maxH, hiThreshold, seed) {
-  const bars = []
-  const range = maxH - minH
-  for (let i = 0; i < count; i++) {
-    const h = minH + ((seed * (i + 1) * 7 + i * 13) % range)
-    bars.push({ h, hi: h > hiThreshold })
+function formatWeekNum(mondayStr) {
+  var parts = mondayStr.split('-').map(Number)
+  var mon = new Date(parts[0], parts[1] - 1, parts[2])
+  var jan1 = new Date(parts[0], 0, 1)
+  var days = Math.floor((mon - jan1) / 86400000)
+  var weekNum = Math.ceil((days + jan1.getDay() + 1) / 7)
+  return parts[0] + '年第' + weekNum + '周'
+}
+
+// 每期周报的真实 mock 数据
+function seedData(key) {
+  var map = {
+    '2026-06-22': { focusTrend: '↓ 3%', postureTrend: '↑ 5%', anomalyCount: 2, discoveryCount: 3, hasNew: true },
+    '2026-06-15': { focusTrend: '↓ 1%', postureTrend: '↑ 2%', anomalyCount: 1, discoveryCount: 2, hasNew: true },
+    '2026-06-08': { focusTrend: '↑ 2%', postureTrend: '↓ 1%', anomalyCount: 0, discoveryCount: 2, hasNew: false },
+    '2026-06-01': { focusTrend: '→ 持平', postureTrend: '↑ 3%', anomalyCount: 1, discoveryCount: 3, hasNew: false },
+    '2026-05-25': { focusTrend: '↓ 2%', postureTrend: '→ 持平', anomalyCount: 0, discoveryCount: 1, hasNew: false },
+    '2026-05-18': { focusTrend: '↑ 4%', postureTrend: '↑ 1%', anomalyCount: 1, discoveryCount: 2, hasNew: false },
+    '2026-05-11': { focusTrend: '→ 持平', postureTrend: '↓ 2%', anomalyCount: 0, discoveryCount: 1, hasNew: false },
+    '2026-05-04': { focusTrend: '↓ 1%', postureTrend: '→ 持平', anomalyCount: 0, discoveryCount: 1, hasNew: false }
   }
-  return bars
+  return map[key] || { focusTrend: '→ 持平', postureTrend: '→ 持平', anomalyCount: 0, discoveryCount: 1, hasNew: false }
 }
 
-// 生成模拟周报数据
-function generateWeekData(mondayStr) {
-  const base = parseInt(mondayStr.split('-')[2]) || 16
-  const seed = (base * 7 + 3) % 20
-  return {
-    highlights: [
-      seed > 10 ? '数学心算连续满分' : '诗词背诵表现突出',
-      seed > 12 ? `专注度提升 ${seed}%` : `正确率提升 ${seed}%`
-    ],
-    tips: [
-      seed < 8 ? '坐姿需关注' : '阅读时长偏短',
-      seed < 10 ? '英语口语可加强' : '科学实验动手不足'
-    ],
-    aiSummary: seed > 10
-      ? '小宇本周学习状态持续向好，数学表现尤为突出。建议下周适当增加英语听力练习。'
-      : '小宇本周整体表现平稳，英语方面进步明显。建议下周多关注科学实验环节，培养动手能力。',
-    metrics: {
-      dailyUsage: 65 + seed,
-      accuracy: 80 + seed,
-      knowledge: 14 + Math.floor(seed / 2)
-    },
-    sparkBars: {
-      dailyUsage: generateSparkBars(7, 14, 48, 30, seed),
-      accuracy: generateSparkBars(5, 14, 48, 30, seed),
-      knowledge: generateSparkBars(3, 16, 48, 30, seed)
-    }
+function buildHistory(key, weeks) {
+  // 选出比当前周更早的周
+  var currentIdx = -1
+  for (var i = 0; i < weeks.length; i++) {
+    if (weeks[i].key === key) { currentIdx = i; break }
   }
-}
-
-// 生成连续数周的周报列表
-function buildWeeks() {
-  const today = new Date()
-  const currentMonday = getMonday(today)
-  const weeks = []
-  // 生成最近 8 周的记录
-  for (let i = 0; i < 8; i++) {
-    const d = new Date(today)
-    d.setDate(d.getDate() - i * 7)
-    const key = getMonday(d)
-    weeks.push({
-      key,
-      label: i === 0 ? '本周' : i === 1 ? '上周' : formatShortLabel(key),
-      date: formatWeekLabel(key),
-      active: i === 0
+  var older = weeks.slice(currentIdx + 1)
+  var list = []
+  for (var j = 0; j < older.length && j < 4; j++) {
+    var w = older[j]
+    var d = seedData(w.key)
+    list.push({
+      id: w.key,
+      key: w.key,
+      type: 'mining',
+      title: w.weekNum + ' · 行为挖掘报告',
+      subtitle: '专注' + d.focusTrend + ' · 坐姿' + d.postureTrend,
+      tags: d.anomalyCount > 0 ? [{ text: d.anomalyCount + '个异常', cls: 'warn' }] : [{ text: '无异常', cls: 'good' }],
+      faded: j >= 3
     })
   }
-  return { weeks, currentKey: currentMonday }
+  return list
+}
+
+function buildWeeks() {
+  var today = new Date()
+  var weeks = []
+  for (var i = 0; i < 8; i++) {
+    var d = new Date(today)
+    d.setDate(d.getDate() - i * 7)
+    var key = getMonday(d)
+    var sd = seedData(key)
+    weeks.push({
+      key: key,
+      label: formatWeekLabel(key),
+      shortLabel: shortLabel(key),
+      weekNum: formatWeekNum(key),
+      hasNew: sd.hasNew
+    })
+  }
+  return { weeks: weeks, currentKey: weeks[0].key }
 }
 
 Page({
   data: {
-    weekLabel: '',
-    historyWeeks: [],
+    weeks: [],
     currentWeekKey: '',
-    // 当前展示的数据
-    highlights: [],
-    tips: [],
-    aiSummary: '',
-    metrics: { dailyUsage: 0, accuracy: 0, knowledge: 0 },
-    sparkBars: { dailyUsage: [], accuracy: [], knowledge: [] }
+    activeWeekId: '',
+    weekData: {},
+    newCount: 3
   },
 
-  onLoad() {
-    const { weeks, currentKey } = buildWeeks()
-    const weekData = generateWeekData(currentKey)
+  onLoad: function () {
+    var result = buildWeeks()
+    var wk = result.currentKey
     this.setData({
-      weekLabel: formatWeekLabel(currentKey),
-      historyWeeks: weeks,
-      currentWeekKey: currentKey,
-      highlights: weekData.highlights,
-      tips: weekData.tips,
-      aiSummary: weekData.aiSummary,
-      metrics: weekData.metrics,
-      sparkBars: weekData.sparkBars,
-      allWeekKeys: weeks.map(w => w.key),
-      allWeekLabels: weeks.map(w => w.date)
+      weeks: result.weeks,
+      currentWeekKey: wk,
+      activeWeekId: 'ws-' + wk,
+      weekData: this.makeWeekData(wk, result.weeks)
     })
   },
 
-  // 加载指定周的数据
-  loadWeek(weekKey) {
-    const weekData = generateWeekData(weekKey)
-    const historyWeeks = this.data.historyWeeks.map(w => ({
-      ...w,
-      active: w.key === weekKey
-    }))
+  onShow: function () {
+    var app = getApp()
+    if (app.globalData.childInfo) {
+      this.setData({ childName: app.globalData.childInfo.name })
+    }
+  },
+
+  makeWeekData: function (key, weeks) {
+    var wks = weeks || this.data.weeks
+    var week = wks.find(function (w) { return w.key === key })
+    if (!week) week = {}
+    var d = seedData(key)
+    return {
+      weekNum: week.weekNum || '',
+      label: week.label || '',
+      shortLabel: week.shortLabel || '',
+      focusTrend: d.focusTrend,
+      postureTrend: d.postureTrend,
+      anomalyCount: d.anomalyCount,
+      discoveryCount: d.discoveryCount,
+      history: buildHistory(key, wks)
+    }
+  },
+
+  onWeekTap: function (e) {
+    var key = e.currentTarget.dataset.key
+    if (key === this.data.currentWeekKey) return
     this.setData({
-      weekLabel: formatWeekLabel(weekKey),
-      currentWeekKey: weekKey,
-      historyWeeks,
-      highlights: weekData.highlights,
-      tips: weekData.tips,
-      aiSummary: weekData.aiSummary,
-      metrics: weekData.metrics,
-      sparkBars: weekData.sparkBars
+      currentWeekKey: key,
+      activeWeekId: 'ws-' + key,
+      weekData: this.makeWeekData(key)
     })
   },
 
-  // 上一周
-  onPrevWeek() {
-    const keys = this.data.allWeekKeys
-    const idx = keys.indexOf(this.data.currentWeekKey)
-    if (idx < keys.length - 1) {
-      this.loadWeek(keys[idx + 1])
-    } else {
-      wx.showToast({ title: '没有更早的周报了', icon: 'none' })
-    }
+  goReportDetail: function (e) {
+    var key = e.currentTarget.dataset.key || this.data.currentWeekKey
+    wx.navigateTo({ url: '/pages/report-detail/report-detail?week=' + key })
   },
 
-  // 下一周
-  onNextWeek() {
-    const keys = this.data.allWeekKeys
-    const idx = keys.indexOf(this.data.currentWeekKey)
-    if (idx > 0) {
-      this.loadWeek(keys[idx - 1])
-    } else {
-      wx.showToast({ title: '已是本周', icon: 'none' })
-    }
-  },
-
-  // 点击日期标签 → 弹出周选择器
-  onWeekLabelTap() {
-    const that = this
-    const labels = this.data.allWeekLabels
-    wx.showActionSheet({
-      itemList: labels.length > 6 ? labels.slice(0, 6) : labels,
-      success(res) {
-        const keys = that.data.allWeekKeys
-        if (keys[res.tapIndex]) {
-          that.loadWeek(keys[res.tapIndex])
-        }
-      }
-    })
-  },
-
-  // 点击历史周报列表项
-  onSelectWeek(e) {
-    const idx = Number(e.currentTarget.dataset.index)
-    const key = this.data.allWeekKeys[idx]
-    if (key) {
-      this.loadWeek(key)
-      wx.pageScrollTo({ scrollTop: 0, duration: 300 })
-    }
-  },
-
-  // 跳转使用时长详情
-  goUsage() {
-    wx.navigateTo({ url: '/pages/usage/usage' })
+  goBehavior: function () {
+    wx.navigateTo({ url: '/pages/behavior/behavior' })
   }
 })

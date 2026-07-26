@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "行为分析",
-  "navigationBarBackgroundColor": "#c1d6f1",
+  "navigationBarBackgroundColor": "#f8f6f2",
   "usingComponents": {
     "danke-mascot": "/components/danke-mascot/danke-mascot"
   }

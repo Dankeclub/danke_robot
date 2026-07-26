@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "周报",
+  "navigationBarTitleText": "报告中心",
   "navigationBarBackgroundColor": "#f8f6f2",
   "usingComponents": {
     "custom-tabbar": "/components/custom-tabbar/custom-tabbar"

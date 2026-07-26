@@ -134,7 +134,13 @@ Page({
     app.globalData.childInfo = childInfo
     wx.setStorageSync('childInfo', childInfo)
     wx.showToast({ title: '保存成功', icon: 'success' })
-    setTimeout(() => wx.navigateBack(), 1500)
+    setTimeout(() => {
+      if (this.data.mode === 'create') {
+        wx.switchTab({ url: '/pages/home/home' })
+      } else {
+        wx.navigateBack()
+      }
+    }, 1500)
   },
 
   onUnbind() {

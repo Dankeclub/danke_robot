@@ -7,7 +7,7 @@
     <view class="dev-device-hero ca">
       <view class="dev-dh-top">
         <view class="dev-device-avatar">
-          <text class="dev-da-text">📱</text>
+          <image class="dev-da-icon" src="/icons/device.svg" mode="aspectFit"/>
         </view>
         <view class="dev-dh-right">
           <view class="dev-device-name">{{device.name}}</view>
@@ -39,8 +39,8 @@
 
     <!-- 设置项 -->
     <view class="dev-setting-cards ca">
-      <view class="dev-setting-item blue">
-        <view class="dev-setting-icon"><text>📱</text></view>
+      <view class="dev-setting-item blue" bind:tap="onEditName">
+        <view class="dev-setting-icon"><image class="dev-si-icon" src="/icons/ic-device-pg.svg" mode="aspectFit"/></view>
         <view class="dev-setting-body">
           <view class="dev-stitle">设备名称</view>
           <view class="dev-ssub">{{device.name}}</view>
@@ -48,7 +48,7 @@
         <text class="dev-setting-arrow">›</text>
       </view>
       <view class="dev-setting-item amber">
-        <view class="dev-setting-icon"><text>🔄</text></view>
+        <view class="dev-setting-icon"><image class="dev-si-icon" src="/icons/refresh-cw.svg" mode="aspectFit"/></view>
         <view class="dev-setting-body">
           <view class="dev-stitle">固件升级</view>
           <view class="dev-ssub">当前 {{device.version}}，检查更新</view>
@@ -56,7 +56,7 @@
         <text class="dev-setting-arrow">›</text>
       </view>
       <view class="dev-setting-item rose" bind:tap="onUnbind">
-        <view class="dev-setting-icon"><text>🔗</text></view>
+        <view class="dev-setting-icon"><image class="dev-si-icon" src="/icons/unlink.svg" mode="aspectFit"/></view>
         <view class="dev-setting-body">
           <view class="dev-stitle">解绑设备</view>
           <view class="dev-ssub">移除设备并清除数据</view>

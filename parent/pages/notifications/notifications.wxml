@@ -35,7 +35,7 @@
 
   <!-- 空状态 -->
   <view wx:if="{{groupedNotifs.length === 0}}" class="notif-empty">
-    <view class="notif-e-icon">🔔</view>
+    <image class="notif-e-icon" src="/icons/ic-bell-pg.svg" mode="aspectFit"/>
     <view class="notif-e-title">暂无通知</view>
     <view class="notif-e-desc">当有新的行为提醒或学习报告时，会在这里显示</view>
   </view>

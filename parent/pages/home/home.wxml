@@ -13,6 +13,8 @@
     </view>
   </view>
 
+  <!-- 在线内容 -->
+  <block wx:if="{{dankeState !== 'offline'}}">
   <!-- Chips -->
   <view class="hcs ca">
     <view class="hc c1" bind:tap="goUsage"><image class="hci" src="/icons/ic-clock-pd.svg" mode="aspectFit"/><text class="hcl">使用时长</text></view>
@@ -23,11 +25,15 @@
 
   <!-- 今日概览 -->
   <view class="hlc ca">
-    <view class="hhd"><view class="hht">今日概览</view><text class="hda">6 月 22 日 · 周一</text></view>
-    <view wx:for="{{todayItems}}" wx:key="text" class="hlr">
-      <view class="hck {{item.done?'on':''}}"><text wx:if="{{item.done}}">✓</text><view wx:else class="hde"/></view>
-      <view class="hrt" style="{{item.done?'':'opacity:.65'}}">{{item.text}}<text class="hsu">{{item.sub}}</text></view>
-    </view>
+    <view class="hhd"><view class="hht">{{taskSectionTitle}}</view></view>
+    <scroll-view wx:if="{{todayItems.length > 0}}" class="hl-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <view wx:for="{{todayItems}}" wx:key="text" class="hlr">
+        <view class="hck {{item.done?'on':''}}"><text wx:if="{{item.done}}">✓</text><view wx:else class="hde"/></view>
+        <view class="hrt" style="{{item.done?'':'opacity:.65'}}">{{item.text}}<text class="hsu">{{item.sub}}</text></view>
+      </view>
+    </scroll-view>
+    <view wx:if="{{todayItems.length > 3}}" class="hl-more">下滑查看更多</view>
+    <view wx:if="{{todayItems.length === 0}}" class="hl-empty">暂无任务，从"派任务"给蛋仔发送任务吧</view>
   </view>
 
   <!-- 统计 -->
@@ -45,30 +51,61 @@
     <view wx:for="{{timelineItems}}" wx:key="text" class="htli"><view class="htld {{item.color}}"/><view class="htlb"><view class="htlt">{{item.time}}</view><view class="htlds">{{item.text}}<text wx:if="{{item.tag}}" class="htg {{item.tagColor}}">{{item.tag}}</text></view></view></view>
   </view>
 
-  <!-- 学习进度 -->
-  <view class="hps ca">
-    <view class="hpt"><image class="hti" src="/icons/ic-chart-pd.svg" mode="aspectFit"/><text class="hptx">学习进度</text></view>
-    <view class="hpc">
-      <view class="hph"><text class="hphl">今日目标</text><text class="hphr">86 / 120 min · 72%</text></view>
-      <view class="hpb"><view class="hpf" style="width:72%"/></view>
-      <view class="hmb">
-        <view wx:for="{{miniProgress}}" wx:key="label" class="hmr2"><view class="hmd {{item.color}}"/><text class="hml">{{item.label}}</text><view class="hmt"><view class="hmf" style="width:{{item.percent}}%;background:{{item.barColor}}"/></view></view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 学习快报 -->
-  <view class="hls ca"><view class="hli"><image class="hlii" src="/icons/ic-star-white.svg" mode="aspectFit"/></view><view class="hlc2"><view class="hlct">学习快报</view><view class="hln">3<text class="hlu"> 个</text></view><view class="hlds">今日新掌握知识点</view></view></view>
-
-  <!-- 蛋仔插画卡 -->
-  <view class="hic ca"><view class="hif"><danke-mascot size="sm" state="online"/></view><view class="hicc"><view class="hit">蛋仔陪你一起成长</view><view class="hid">数学心算模块表现优秀 · 继续保持！</view></view></view>
+  </block>
 
   <!-- 离线态 -->
-  <view wx:if="{{dankeState==='offline'}}" class="hof">
+  <view wx:else class="hof">
     <view class="hom"><danke-mascot size="lg" state="offline"/></view>
     <view class="hot">蛋仔正在休息</view><view class="hod">设备离线，无法实时看护</view>
     <view class="hob" bind:tap="goDevice">✓ 去连接</view>
   </view>
 
   <custom-tabbar/>
+
+  <!-- ===== 派任务底部弹出面板 ===== -->
+  <view class="task-sheet-mask {{showTaskSheet ? 'show' : ''}}" bind:tap="closeTaskSheet"></view>
+  <view class="task-sheet {{showTaskSheet ? 'show' : ''}}" style="padding-bottom:{{safeBottom + 60}}rpx">
+    <view class="ts-handle" catch:tap="noop">
+      <view class="ts-handle-bar"></view>
+    </view>
+    <view class="ts-title">派任务给蛋仔</view>
+
+    <view class="ts-tabs-row">
+      <scroll-view class="ts-tabs" scroll-x>
+        <view wx:for="{{taskTabs}}" wx:key="*this" class="ts-tab {{activeTaskTab === index ? 'active' : ''}}" bind:tap="onTaskTabTap" data-index="{{index}}">{{item}}</view>
+      </scroll-view>
+      <view class="ts-select-all" bind:tap="onSelectAll">
+        <text>{{selectAll ? '取消' : '全选'}}</text>
+      </view>
+    </view>
+
+    <view class="ts-list">
+      <view wx:for="{{displayTasks}}" wx:key="_key" class="ts-item {{selectedMap[index] ? 'selected' : ''}}" bind:tap="onTaskSelect" data-index="{{index}}">
+        <view class="ts-item-left">
+          <image class="ts-item-icon" src="/icons/{{item.icon}}.svg" mode="aspectFit"/>
+          <text class="ts-item-name">{{item.name}}</text>
+          <text wx:if="{{item.isCustom}}" class="ts-custom-tag">自定义</text>
+        </view>
+        <view class="ts-item-right">
+          <view wx:if="{{item.isCustom}}" class="ts-item-del" catch:tap="onDeleteCustomTask" data-index="{{index}}">
+            <image class="ts-del-icon" src="/icons/x.svg" mode="aspectFit"/>
+          </view>
+          <view class="ts-item-check {{selectedMap[index] ? 'on' : ''}}">
+            <image wx:if="{{selectedMap[index]}}" class="ts-check-icon" src="/icons/ic-check-white.svg" mode="aspectFit"/>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{displayTasks.length === 0}}" class="ts-empty">暂无任务，添加一个自定义任务吧</view>
+    </view>
+
+    <view class="ts-custom-row">
+      <input class="ts-custom-input" value="{{customInput}}" placeholder="输入自定义任务…" bind:input="onCustomInput" confirm-type="done" bind:confirm="onAddCustomTask" maxlength="30" />
+      <view class="ts-custom-add" bind:tap="onAddCustomTask">添加</view>
+    </view>
+
+    <view class="ts-send-btn {{selectedTasks.length > 0 ? 'ready' : ''}}" bind:tap="onSendTask">
+      <image class="ts-send-icon" src="/icons/ic-send-white.svg" mode="aspectFit"/>
+      <text>发送任务{{selectedTasks.length > 0 ? '（' + selectedTasks.length + '）' : ''}}</text>
+    </view>
+  </view>
 </view>

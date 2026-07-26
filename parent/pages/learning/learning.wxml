@@ -54,5 +54,4 @@
     </view>
     <image class="illo-arrow" src="/icons/ic-chevron-pa2.svg" mode="aspectFit"/>
   </view>
-  <custom-tabbar />
 </view>

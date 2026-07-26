@@ -10,6 +10,7 @@
     "pages/profile/profile",
     "pages/device/device",
     "pages/behavior/behavior",
+    "pages/report-detail/report-detail",
     "pages/usage/usage",
     "pages/goal/goal",
     "pages/notifications/notifications",
@@ -22,6 +23,7 @@
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f8f6f2"
   },
+  "lazyCodeLoading": "requiredComponents",
   "tabBar": {
     "custom": true,
     "color": "#B6C2CF",
@@ -34,16 +36,8 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/report/report",
-        "text": "报告"
-      },
-      {
         "pagePath": "pages/monitor/monitor",
         "text": "看护"
-      },
-      {
-        "pagePath": "pages/learning/learning",
-        "text": "学习"
       },
       {
         "pagePath": "pages/profile/profile",
