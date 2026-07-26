@@ -2,8 +2,7 @@
 
 import jwt as pyjwt
 
-from fastapi import Depends, Request
-from fastapi.responses import JSONResponse
+from fastapi import Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.security import decode_token
@@ -19,22 +18,22 @@ async def get_current_device(
 
     Returns: {"device_id": str, "child_id": str, "family_id": str}
 
-    Raises 401 JSONResponse on missing/invalid/expired token or wrong sub_type.
+    Raises HTTPException 401 on missing/invalid/expired token or wrong sub_type.
     """
     auth_header = request.headers.get("Authorization", "")
     if not auth_header.startswith("Bearer "):
-        return _unauthorized("missing_token")
+        raise _unauthorized("missing_token")
 
     token = auth_header[7:]  # strip "Bearer "
     try:
         payload = decode_token(token)
     except pyjwt.ExpiredSignatureError:
-        return _unauthorized("token_expired")
+        raise _unauthorized("token_expired")
     except pyjwt.PyJWTError:
-        return _unauthorized("invalid_token")
+        raise _unauthorized("invalid_token")
 
     if payload.get("sub_type") != "device":
-        return _unauthorized("wrong_token_type")
+        raise _unauthorized("wrong_token_type")
 
     return {
         "device_id": payload["sub"],
@@ -51,29 +50,29 @@ async def get_current_parent(
 
     Returns: parent_id as string.
 
-    Raises 401 JSONResponse on missing/invalid/expired token or wrong sub_type.
+    Raises HTTPException 401 on missing/invalid/expired token or wrong sub_type.
     """
     auth_header = request.headers.get("Authorization", "")
     if not auth_header.startswith("Bearer "):
-        return _unauthorized("missing_token")
+        raise _unauthorized("missing_token")
 
     token = auth_header[7:]
     try:
         payload = decode_token(token)
     except pyjwt.ExpiredSignatureError:
-        return _unauthorized("token_expired")
+        raise _unauthorized("token_expired")
     except pyjwt.PyJWTError:
-        return _unauthorized("invalid_token")
+        raise _unauthorized("invalid_token")
 
     if payload.get("sub_type") != "parent":
-        return _unauthorized("wrong_token_type")
+        raise _unauthorized("wrong_token_type")
 
     return payload["sub"]
 
 
 def _unauthorized(msg: str):
-    """Return a 401 JSONResponse. Never returns — the caller should return this."""
-    return JSONResponse(
+    """Raise HTTPException with 401 status and consistent error body."""
+    return HTTPException(
         status_code=401,
-        content=error(401, msg),
+        detail=error(401, msg),
     )
