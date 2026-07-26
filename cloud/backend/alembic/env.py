@@ -12,6 +12,8 @@ from alembic import context
 from app.config import settings
 from app.models.base import Base
 from app.models import child, device_binding, family, parent, parent_child  # noqa: F401
+from app.auth.models import RefreshToken  # noqa: F401
+from app.telemetry.models import LearningEvent  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
