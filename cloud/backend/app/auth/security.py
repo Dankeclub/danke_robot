@@ -1,6 +1,7 @@
 """JWT token creation, verification, rotation, and rate limiting."""
 
 import hashlib
+import hmac
 import secrets
 import time
 import uuid
@@ -15,14 +16,26 @@ from app.config import settings
 
 # ── Hashing ─────────────────────────────────────────────
 
+_PHONE_PEPPER = "danke-phone-pepper-v1"  # TODO: move to config
+_TOKEN_PEPPER = "danke-token-pepper-v1"  # TODO: move to config
+
+
 def hash_token(token: str) -> str:
-    """SHA-256 hash a token string for storage."""
-    return hashlib.sha256(token.encode()).hexdigest()
+    """HMAC-SHA256 hash of a token string with server-side pepper."""
+    return hmac.new(
+        _TOKEN_PEPPER.encode(),
+        token.encode(),
+        hashlib.sha256,
+    ).hexdigest()
 
 
 def hash_phone(phone: str) -> str:
-    """Deterministic SHA-256 hash of a phone number for lookup."""
-    return hashlib.sha256(phone.encode()).hexdigest()
+    """HMAC-SHA256 hash of phone number with server-side pepper."""
+    return hmac.new(
+        _PHONE_PEPPER.encode(),
+        phone.encode(),
+        hashlib.sha256,
+    ).hexdigest()
 
 
 # ── JWT ─────────────────────────────────────────────────
@@ -211,6 +224,7 @@ async def revoke_refresh_token(db: AsyncSession, raw_token: str) -> None:
 # when multi-worker deployment is needed.
 
 _rate_limit_store: dict[str, list[float]] = {}
+_rate_limit_check_count: int = 0
 
 
 def check_phone_login_rate_limit(ip: str) -> None:
@@ -219,10 +233,22 @@ def check_phone_login_rate_limit(ip: str) -> None:
     Single-worker only -- each worker has its own in-memory counter.
     Docker Compose must use --workers 1.
     """
+    global _rate_limit_check_count
+    _rate_limit_check_count += 1
+
     now = time.time()
     window_start = now - 60  # 1 minute sliding window
 
-    # Clean old entries
+    # Periodic cleanup of stale IP entries (every 100 checks)
+    if _rate_limit_check_count % 100 == 0:
+        stale_ips = [
+            ip_addr for ip_addr, timestamps in _rate_limit_store.items()
+            if not timestamps or all(ts <= window_start for ts in timestamps)
+        ]
+        for ip_addr in stale_ips:
+            del _rate_limit_store[ip_addr]
+
+    # Clean old entries for this IP
     if ip in _rate_limit_store:
         _rate_limit_store[ip] = [
             ts for ts in _rate_limit_store[ip] if ts > window_start

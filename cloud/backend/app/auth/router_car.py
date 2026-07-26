@@ -134,7 +134,6 @@ async def car_phone_login(
         binding.device_type = body.device_type
         binding.app_version = body.app_version
         binding.bind_status = "active"
-        binding.bound_at = datetime.now(UTC)
 
     await db.flush()
 

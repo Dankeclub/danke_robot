@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Python dependencies
 COPY pyproject.toml .
-RUN pip install --no-cache-dir -e . && pip install --no-cache-dir httpx PyJWT
+RUN pip install --no-cache-dir . && pip install --no-cache-dir httpx PyJWT
 
 # Copy application code
 COPY . .

@@ -1,6 +1,7 @@
 """Telemetry event ingestion routes."""
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.dependencies import get_current_device
@@ -27,7 +28,7 @@ async def batch_events(
     child_id = device["child_id"]
 
     if not child_id:
-        return error(400, "missing_child_id")
+        return JSONResponse(status_code=400, content=error(400, "missing_child_id"))
 
     events_data = [
         {
