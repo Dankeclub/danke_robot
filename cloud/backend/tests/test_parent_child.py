@@ -1,7 +1,5 @@
 """Tests for the parent_child table."""
 
-import uuid
-
 import pytest
 from sqlalchemy.exc import IntegrityError
 
@@ -12,7 +10,7 @@ from app.models.parent_child import ParentChild
 
 
 async def test_create_parent_child(db_session):
-    """A parent-child binding can be inserted and gets a UUID and timestamps."""
+    """A parent-child binding can be inserted with composite PK."""
     family = Family(name="小宇的家")
     db_session.add(family)
     await db_session.flush()
@@ -38,8 +36,9 @@ async def test_create_parent_child(db_session):
     await db_session.commit()
     await db_session.refresh(pc)
 
-    assert pc.id is not None
-    assert isinstance(pc.id, uuid.UUID)
+    # Composite PK: no UUID id field
+    assert pc.parent_id == parent.id
+    assert pc.child_id == child.id
     assert pc.status == "active"
     assert pc.is_default is False
     assert pc.created_at is not None
@@ -47,7 +46,7 @@ async def test_create_parent_child(db_session):
 
 
 async def test_parent_child_unique_constraint(db_session):
-    """Duplicate (parent_id, child_id) violates unique constraint."""
+    """Duplicate (parent_id, child_id) violates composite PK."""
     family = Family(name="测试家庭")
     db_session.add(family)
     await db_session.flush()
