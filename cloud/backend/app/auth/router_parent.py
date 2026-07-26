@@ -1,8 +1,7 @@
 """Parent auth routes -- WeChat login, phone binding, token refresh, logout."""
 
 import httpx
-
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,7 +21,6 @@ from app.auth.security import (
     create_parent_access_token,
     create_refresh_token_record,
     hash_phone,
-    hash_token,
     mask_phone,
     revoke_refresh_token,
     rotate_refresh_token,

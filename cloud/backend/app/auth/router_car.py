@@ -1,6 +1,6 @@
 """Car device auth routes — phone number login, token refresh, logout."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
@@ -19,9 +19,7 @@ from app.auth.security import (
     check_phone_login_rate_limit,
     create_access_token,
     create_refresh_token_record,
-    decode_token,
     hash_phone,
-    mask_phone,
     revoke_refresh_token,
     rotate_refresh_token,
 )
@@ -128,7 +126,7 @@ async def car_phone_login(
             device_type=body.device_type,
             app_version=body.app_version,
             bind_status="active",
-            bound_at=datetime.now(timezone.utc),
+            bound_at=datetime.now(UTC),
         )
         db.add(binding)
     else:
@@ -136,7 +134,7 @@ async def car_phone_login(
         binding.device_type = body.device_type
         binding.app_version = body.app_version
         binding.bind_status = "active"
-        binding.bound_at = datetime.now(timezone.utc)
+        binding.bound_at = datetime.now(UTC)
 
     await db.flush()
 

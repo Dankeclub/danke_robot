@@ -11,7 +11,6 @@ from sqlalchemy.ext.asyncio import (
 
 from app.config import settings
 
-
 async_engine: AsyncEngine = create_async_engine(
     settings.database_url,
     echo=settings.app_env == "dev",

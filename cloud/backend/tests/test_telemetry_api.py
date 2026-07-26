@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 from httpx import AsyncClient
@@ -9,6 +9,8 @@ from app.models.child import Child
 from app.models.family import Family
 from app.models.parent import ParentAccount
 from app.models.parent_child import ParentChild
+
+BATCH_URL = "/v1/api/car/telemetry/events:batch"
 
 
 @pytest.fixture
@@ -61,10 +63,10 @@ async def test_batch_events(async_client: AsyncClient, telemetry_setup):
     token = login_res.json()["data"]["access_token"]
 
     event_id = str(uuid.uuid4())
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
 
     res = await async_client.post(
-        "/v1/api/car/telemetry/events:batch",
+        BATCH_URL,
         json={
             "events": [
                 {
@@ -98,7 +100,7 @@ async def test_batch_events_idempotent(async_client: AsyncClient, telemetry_setu
     token = login_res.json()["data"]["access_token"]
 
     event_id = str(uuid.uuid4())
-    now = datetime.now(timezone.utc).isoformat()
+    now = datetime.now(UTC).isoformat()
     event_payload = {
         "events": [
             {
@@ -113,11 +115,11 @@ async def test_batch_events_idempotent(async_client: AsyncClient, telemetry_setu
     headers = {"Authorization": f"Bearer {token}"}
 
     # First request
-    res1 = await async_client.post("/v1/api/car/telemetry/events:batch", json=event_payload, headers=headers)
+    res1 = await async_client.post(BATCH_URL, json=event_payload, headers=headers)
     assert res1.json()["data"]["accepted"] == 1
 
     # Second request — same event_id
-    res2 = await async_client.post("/v1/api/car/telemetry/events:batch", json=event_payload, headers=headers)
+    res2 = await async_client.post(BATCH_URL, json=event_payload, headers=headers)
     assert res2.status_code == 200
     assert res2.json()["data"]["accepted"] == 0
     assert res2.json()["data"]["duplicates"] == 1
@@ -126,7 +128,16 @@ async def test_batch_events_idempotent(async_client: AsyncClient, telemetry_setu
 @pytest.mark.asyncio
 async def test_batch_events_unauthorized(async_client: AsyncClient):
     """POST without auth token returns 401."""
-    res = await async_client.post("/v1/api/car/telemetry/events:batch", json={
-        "events": [{"event_id": str(uuid.uuid4()), "event_type": "test", "timestamp": "2026-07-26T10:00:00+08:00"}]
-    })
+    res = await async_client.post(
+        BATCH_URL,
+        json={
+            "events": [
+                {
+                    "event_id": str(uuid.uuid4()),
+                    "event_type": "test",
+                    "timestamp": "2026-07-26T10:00:00+08:00",
+                }
+            ]
+        },
+    )
     assert res.status_code == 401

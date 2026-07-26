@@ -1,7 +1,6 @@
 """FastAPI dependencies for auth — extract identity from Bearer token."""
 
 import jwt as pyjwt
-
 from fastapi import Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 

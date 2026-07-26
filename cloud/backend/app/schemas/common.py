@@ -1,13 +1,11 @@
 """Unified API response envelope and helper functions."""
 
-from typing import Any, Generic, TypeVar
+from typing import Any
 
 from pydantic import BaseModel
 
-T = TypeVar("T")
 
-
-class APIResponse(BaseModel, Generic[T]):
+class APIResponse[T](BaseModel):
     """Standard API response wrapper.
 
     All endpoints return this envelope:

@@ -4,16 +4,14 @@ import hashlib
 import secrets
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import jwt
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.models import RefreshToken
 from app.config import settings
-
 
 # ── Hashing ─────────────────────────────────────────────
 
@@ -45,7 +43,10 @@ def create_access_token(
     device_id: str,
     child_id: str,
     family_id: str,
-    scope: str = "car.learning.read car.learning.write car.chat car.messages car.files car.realtime",
+    scope: str = (
+        "car.learning.read car.learning.write car.chat "
+        "car.messages car.files car.realtime"
+    ),
 ) -> str:
     """Sign a JWT access token for the car device."""
     payload = {
@@ -117,7 +118,7 @@ async def create_refresh_token_record(
     """Create a RefreshToken row and return the raw token."""
     raw = _generate_refresh_token_raw()
     token_hash = hash_token(raw)
-    expires_at = datetime.now(timezone.utc).timestamp() + settings.refresh_token_ttl_seconds
+    expires_at = datetime.now(UTC).timestamp() + settings.refresh_token_ttl_seconds
 
     record = RefreshToken(
         token_hash=token_hash,
@@ -125,7 +126,7 @@ async def create_refresh_token_record(
         device_id=device_id,
         child_id=uuid.UUID(child_id) if child_id else None,
         family_id=uuid.UUID(family_id) if family_id else None,
-        expires_at=datetime.fromtimestamp(expires_at, tz=timezone.utc),
+        expires_at=datetime.fromtimestamp(expires_at, tz=UTC),
     )
     db.add(record)
     await db.flush()
@@ -159,12 +160,12 @@ async def rotate_refresh_token(
         raise ValueError("refresh_token_replayed")
 
     # Revoke old token
-    old_record.revoked_at = datetime.now(timezone.utc)
+    old_record.revoked_at = datetime.now(UTC)
 
     # Create new token, rotated from old
     new_raw = _generate_refresh_token_raw()
     new_hash = hash_token(new_raw)
-    expires_at = datetime.now(timezone.utc).timestamp() + settings.refresh_token_ttl_seconds
+    expires_at = datetime.now(UTC).timestamp() + settings.refresh_token_ttl_seconds
 
     new_record = RefreshToken(
         token_hash=new_hash,
@@ -172,7 +173,7 @@ async def rotate_refresh_token(
         device_id=old_record.device_id,
         child_id=old_record.child_id,
         family_id=old_record.family_id,
-        expires_at=datetime.fromtimestamp(expires_at, tz=timezone.utc),
+        expires_at=datetime.fromtimestamp(expires_at, tz=UTC),
         rotated_from_id=old_record.id,
     )
     db.add(new_record)
@@ -182,7 +183,7 @@ async def rotate_refresh_token(
 
 async def _revoke_chain(db: AsyncSession, record: RefreshToken) -> None:
     """Recursively revoke all tokens in the rotation chain."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     record.revoked_at = now
     if record.rotated_from_id:
         result = await db.execute(
@@ -201,7 +202,7 @@ async def revoke_refresh_token(db: AsyncSession, raw_token: str) -> None:
     )
     record = result.scalar_one_or_none()
     if record and record.revoked_at is None:
-        record.revoked_at = datetime.now(timezone.utc)
+        record.revoked_at = datetime.now(UTC)
         await db.flush()
 
 

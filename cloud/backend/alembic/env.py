@@ -8,11 +8,10 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-
-from app.config import settings
-from app.models.base import Base
-from app.models import child, device_binding, family, parent, parent_child  # noqa: F401
 from app.auth.models import RefreshToken  # noqa: F401
+from app.config import settings
+from app.models import child, device_binding, family, parent, parent_child  # noqa: F401
+from app.models.base import Base
 from app.telemetry.models import LearningEvent  # noqa: F401
 
 # this is the Alembic Config object, which provides
