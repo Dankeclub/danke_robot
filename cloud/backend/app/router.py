@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 from app.auth.router_car import car_auth_router
 from app.auth.router_parent import parent_auth_router
+from app.telemetry.router import telemetry_router
 
 top_router = APIRouter()
 
@@ -16,6 +17,7 @@ async def health_check():
 # Car device API
 car_router = APIRouter(prefix="/v1/api/car")
 car_router.include_router(car_auth_router)
+car_router.include_router(telemetry_router)
 top_router.include_router(car_router)
 
 # Parent mini-program API
