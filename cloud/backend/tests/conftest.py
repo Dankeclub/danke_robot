@@ -29,7 +29,14 @@ async def tables(engine):
         await conn.run_sync(Base.metadata.create_all)
     yield
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        # Use CASCADE to handle FK dependencies between new and old tables.
+        # SQLAlchemy's drop_all can mis-order tables with complex FK graphs.
+        from sqlalchemy import text
+
+        for table in reversed(Base.metadata.sorted_tables):
+            await conn.execute(
+                text(f"DROP TABLE IF EXISTS {table.name} CASCADE")
+            )
 
 
 @pytest.fixture
