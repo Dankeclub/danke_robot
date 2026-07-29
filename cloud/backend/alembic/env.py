@@ -22,6 +22,7 @@ from app.models.content import (  # noqa: F401
     ScienceArticle,
 )
 from app.models.learning import BatchItem, LearningBatch, LearningSession  # noqa: F401
+from app.models.task import DailyTask  # noqa: F401
 from app.telemetry.models import LearningEvent  # noqa: F401
 
 # this is the Alembic Config object, which provides
