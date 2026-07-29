@@ -8,7 +8,11 @@ from pydantic import BaseModel, Field
 class EventItem(BaseModel):
     """A single telemetry event from the car device."""
     event_id: str = Field(..., description="UUID v4 idempotency key")
-    event_type: str = Field(..., description="e.g. learning.session.start")
+    _EVENT_TYPES = (
+        "answer_submitted, active_reading, word_studied, "
+        "audio_playback, recording_uploaded"
+    )
+    event_type: str = Field(..., description=_EVENT_TYPES)
     module: str | None = Field(None, description="Learning module: science, math, etc.")
     timestamp: datetime = Field(..., description="Event occurrence time (ISO 8601 with offset)")
     payload: dict = Field(default_factory=dict, description="Arbitrary event data")
