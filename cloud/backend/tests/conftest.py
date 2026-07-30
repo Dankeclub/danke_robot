@@ -5,9 +5,24 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
+from app.auth.models import RefreshToken  # noqa: F401 — register with Base.metadata
 from app.auth.security import _rate_limit_store
 from app.config import settings
+from app.models import child, device_binding, family, parent, parent_child  # noqa: F401
+from app.models.answer import AnswerRecord, WrongAnswer  # noqa: F401
 from app.models.base import Base
+from app.models.config import LearningModuleConfig  # noqa: F401
+from app.models.content import (  # noqa: F401
+    EnglishWord,
+    MathQuestion,
+    MusicTrack,
+    PoemContent,
+    QuizQuestion,
+    ScienceArticle,
+)
+from app.models.learning import BatchItem, LearningBatch, LearningSession  # noqa: F401
+from app.models.task import DailyTask  # noqa: F401
+from app.telemetry.models import LearningEvent  # noqa: F401
 
 
 @pytest.fixture

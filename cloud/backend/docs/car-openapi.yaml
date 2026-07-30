@@ -45,11 +45,10 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
             example:
               phone: '13800138000'
-              device:
-                device_id: car_device_001
-                device_name: 儿童车机 A
-                platform: android_car
-                app_version: 1.0.0
+              device_id: car_device_001
+              device_name: 儿童车机 A
+              device_type: car
+              app_version: 1.0.0
       responses:
         '200':
           description: OK
@@ -911,34 +910,32 @@ components:
         data:
           nullable: true
           type: object
-    DeviceInfo:
-      type: object
-      required:
-      - device_id
-      - platform
-      - app_version
-      properties:
-        device_id:
-          type: string
-        device_name:
-          type: string
-        platform:
-          type: string
-          enum:
-          - android_car
-        app_version:
-          type: string
     LoginRequest:
       type: object
       required:
       - phone
-      - device
+      - device_id
       properties:
         phone:
           type: string
           example: '13800138000'
-        device:
-          $ref: '#/components/schemas/DeviceInfo'
+        device_id:
+          type: string
+          description: 设备唯一标识
+        device_name:
+          type: string
+          description: 设备名称，默认"蛋仔机器人"
+          default: 蛋仔机器人
+        device_type:
+          type: string
+          enum:
+          - car
+          - robot
+          description: 设备类型
+          default: car
+        app_version:
+          type: string
+          description: 应用版本号
     LoginData:
       type: object
       properties:

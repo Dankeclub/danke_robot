@@ -178,25 +178,14 @@ async def create_batch(
     if session is None:
         raise ValueError("session_not_found")
 
-    # Check for existing batch (same sequence)
+    # Determine next sequence number
     result = await db.execute(
         select(LearningBatch).where(
             LearningBatch.session_id == session_uuid,
         ).order_by(LearningBatch.sequence_no.desc()).limit(1)
     )
     latest_batch = result.scalar_one_or_none()
-
     sequence_no = (latest_batch.sequence_no + 1) if latest_batch else 1
-
-    # If a batch already exists at this sequence, return it (idempotent)
-    if latest_batch and latest_batch.sequence_no == sequence_no:
-        result = await db.execute(
-            select(BatchItem).where(
-                BatchItem.batch_id == latest_batch.id,
-            ).order_by(BatchItem.item_order)
-        )
-        items = result.scalars().all()
-        return _batch_to_dict(latest_batch, items, session)
 
     config = session.config_snapshot or {}
     batch_size = config.get("batch_size", 10)
