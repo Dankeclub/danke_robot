@@ -11,7 +11,7 @@ from app.config import settings
 from app.models import child, device_binding, family, parent, parent_child  # noqa: F401
 from app.models.answer import AnswerRecord, WrongAnswer  # noqa: F401
 from app.models.base import Base
-from app.models.config import LearningModuleConfig  # noqa: F401
+from app.models.config import ConfigAudit, LearningModuleConfig  # noqa: F401
 from app.models.content import (  # noqa: F401
     EnglishWord,
     MathQuestion,

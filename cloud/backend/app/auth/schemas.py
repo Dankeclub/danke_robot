@@ -1,4 +1,4 @@
-"""Auth module request/response pydantic schemas."""
+"""Auth module request/response pydantic schemas — aligned with parent-openapi.yaml."""
 
 from typing import Literal
 
@@ -29,6 +29,11 @@ class TokenPairResponse(BaseModel):
     expires_in: int = 7200
 
 
+class RefreshTokenRequest(BaseModel):
+    """Request body for token refresh and logout."""
+    refresh_token: str
+
+
 # ── Car login ───────────────────────────────────────────
 
 class CarLoginRequest(BaseModel):
@@ -48,8 +53,12 @@ class CarLoginResponse(TokenPairResponse):
 # ── Parent WeChat login ─────────────────────────────────
 
 class WechatLoginRequest(BaseModel):
-    """Request body for parent WeChat mini-program login."""
-    code: str = Field(..., description="wx.login() temporary code")
+    """Request body for parent WeChat mini-program login — aligned with parent-openapi.yaml."""
+    wx_code: str = Field(..., alias="wx_code", description="wx.login() temporary code")
+    app_id: str = Field(..., description="WeChat Mini Program AppID")
+    invite_code: str | None = None
+
+    model_config = {"populate_by_name": True}
 
 
 class WechatLoginResponse(TokenPairResponse):
@@ -62,26 +71,23 @@ class WechatLoginResponse(TokenPairResponse):
 # ── Phone binding ───────────────────────────────────────
 
 class PhoneBindRequest(BaseModel):
-    """Request body for binding phone number after WeChat login.
+    """Request body for binding phone number after WeChat login — aligned with parent-openapi.yaml.
 
-    Phase 1 simplified: plaintext phone. Later upgrade to
-    wx.getPhoneNumber() encrypted data.
+    Priority: plaintext phone (Phase 1 simple flow) > wx_bind_token exchange.
     """
-    phone: str = Field(..., description="E.164 phone number")
+    wx_bind_token: str = Field(
+        default="",
+        description="WeChat phone bind token from wx.getPhoneNumber() (future)",
+    )
+    encrypted_data: str | None = None
+    iv: str | None = None
+    phone: str | None = Field(
+        default=None,
+        description="Plaintext E.164 phone number (Phase 1 simple flow)",
+    )
+    verify_code: str | None = None
 
 
 class PhoneBindResponse(BaseModel):
     """Phone binding success response."""
     profile: ParentProfile
-
-
-# ── Token refresh ───────────────────────────────────────
-
-class RefreshRequest(BaseModel):
-    """Request body for token refresh."""
-    refresh_token: str
-
-
-class LogoutRequest(BaseModel):
-    """Request body for logout (revoke refresh token)."""
-    refresh_token: str

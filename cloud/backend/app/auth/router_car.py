@@ -11,8 +11,7 @@ from app.auth.schemas import (
     CarLoginRequest,
     CarLoginResponse,
     ChildProfile,
-    LogoutRequest,
-    RefreshRequest,
+    RefreshTokenRequest,
     TokenPairResponse,
 )
 from app.auth.security import (
@@ -169,7 +168,7 @@ async def car_phone_login(
 
 @car_auth_router.post("/refresh")
 async def car_refresh_token(
-    body: RefreshRequest,
+    body: RefreshTokenRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """Rotate refresh token — revoke old, issue new pair."""
@@ -207,7 +206,7 @@ async def car_refresh_token(
 
 @car_auth_router.post("/logout")
 async def car_logout(
-    body: LogoutRequest,
+    body: RefreshTokenRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """Revoke refresh token (logout)."""

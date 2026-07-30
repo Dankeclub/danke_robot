@@ -1,4 +1,7 @@
-"""Parent auth routes -- WeChat login, phone binding, token refresh, logout."""
+"""Parent auth routes -- WeChat login, phone binding, token refresh, logout.
+
+Aligned with parent-openapi.yaml v0.2.0-draft.
+"""
 
 import httpx
 from fastapi import APIRouter, Depends
@@ -8,11 +11,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.dependencies import get_current_parent
 from app.auth.schemas import (
-    LogoutRequest,
     ParentProfile,
     PhoneBindRequest,
     PhoneBindResponse,
-    RefreshRequest,
+    RefreshTokenRequest,
     TokenPairResponse,
     WechatLoginRequest,
     WechatLoginResponse,
@@ -44,7 +46,7 @@ async def wechat_login(
     2. Find or create ParentAccount by openid
     3. Issue JWT access + refresh tokens
     """
-    wx_appid = settings.wx_appid
+    wx_appid = body.app_id or settings.wx_appid
     wx_secret = settings.wx_secret.get_secret_value()
 
     if not wx_appid or not wx_secret:
@@ -57,7 +59,7 @@ async def wechat_login(
     wx_url = (
         f"https://api.weixin.qq.com/sns/jscode2session"
         f"?appid={wx_appid}&secret={wx_secret}"
-        f"&js_code={body.code}&grant_type=authorization_code"
+        f"&js_code={body.wx_code}&grant_type=authorization_code"
     )
 
     try:
@@ -137,10 +139,19 @@ async def bind_phone(
 ):
     """Bind phone number to parent account (after WeChat login).
 
-    Phase 1 simplified: plaintext phone input.
+    Phase 1 simplified: plaintext phone input via body.phone.
+    Future: exchange body.wx_bind_token via WeChat API for phone number.
     """
+    # Determine phone input source
+    phone = body.phone
+    if not phone:
+        return JSONResponse(
+            status_code=400,
+            content=error(400, "phone_required"),
+        )
+
     # Check if phone already bound to another account
-    phone_hash = hash_phone(body.phone)
+    phone_hash = hash_phone(phone)
     result = await db.execute(
         select(ParentAccount).where(ParentAccount.phone_hash == phone_hash)
     )
@@ -162,9 +173,9 @@ async def bind_phone(
             content=error(404, "parent_not_found"),
         )
 
-    parent.phone_e164 = body.phone
+    parent.phone_e164 = phone
     parent.phone_hash = phone_hash
-    parent.phone_masked = mask_phone(body.phone)
+    parent.phone_masked = mask_phone(phone)
     parent.status = "active"
     await db.commit()
     await db.refresh(parent)
@@ -179,9 +190,9 @@ async def bind_phone(
     return ok(PhoneBindResponse(profile=profile).model_dump())
 
 
-@parent_auth_router.post("/refresh")
+@parent_auth_router.post("/token/refresh")
 async def parent_refresh_token(
-    body: RefreshRequest,
+    body: RefreshTokenRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """Rotate refresh token -- revoke old, issue new pair."""
@@ -216,7 +227,7 @@ async def parent_refresh_token(
 
 @parent_auth_router.post("/logout")
 async def parent_logout(
-    body: LogoutRequest,
+    body: RefreshTokenRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """Revoke refresh token (logout)."""

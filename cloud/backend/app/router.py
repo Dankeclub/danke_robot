@@ -6,6 +6,10 @@ from app.auth.router_car import car_auth_router
 from app.auth.router_parent import parent_auth_router
 from app.car.learning.router import learning_router
 from app.car.task.router import task_router
+from app.parent.children.router import children_router
+from app.parent.config.router import config_router
+from app.parent.dashboard.router import dashboard_router
+from app.parent.device.router import device_router
 from app.telemetry.router import telemetry_router
 
 top_router = APIRouter()
@@ -28,4 +32,8 @@ top_router.include_router(car_router)
 # Parent mini-program API
 parent_router = APIRouter(prefix="/v1/api/parent")
 parent_router.include_router(parent_auth_router)
+parent_router.include_router(children_router)
+parent_router.include_router(device_router)
+parent_router.include_router(config_router)
+parent_router.include_router(dashboard_router)
 top_router.include_router(parent_router)
