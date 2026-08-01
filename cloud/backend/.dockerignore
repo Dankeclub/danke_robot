@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.git
+.env
+.venv
+node_modules
+alembic/versions/__pycache__
+tests/__pycache__

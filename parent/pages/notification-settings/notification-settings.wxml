@@ -13,7 +13,7 @@
   <!-- App 内通知 -->
   <view class="ns-setting-card ca">
     <view class="ns-setting-item">
-      <view class="ns-setting-icon amber">⚠</view>
+      <view class="ns-setting-icon amber"><image class="ns-setting-icon-img" src="/icons/ic-alert-amber.svg" mode="aspectFit"/></view>
       <view class="ns-setting-body">
         <view class="ns-stitle">行为异常提醒</view>
         <view class="ns-sdesc">走神、姿态不良、离屏幕太近</view>
@@ -21,7 +21,7 @@
       <switch checked="{{behaviorAlert}}" bind:change="onSwitchBehavior" color="#4F9A5F" />
     </view>
     <view class="ns-setting-item">
-      <view class="ns-setting-icon mint">★</view>
+      <view class="ns-setting-icon amber"><image class="ns-setting-icon-img" src="/icons/ic-star-amber.svg" mode="aspectFit"/></view>
       <view class="ns-setting-body">
         <view class="ns-stitle">每日学习总结</view>
         <view class="ns-sdesc">当天学习完成时推送</view>
@@ -29,7 +29,7 @@
       <switch checked="{{dailySummary}}" bind:change="onSwitchDaily" color="#4F9A5F" />
     </view>
     <view class="ns-setting-item">
-      <view class="ns-setting-icon sky">📱</view>
+      <view class="ns-setting-icon sky"><image class="ns-setting-icon-img" src="/icons/ic-device-pg.svg" mode="aspectFit"/></view>
       <view class="ns-setting-body">
         <view class="ns-stitle">设备状态变更</view>
         <view class="ns-sdesc">设备离线、低电量时通知</view>
@@ -41,7 +41,7 @@
   <!-- 微信服务通知 -->
   <view class="ns-setting-card ca">
     <view class="ns-setting-item">
-      <view class="ns-setting-icon sky">📄</view>
+      <view class="ns-setting-icon mint"><image class="ns-setting-icon-img" src="/icons/ic-clip-mint.svg" mode="aspectFit"/></view>
       <view class="ns-setting-body">
         <view class="ns-stitle">周报生成通知</view>
         <view class="ns-sdesc">每周一生成上周学习报告</view>
@@ -49,7 +49,7 @@
       <switch checked="{{weeklyReport}}" bind:change="onSwitchWeekly" color="#4F9A5F" />
     </view>
     <view class="ns-setting-item">
-      <view class="ns-setting-icon amber">⚠</view>
+      <view class="ns-setting-icon amber"><image class="ns-setting-icon-img" src="/icons/ic-alert-amber.svg" mode="aspectFit"/></view>
       <view class="ns-setting-body">
         <view class="ns-stitle">行为异常实时提醒</view>
         <view class="ns-sdesc">严重走神时立即推送</view>
@@ -57,7 +57,7 @@
       <switch checked="{{realtimeAlert}}" bind:change="onSwitchRealtime" color="#4F9A5F" />
     </view>
     <view class="ns-setting-item">
-      <view class="ns-setting-icon rose">❤</view>
+      <view class="ns-setting-icon rose"><image class="ns-setting-icon-img" src="/icons/ic-heart-rose.svg" mode="aspectFit"/></view>
       <view class="ns-setting-body">
         <view class="ns-stitle">学习目标达成</view>
         <view class="ns-sdesc">完成每日学习目标时通知</view>
@@ -68,12 +68,15 @@
 
   <!-- 免打扰时段 -->
   <view class="ns-dnd-card ca">
-    <view class="ns-dnd-label">🔕 免打扰时段</view>
+    <view class="ns-dnd-label">
+      <image class="ns-dnd-icon" src="/icons/ic-bell-pg.svg" mode="aspectFit"/>
+      <text>免打扰时段</text>
+    </view>
     <view class="ns-dnd-row">
       <text class="ns-dnd-label-text">从</text>
-      <view class="ns-time-chip" bind:tap="onPickDndStart">{{dndStart}}</view>
+      <view class="ns-time-chip" bindtap="onTapTimeChip" data-field="dndStart">{{dndStart}}  ▾</view>
       <text class="ns-dnd-label-text">至</text>
-      <view class="ns-time-chip" bind:tap="onPickDndEnd">{{dndEnd}}</view>
+      <view class="ns-time-chip" bindtap="onTapTimeChip" data-field="dndEnd">{{dndEnd}}  ▾</view>
     </view>
   </view>
 
@@ -83,9 +86,27 @@
       <danke-mascot size="sm" state="online" />
     </view>
     <view class="illo-body">
-      <view class="illo-title">通知已开启 5 项</view>
+      <view class="illo-title">通知已开启 {{enabledCount}} 项</view>
       <view class="illo-sub">重要提醒一个都不会错过</view>
     </view>
+  </view>
+
+  <!-- 时间选择器弹出层 -->
+  <view class="ns-picker-mask {{showTimePicker ? 'show' : ''}}" bindtap="onCloseTimePicker"></view>
+  <view class="ns-picker {{showTimePicker ? 'show' : ''}}">
+    <view class="ns-picker-hdr">
+      <text class="ns-picker-cancel" bindtap="onCloseTimePicker">取消</text>
+      <text class="ns-picker-title">{{timePickerLabel}}</text>
+      <text class="ns-picker-confirm" bindtap="onConfirmTimePicker">确定</text>
+    </view>
+    <picker-view class="ns-picker-view" value="{{timePickerValue}}" bindchange="onTimePickerChange" indicator-class="ns-picker-indicator">
+      <picker-view-column>
+        <view wx:for="{{hours}}" wx:key="*this" class="ns-pv-item">{{item}} 时</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view wx:for="{{minutes}}" wx:key="*this" class="ns-pv-item">{{item}} 分</view>
+      </picker-view-column>
+    </picker-view>
   </view>
 
 </view>

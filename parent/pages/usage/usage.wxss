@@ -1,5 +1,6 @@
 /* ===== 使用时长详情页 ===== */
 
+/* 分段切换 */
 .use-seg-row {
   display: flex;
   gap: 12rpx;
@@ -19,67 +20,122 @@
   color: var(--pa2);
 }
 .use-seg.on {
-  background: var(--pd);
+  background: #8899D5;
   color: var(--white);
-  box-shadow: 0 4rpx 20rpx rgba(119,140,205,0.25);
+  box-shadow: 0 4rpx 20rpx rgba(119,140,205,0.2);
 }
 
-/* 摘要 */
+/* 统一卡片 */
+.use-main-card {
+  margin: 0 var(--m) var(--g);
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 40rpx 36rpx 36rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.03);
+}
+
+/* 摘要行：左大卡 + 右双卡 */
 .use-summary-row {
   display: flex;
-  gap: 20rpx;
-  margin: 0 var(--m) var(--g);
+  gap: 16rpx;
 }
-.use-smr {
+.use-smr-main {
+  flex: 5;
+  text-align: center;
+  padding: 44rpx 32rpx 36rpx;
+  border-radius: 36rpx;
+  background: #FDEDDD;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.use-smr-stack {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+.use-smr-side {
   flex: 1;
-  border-radius: 44rpx;
-  padding: 32rpx 28rpx;
-  position: relative;
-  overflow: hidden;
+  text-align: center;
+  padding: 28rpx 16rpx;
+  border-radius: 36rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.use-smr.blue { background: var(--pl); }
-.use-smr.pink { background: var(--pp); }
-.use-smr.mint { background: var(--pg); }
+.use-smr-side:nth-child(1) { background: #fed4d8; }
+.use-smr-side:nth-child(2) { background: #dff6e6; }
 
-.use-sv { font-size: 60rpx; font-weight: 900; line-height: 1; }
-.use-smr.blue  .use-sv { color: var(--pd); }
-.use-smr.pink  .use-sv { color: #C77974; }
-.use-smr.mint  .use-sv { color: #4F9A5F; }
-.use-sv-unit { font-size: var(--t4); font-weight: 700; }
-
-.use-sl { font-size: var(--t5); font-weight: 600; color: #5A5A62; margin-top: 12rpx; }
-.use-sm { font-size: var(--t5); font-weight: 500; color: var(--pa2); margin-top: 4rpx; }
+.use-sv-main {
+  font-size: 112rpx;
+  font-weight: 900;
+  line-height: 1;
+  color: #8899D5;
+}
+.use-sv-side {
+  font-size: 56rpx;
+  font-weight: 900;
+  line-height: 1;
+}
+.use-smr-side:nth-child(1) .use-sv-side { color: #D08C88; }
+.use-smr-side:nth-child(2) .use-sv-side { color: #63A870; }
+.use-sv-unit {
+  font-size: var(--t3);
+  font-weight: 700;
+}
+.use-sl {
+  font-size: var(--t4);
+  font-weight: 600;
+  color: #5A5A62;
+  margin-top: 12rpx;
+}
+.use-smr-side .use-sl { font-size: var(--t5); margin-top: 8rpx; }
+.use-sm {
+  font-size: var(--t5);
+  font-weight: 500;
+  color: var(--pa2);
+  margin-top: 6rpx;
+}
+.use-smr-side .use-sm { font-size: var(--t6); }
+.use-smr-side .use-sm { font-size: 22rpx; }
 
 .use-mini-bar {
   height: 8rpx;
-  background: rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.06);
   border-radius: 4rpx;
   margin-top: 16rpx;
   overflow: hidden;
 }
-.use-mini-bar-fill { height: 100%; border-radius: 4rpx; }
-.use-mini-bar-fill.blue { background: var(--pd); }
+.use-mini-bar-fill {
+  height: 100%;
+  border-radius: 4rpx;
+  background: #8899D5;
+}
 
-/* 图表 */
-.use-chart-card {
-  margin: 0 var(--m) var(--g);
-  background: rgba(193,214,241,0.1);
-  border-radius: var(--r);
-  padding: 40rpx 36rpx;
+/* 分隔线 */
+.use-divider {
+  height: 1rpx;
+  background: #E8ECF2;
+  margin: 32rpx 0 28rpx;
+}
+
+/* 图表区 */
+.use-chart-section {
+  padding: 0 4rpx;
 }
 .use-chdr {
   font-size: var(--t3);
   font-weight: 800;
   color: var(--pd);
-  margin-bottom: 32rpx;
+  margin-bottom: 28rpx;
 }
-.use-chart-placeholder { padding: 20rpx 0; }
 
 .use-bar-chart {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  height: 240rpx;
+  height: 220rpx;
 }
 .use-bar-col {
   display: flex;
@@ -87,18 +143,37 @@
   align-items: center;
   gap: 8rpx;
 }
-.use-bar-val   { font-size: 20rpx; font-weight: 700; color: #5A5A62; }
-.use-bar-fill  { width: 56rpx; border-radius: 12rpx 12rpx 0 0; min-height: 6rpx; }
-.use-bar-label { font-size: 20rpx; font-weight: 600; color: var(--pa2); }
+.use-bar-val {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #5A5A62;
+}
+.use-bar-fill {
+  width: 52rpx;
+  border-radius: 10rpx 10rpx 0 0;
+  min-height: 6rpx;
+}
+.use-bar-label {
+  font-size: 20rpx;
+  font-weight: 600;
+  color: var(--pa2);
+}
 
-/* 分布 */
+/* 模块分布 */
 .use-dist-card {
   margin: 0 var(--m) var(--g);
   background: var(--white);
   border-radius: var(--r);
   padding: 40rpx 36rpx;
-  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.03);
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.03);
 }
+.use-dist-hd {
+  font-size: var(--t3);
+  font-weight: 800;
+  color: var(--pd);
+  margin-bottom: 24rpx;
+}
+
 .use-dist-row {
   display: flex;
   align-items: center;
@@ -117,17 +192,44 @@
   justify-content: center;
   flex-shrink: 0;
   font-size: 28rpx;
+  font-weight: 700;
 }
-.use-dist-icon.math { background: var(--pd);  color: var(--white); }
-.use-dist-icon.sci  { background: #4F9A5F;    color: var(--white); }
-.use-dist-icon.eng  { background: #D97A84;    color: var(--white); }
-.use-dist-icon.poem { background: var(--pa2);  color: var(--white); }
+.use-dist-icon.math { background: #8899D5; color: var(--white); }
+.use-dist-icon.sci  { background: #63A870; color: var(--white); }
+.use-dist-icon.eng  { background: #E08D96; color: var(--white); }
+.use-dist-icon.poem { background: #A5A5A9; color: var(--white); }
 
-.use-dist-label { font-size: var(--t4); font-weight: 700; color: #3D3D50; width: 72rpx; flex-shrink: 0; }
-.use-dist-bar-wrap { flex: 1; height: 16rpx; background: rgba(0,0,0,0.04); border-radius: 8rpx; overflow: hidden; }
-.use-dist-bar      { height: 100%; border-radius: 8rpx; }
-.use-dist-bar.math { background: var(--pd); }
-.use-dist-bar.sci  { background: #4F9A5F; }
-.use-dist-bar.eng  { background: #D97A84; }
-.use-dist-bar.poem { background: var(--pa2); }
-.use-dist-val { font-size: var(--t4); font-weight: 800; color: #5A5A62; width: 56rpx; text-align: right; flex-shrink: 0; }
+.use-dist-info {
+  flex: 1;
+  min-width: 0;
+}
+.use-dist-label {
+  font-size: var(--t4);
+  font-weight: 700;
+  color: #3D3D50;
+  display: block;
+  margin-bottom: 10rpx;
+}
+.use-dist-bar-wrap {
+  height: 16rpx;
+  background: rgba(0,0,0,0.04);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+.use-dist-bar {
+  height: 100%;
+  border-radius: 8rpx;
+}
+.use-dist-bar.math { background: #8899D5; }
+.use-dist-bar.sci  { background: #63A870; }
+.use-dist-bar.eng  { background: #E08D96; }
+.use-dist-bar.poem { background: #A5A5A9; }
+
+.use-dist-val {
+  font-size: var(--t4);
+  font-weight: 800;
+  color: #5A5A62;
+  width: 56rpx;
+  text-align: right;
+  flex-shrink: 0;
+}

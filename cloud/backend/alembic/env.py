@@ -8,10 +8,23 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-
+from app.auth.models import RefreshToken  # noqa: F401
 from app.config import settings
-from app.models.base import Base
 from app.models import child, device_binding, family, parent, parent_child  # noqa: F401
+from app.models.answer import AnswerRecord, WrongAnswer  # noqa: F401
+from app.models.base import Base
+from app.models.config import ConfigAudit, LearningModuleConfig  # noqa: F401
+from app.models.content import (  # noqa: F401
+    EnglishWord,
+    MathQuestion,
+    MusicTrack,
+    PoemContent,
+    QuizQuestion,
+    ScienceArticle,
+)
+from app.models.learning import BatchItem, LearningBatch, LearningSession  # noqa: F401
+from app.models.task import DailyTask  # noqa: F401
+from app.telemetry.models import LearningEvent  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -23,7 +23,8 @@
   justify-content: center;
   flex-shrink: 0;
 }
-.dev-da-text { font-size: 56rpx; }
+.dev-da-icon { width: 64rpx; height: 64rpx; }
+.dev-si-icon { width: 44rpx; height: 44rpx; }
 .dev-dh-right { flex: 1; }
 .dev-device-name { font-size: var(--t2); font-weight: 800; }
 .dev-device-status {

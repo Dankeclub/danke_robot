@@ -32,8 +32,18 @@ Page({
         { name: '户外散步 20 分钟', icon: 'ic-heart-rose' }
       ]
     ],
-    selectedTask: -1,
-    selectedTabTask: ''
+    selectedTasks: [],
+    selectedMap: {},
+    selectedTabTask: '',
+    customTasks: [[], [], []],
+    displayTasks: [],
+    customInput: '',
+    selectAll: false,
+    safeBottom: 0
+  },
+
+  onLoad() {
+    this.setData({ safeBottom: getApp().globalData.safeBottom })
   },
 
   stateConfig: {
@@ -149,8 +159,26 @@ Page({
 
   // ===== 派任务面板 =====
 
+  _updateDisplay() {
+    const tab = this.data.activeTaskTab
+    const presets = this.data.taskItems[tab] || []
+    const customs = this.data.customTasks[tab] || []
+    const display = [
+      ...presets.map((item, i) => ({ ...item, isCustom: false, _idx: i, _key: 'p' + i })),
+      ...customs.map((item, i) => ({ ...item, isCustom: true, _idx: i, _key: 'c' + i }))
+    ]
+    this.setData({ displayTasks: display })
+  },
+
+  _syncSelectedMap() {
+    var map = {}
+    this.data.selectedTasks.forEach(function (i) { map[i] = true })
+    this.setData({ selectedMap: map })
+  },
+
   openTask() {
-    this.setData({ showTaskSheet: true, selectedTask: -1, selectedTabTask: '' })
+    this._updateDisplay()
+    this.setData({ showTaskSheet: true, selectedTasks: [], selectedMap: {}, selectedTabTask: '', customInput: '', selectAll: false })
   },
 
   closeTaskSheet() {
@@ -159,25 +187,97 @@ Page({
 
   onTaskTabTap(e) {
     const idx = Number(e.currentTarget.dataset.index)
-    this.setData({ activeTaskTab: idx, selectedTask: -1, selectedTabTask: '' })
+    this.setData({ activeTaskTab: idx, selectedTasks: [], selectedMap: {}, selectedTabTask: '', customInput: '', selectAll: false })
+    this._updateDisplay()
   },
 
   onTaskSelect(e) {
     const idx = Number(e.currentTarget.dataset.index)
-    const items = this.data.taskItems[this.data.activeTaskTab]
-    this.setData({
-      selectedTask: idx,
-      selectedTabTask: items[idx].name
-    })
+    if (idx < 0 || idx >= this.data.displayTasks.length) return
+    let selected = this.data.selectedTasks.slice()
+    const pos = selected.indexOf(idx)
+    if (pos >= 0) {
+      selected.splice(pos, 1)
+    } else {
+      selected.push(idx)
+    }
+    this.setData({ selectedTasks: selected, selectAll: selected.length === this.data.displayTasks.length })
+    this._syncSelectedMap()
+  },
+
+  onSelectAll() {
+    const all = this.data.selectAll
+    if (all) {
+      this.setData({ selectedTasks: [], selectedMap: {}, selectAll: false })
+    } else {
+      const allIdx = this.data.displayTasks.map(function (_, i) { return i })
+      this.setData({ selectedTasks: allIdx, selectAll: true })
+      this._syncSelectedMap()
+    }
+  },
+
+  onCustomInput(e) {
+    this.setData({ customInput: e.detail.value })
+  },
+
+  onAddCustomTask() {
+    const text = this.data.customInput.trim()
+    if (!text) {
+      wx.showToast({ title: '请输入任务内容', icon: 'none' })
+      return
+    }
+    const tab = this.data.activeTaskTab
+    const customs = JSON.parse(JSON.stringify(this.data.customTasks))
+    customs[tab].push({ name: text, icon: 'ic-edit-amber' })
+    this.setData({ customTasks: customs, customInput: '' })
+    this._updateDisplay()
+  },
+
+  onDeleteCustomTask(e) {
+    const idx = Number(e.currentTarget.dataset.index)
+    const item = this.data.displayTasks[idx]
+    if (!item || !item.isCustom) return
+    const tab = this.data.activeTaskTab
+    const customs = JSON.parse(JSON.stringify(this.data.customTasks))
+    customs[tab].splice(item._idx, 1)
+    let selected = this.data.selectedTasks.filter(function (i) { return i !== idx })
+    selected = selected.map(function (i) { return i > idx ? i - 1 : i })
+    this.setData({ customTasks: customs, selectedTasks: selected, selectAll: false })
+    this._updateDisplay()
+    this._syncSelectedMap()
   },
 
   onSendTask() {
-    if (this.data.selectedTask < 0) {
-      wx.showToast({ title: '请先选择一个任务', icon: 'none' })
+    if (this.data.selectedTasks.length === 0) {
+      wx.showToast({ title: '请先选择任务', icon: 'none' })
       return
     }
-    wx.showToast({ title: '任务已派发', icon: 'success' })
-    this.setData({ showTaskSheet: false, selectedTask: -1, selectedTabTask: '' })
+    var tasks = []
+    var self = this
+    this.data.selectedTasks.forEach(function (i) {
+      var item = self.data.displayTasks[i]
+      if (item) tasks.push({ name: item.name, tab: self.data.activeTaskTab, time: self._now(), date: self._today() })
+    })
+    // 写入本地存储
+    var saved = wx.getStorageSync('dispatchedTasks') || []
+    saved.push.apply(saved, tasks)
+    wx.setStorageSync('dispatchedTasks', saved)
+    // 同步到 globalData
+    var app = getApp()
+    app.globalData.dispatchedTasks = saved
+    wx.showToast({ title: '已派发 ' + tasks.length + ' 个任务', icon: 'success' })
+    this.setData({ showTaskSheet: false, selectedTasks: [], selectedMap: {}, selectAll: false })
+  },
+
+  _now: function () {
+    var d = new Date()
+    var pad = function (n) { return n < 10 ? '0' + n : '' + n }
+    return pad(d.getHours()) + ':' + pad(d.getMinutes())
+  },
+
+  _today: function () {
+    var d = new Date()
+    return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate()
   },
 
   noop() {},

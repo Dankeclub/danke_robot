@@ -103,6 +103,7 @@ class ConfigAudit(Base):
     )
 
 
+
 class LearningGoal(Base):
     """Per-child daily learning time goals.
 

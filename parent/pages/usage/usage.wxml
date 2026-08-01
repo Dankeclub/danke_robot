@@ -12,31 +12,36 @@
     >{{item}}</view>
   </view>
 
-  <!-- 摘要行 -->
-  <view class="use-summary-row ca">
-    <view class="use-smr blue">
-      <view class="use-sv">86<text class="use-sv-unit">m</text></view>
-      <view class="use-sl">今日使用</view>
-      <view class="use-sm">目标 120m</view>
-      <view class="use-mini-bar"><view class="use-mini-bar-fill blue" style="width:72%"></view></view>
+  <!-- 统一卡片：摘要 + 图表 -->
+  <view class="use-main-card ca">
+    <!-- 摘要行：左大卡 + 右双卡 -->
+    <view class="use-summary-row">
+      <view class="use-smr use-smr-main">
+        <view class="use-sv-main">86<text class="use-sv-unit">m</text></view>
+        <view class="use-sl">今日使用</view>
+        <view class="use-sm">目标 120m</view>
+        <view class="use-mini-bar"><view class="use-mini-bar-fill" style="width:72%"></view></view>
+      </view>
+      <view class="use-smr-stack">
+        <view class="use-smr use-smr-side">
+          <view class="use-sv-side">34<text class="use-sv-unit">m</text></view>
+          <view class="use-sl">剩余时长</view>
+          <view class="use-sm">距今日限额</view>
+        </view>
+        <view class="use-smr use-smr-side">
+          <view class="use-sv-side">92<text class="use-sv-unit">%</text></view>
+          <view class="use-sl">日均达标</view>
+          <view class="use-sm"><text class="use-trend up">↑3%</text> vs 上周</view>
+        </view>
+      </view>
     </view>
-    <view class="use-smr pink">
-      <view class="use-sv">34<text class="use-sv-unit">m</text></view>
-      <view class="use-sl">剩余时长</view>
-      <view class="use-sm">距限额</view>
-    </view>
-    <view class="use-smr mint">
-      <view class="use-sv">92<text class="use-sv-unit">%</text></view>
-      <view class="use-sl">日均达标</view>
-      <view class="use-sm">↑3% vs 上周</view>
-    </view>
-  </view>
 
-  <!-- 图表区（占位） -->
-  <view class="use-chart-card ca">
-    <view class="use-chdr">📊 每日使用时长 · 本周</view>
-    <view class="use-chart-placeholder">
-      <!-- 简易柱状图 -->
+    <!-- 分隔线 -->
+    <view class="use-divider"></view>
+
+    <!-- 图表区 -->
+    <view class="use-chart-section">
+      <view class="use-chdr">{{chartTitle}}</view>
       <view class="use-bar-chart">
         <view wx:for="{{chartBars}}" wx:key="label" class="use-bar-col">
           <view class="use-bar-val">{{item.value}}m</view>
@@ -49,12 +54,14 @@
 
   <!-- 模块分布 -->
   <view class="use-dist-card ca">
-    <view class="use-chdr">📋 模块分布</view>
+    <view class="use-dist-hd">模块分布</view>
     <view wx:for="{{modules}}" wx:key="key" class="use-dist-row">
       <view class="use-dist-icon {{item.key}}">{{item.icon}}</view>
-      <text class="use-dist-label">{{item.name}}</text>
-      <view class="use-dist-bar-wrap">
-        <view class="use-dist-bar {{item.key}}" style="width:{{item.percent}}%"></view>
+      <view class="use-dist-info">
+        <text class="use-dist-label">{{item.name}}</text>
+        <view class="use-dist-bar-wrap">
+          <view class="use-dist-bar {{item.key}}" style="width:{{item.percent}}%"></view>
+        </view>
       </view>
       <text class="use-dist-val">{{item.time}}m</text>
     </view>

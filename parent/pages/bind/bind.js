@@ -32,6 +32,6 @@ Page({
   },
 
   onSkip() {
-    wx.switchTab({ url: '/pages/home/home' })
+    wx.navigateTo({ url: '/pages/child-info/child-info?mode=create' })
   }
 })

@@ -98,7 +98,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 72rpx;
+  padding: 36rpx;
 }
 .notif-e-title { font-size: var(--t2); font-weight: 800; color: var(--pa2); margin-bottom: 12rpx; }
 .notif-e-desc  { font-size: var(--t4); color: var(--pa1); }

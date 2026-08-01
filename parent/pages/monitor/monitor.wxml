@@ -89,34 +89,52 @@
 
   <!-- ===== 派任务底部弹出面板 ===== -->
   <view class="task-sheet-mask {{showTaskSheet ? 'show' : ''}}" bind:tap="closeTaskSheet"></view>
-  <view class="task-sheet {{showTaskSheet ? 'show' : ''}}">
+  <view class="task-sheet {{showTaskSheet ? 'show' : ''}}" style="padding-bottom:{{safeBottom + 60}}rpx">
     <view class="ts-handle" catch:tap="noop">
       <view class="ts-handle-bar"></view>
     </view>
     <view class="ts-title">派任务给蛋仔</view>
 
-    <!-- 分类 tabs -->
-    <scroll-view class="ts-tabs" scroll-x>
-      <view wx:for="{{taskTabs}}" wx:key="*this" class="ts-tab {{activeTaskTab === index ? 'active' : ''}}" bind:tap="onTaskTabTap" data-index="{{index}}">{{item}}</view>
-    </scroll-view>
-
-    <!-- 任务列表 -->
-    <view class="ts-list">
-      <view wx:for="{{taskItems[activeTaskTab]}}" wx:key="name" class="ts-item {{selectedTask === index ? 'selected' : ''}}" bind:tap="onTaskSelect" data-index="{{index}}">
-        <view class="ts-item-left">
-          <image class="ts-item-icon" src="/icons/{{item.icon}}.svg" mode="aspectFit"/>
-          <text class="ts-item-name">{{item.name}}</text>
-        </view>
-        <view class="ts-item-check {{selectedTask === index ? 'on' : ''}}">
-          <image wx:if="{{selectedTask === index}}" class="ts-check-icon" src="/icons/ic-check-white.svg" mode="aspectFit"/>
-        </view>
+    <!-- 分类 tabs + 全选 -->
+    <view class="ts-tabs-row">
+      <scroll-view class="ts-tabs" scroll-x>
+        <view wx:for="{{taskTabs}}" wx:key="*this" class="ts-tab {{activeTaskTab === index ? 'active' : ''}}" bind:tap="onTaskTabTap" data-index="{{index}}">{{item}}</view>
+      </scroll-view>
+      <view class="ts-select-all" bind:tap="onSelectAll">
+        <text>{{selectAll ? '取消' : '全选'}}</text>
       </view>
     </view>
 
+    <!-- 任务列表 -->
+    <view class="ts-list">
+      <view wx:for="{{displayTasks}}" wx:key="_key" class="ts-item {{selectedMap[index] ? 'selected' : ''}}" bind:tap="onTaskSelect" data-index="{{index}}">
+        <view class="ts-item-left">
+          <image class="ts-item-icon" src="/icons/{{item.icon}}.svg" mode="aspectFit"/>
+          <text class="ts-item-name">{{item.name}}</text>
+          <text wx:if="{{item.isCustom}}" class="ts-custom-tag">自定义</text>
+        </view>
+        <view class="ts-item-right">
+          <view wx:if="{{item.isCustom}}" class="ts-item-del" catch:tap="onDeleteCustomTask" data-index="{{index}}">
+            <image class="ts-del-icon" src="/icons/x.svg" mode="aspectFit"/>
+          </view>
+          <view class="ts-item-check {{selectedMap[index] ? 'on' : ''}}">
+            <image wx:if="{{selectedMap[index]}}" class="ts-check-icon" src="/icons/ic-check-white.svg" mode="aspectFit"/>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{displayTasks.length === 0}}" class="ts-empty">暂无任务，添加一个自定义任务吧</view>
+    </view>
+
+    <!-- 自定义任务输入 -->
+    <view class="ts-custom-row">
+      <input class="ts-custom-input" value="{{customInput}}" placeholder="输入自定义任务…" bind:input="onCustomInput" confirm-type="done" bind:confirm="onAddCustomTask" maxlength="30" />
+      <view class="ts-custom-add" bind:tap="onAddCustomTask">添加</view>
+    </view>
+
     <!-- 发送按钮 -->
-    <view class="ts-send-btn" bind:tap="onSendTask">
+    <view class="ts-send-btn {{selectedTasks.length > 0 ? 'ready' : ''}}" bind:tap="onSendTask">
       <image class="ts-send-icon" src="/icons/ic-send-white.svg" mode="aspectFit"/>
-      <text>发送任务</text>
+      <text>发送任务{{selectedTasks.length > 0 ? '（' + selectedTasks.length + '）' : ''}}</text>
     </view>
   </view>
 

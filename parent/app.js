@@ -9,6 +9,20 @@ App({
       this.globalData.childInfo = saved
     }
 
+    // 从本地存储恢复设备信息
+    const savedDevice = wx.getStorageSync('deviceInfo')
+    if (savedDevice) {
+      this.globalData.deviceInfo = savedDevice
+    }
+
+    // 从本地存储恢复派发任务
+    const savedTasks = wx.getStorageSync('dispatchedTasks')
+    if (savedTasks) {
+      this.globalData.dispatchedTasks = savedTasks
+    } else {
+      this.globalData.dispatchedTasks = []
+    }
+
     // 加载字体（国内可能失败，回退到 PingFang SC）
     wx.loadFontFace({
       family: 'Nunito',

@@ -53,8 +53,8 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "3.3.4",
-  "appid": "wxa8d36032770c86ae",
+  "libVersion": "3.16.2",
+  "appid": "wxefa9e8562c7d7013",
   "projectname": "danke-parent",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
