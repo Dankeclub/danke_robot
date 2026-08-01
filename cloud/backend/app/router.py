@@ -10,6 +10,9 @@ from app.parent.children.router import children_router
 from app.parent.config.router import config_router
 from app.parent.dashboard.router import dashboard_router
 from app.parent.device.router import device_router
+from app.parent.dispatch.router import dispatch_router
+from app.parent.goal.router import goal_router
+from app.parent.reports.router import reports_router
 from app.telemetry.router import telemetry_router
 
 top_router = APIRouter()
@@ -36,4 +39,7 @@ parent_router.include_router(children_router)
 parent_router.include_router(device_router)
 parent_router.include_router(config_router)
 parent_router.include_router(dashboard_router)
+parent_router.include_router(goal_router)
+parent_router.include_router(dispatch_router)
+parent_router.include_router(reports_router)
 top_router.include_router(parent_router)
