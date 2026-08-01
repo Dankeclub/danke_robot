@@ -37,13 +37,14 @@ class DailyTask(Base):
         ForeignKey("child.id"), nullable=False
     )
     business_date: Mapped[date] = mapped_column(Date, nullable=False)
-    module: Mapped[str] = mapped_column(
+    module: Mapped[str | None] = mapped_column(
         Text,
         CheckConstraint(
-            "module IN ('science','math','english','poems','music','quiz')",
+            "module IS NULL OR module IN "
+            "('science','math','english','poems','music','quiz')",
             name="ck_task_module",
         ),
-        nullable=False,
+        nullable=True,
     )
     task_category: Mapped[str] = mapped_column(
         Text,
