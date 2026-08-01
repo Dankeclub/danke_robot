@@ -1,4 +1,6 @@
-"""Shared parent business logic — access checks, serialization helpers."""
+"""Shared parent business logic — access checks, timezone helpers."""
+
+from datetime import date, datetime, timedelta, timezone
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,3 +20,17 @@ async def verify_parent_access(
         )
     )
     return result.scalar_one_or_none() is not None
+
+
+def today_shanghai() -> date:
+    """Return today's date in Asia/Shanghai timezone."""
+    tz = timezone(timedelta(hours=8))
+    return datetime.now(tz).date()
+
+
+def datetime_range_shanghai(d: date) -> tuple[datetime, datetime]:
+    """Return [start_of_day, start_of_next_day) in Asia/Shanghai TZ."""
+    tz = timezone(timedelta(hours=8))
+    start = datetime(d.year, d.month, d.day, tzinfo=tz)
+    end = start + timedelta(days=1)
+    return start, end

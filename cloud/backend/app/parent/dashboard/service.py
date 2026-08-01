@@ -1,6 +1,6 @@
 """Parent dashboard business logic."""
 
-from datetime import date, datetime, timedelta, timezone
+from datetime import timedelta
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +9,7 @@ from app.models.answer import AnswerRecord
 from app.models.learning import LearningSession
 from app.models.parent_child import ParentChild
 from app.models.task import DailyTask
+from app.parent.service import datetime_range_shanghai, today_shanghai
 
 MODULE_LABELS = {
     "science": "科学探秘",
@@ -20,10 +21,6 @@ MODULE_LABELS = {
 }
 
 
-def _today() -> date:
-    """Return today's date in Asia/Shanghai timezone."""
-    tz = timezone(timedelta(hours=8))
-    return datetime.now(tz).date()
 
 
 async def get_dashboard_today(
@@ -45,7 +42,7 @@ async def get_dashboard_today(
     if result.scalar_one_or_none() is None:
         return None
 
-    today = _today()
+    today = today_shanghai()
 
     # Get today's tasks
     task_result = await db.execute(
@@ -59,8 +56,7 @@ async def get_dashboard_today(
     tasks = task_result.scalars().all()
 
     # Get today's learning sessions
-    today_start = datetime(today.year, today.month, today.day, tzinfo=timezone(timedelta(hours=8)))
-    tomorrow_start = today_start + timedelta(days=1)
+    today_start, tomorrow_start = datetime_range_shanghai(today)
 
     session_result = await db.execute(
         select(LearningSession)
