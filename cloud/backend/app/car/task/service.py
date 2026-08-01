@@ -23,6 +23,7 @@ async def ensure_daily_tasks(
         select(DailyTask).where(
             DailyTask.child_id == child_uuid,
             DailyTask.business_date == business_date,
+            DailyTask.module.isnot(None),
         )
     )
     existing = {t.module: t for t in result.scalars().all()}
@@ -108,7 +109,7 @@ def _task_to_dict(t: DailyTask) -> dict:
     return {
         "task_id": str(t.id),
         "module": t.module,
-        "module_label": _mod_label(t.module),
+        "module_label": _mod_label(t.module) if t.module else "",
         "task_category": t.task_category,
         "status": t.status,
         "title": t.title,
