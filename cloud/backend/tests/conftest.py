@@ -6,6 +6,7 @@ from sqlalchemy.pool import NullPool
 
 from app.config import settings
 from app.models.base import Base
+from app.models.config import ConfigAudit, LearningGoal, LearningModuleConfig  # noqa: F401
 
 
 @pytest.fixture
