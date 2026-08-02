@@ -1,7 +1,7 @@
 """Car learning business logic — park, sessions, batches, content selection."""
 
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -210,13 +210,15 @@ async def create_batch(
     if len(content_items) < batch_size:
         raise ValueError("content_pool_exhausted")
 
+    SHANGHAI_TZ = timezone(timedelta(hours=8))
+
     # Create batch
     batch = LearningBatch(
         session_id=session_uuid,
         module=module,
         sequence_no=sequence_no,
         config_snapshot=config,
-        issued_at=datetime.now(UTC),
+        issued_at=datetime.now(SHANGHAI_TZ),
         status="active",
     )
     db.add(batch)
