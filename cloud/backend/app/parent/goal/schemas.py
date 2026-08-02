@@ -20,6 +20,12 @@ class LearningGoalModule(BaseModel):
     goal_minutes: int = 0
 
 
+class GoalModuleIn(BaseModel):
+    """Per-module goal input (no label)."""
+    module: str
+    goal_minutes: int = Field(default=0, ge=0)
+
+
 class LearningGoalOut(BaseModel):
     """GET / PUT response for learning goal."""
     daily_goal_minutes: int = 30
@@ -29,4 +35,4 @@ class LearningGoalOut(BaseModel):
 class UpdateLearningGoalRequest(BaseModel):
     """PUT request body for updating learning goal."""
     daily_goal_minutes: int = Field(..., ge=0)
-    modules: list[LearningGoalModule] = Field(default_factory=list)
+    modules: list[GoalModuleIn] = Field(default_factory=list)

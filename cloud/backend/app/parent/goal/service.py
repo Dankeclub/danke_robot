@@ -47,6 +47,13 @@ async def upsert_learning_goal(
         if mod_name not in VALID_MODULES:
             raise ValueError(f"invalid_module: {mod_name}")
 
+    # Validate per-module sum ≤ daily total
+    module_sum = sum(m.get("goal_minutes", 0) for m in modules)
+    if module_sum > daily_goal_minutes:
+        raise ValueError(
+            f"goal_module_sum_exceeds_total: {module_sum} > {daily_goal_minutes}"
+        )
+
     module_goals = [
         {"module": m["module"], "goal_minutes": m.get("goal_minutes", 0)}
         for m in modules
