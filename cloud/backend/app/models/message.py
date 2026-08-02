@@ -46,7 +46,7 @@ class ParentMessage(Base):
     msg_type: Mapped[str] = mapped_column(
         Text,
         CheckConstraint(
-            "msg_type IN ('text','image','audio','task_card')",
+            "msg_type IN ('text','image','audio','task_card','preset_text','voice')",
             name="ck_msg_type",
         ),
         nullable=False,
