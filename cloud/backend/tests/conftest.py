@@ -12,6 +12,11 @@ from app.models import child, device_binding, family, parent, parent_child  # no
 from app.models.answer import AnswerRecord, WrongAnswer  # noqa: F401
 from app.models.base import Base
 from app.models.config import ConfigAudit, LearningGoal, LearningModuleConfig  # noqa: F401
+from app.models.behavior import BehaviorEvent  # noqa: F401
+from app.models.file_upload import FileUpload  # noqa: F401
+from app.models.message import ParentMessage  # noqa: F401
+from app.models.navigation import NavigationInstruction  # noqa: F401
+from app.models.notification import Notification, NotificationSettings  # noqa: F401
 from app.models.content import (  # noqa: F401
     EnglishWord,
     MathQuestion,

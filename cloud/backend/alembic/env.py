@@ -24,6 +24,11 @@ from app.models.content import (  # noqa: F401
 )
 from app.models.learning import BatchItem, LearningBatch, LearningSession  # noqa: F401
 from app.models.task import DailyTask  # noqa: F401
+from app.models.behavior import BehaviorEvent  # noqa: F401
+from app.models.file_upload import FileUpload  # noqa: F401
+from app.models.message import ParentMessage  # noqa: F401
+from app.models.navigation import NavigationInstruction  # noqa: F401
+from app.models.notification import Notification, NotificationSettings  # noqa: F401
 from app.telemetry.models import LearningEvent  # noqa: F401
 
 # this is the Alembic Config object, which provides
