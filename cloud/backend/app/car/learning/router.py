@@ -47,6 +47,13 @@ async def create_learning_session(
     if module not in valid_modules:
         return JSONResponse(status_code=404, content=error(404, "module_not_found"))
 
+    valid_sources = {"today_task", "free_learning", "task_extension", "ws_navigation"}
+    if body.source not in valid_sources:
+        return JSONResponse(
+            status_code=400,
+            content=error(400, f"invalid_source: must be one of {sorted(valid_sources)}"),
+        )
+
     try:
         session = await create_session(
             db, child_id, module, body.source, body.task_id, body.navigation_id,
