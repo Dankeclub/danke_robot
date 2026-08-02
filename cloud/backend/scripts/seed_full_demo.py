@@ -173,9 +173,9 @@ async def main() -> None:
         await session.flush()
         print("  Tasks seeded (7 days × 6 modules)")
 
-        # 10. Create learning sessions with answers
+        # 10. Create learning sessions with batches and answers
         from app.models.answer import AnswerRecord
-        from app.models.learning import LearningSession
+        from app.models.learning import BatchItem, LearningBatch, LearningSession
         for days_ago in [1, 2, 3, 4, 5]:
             d = today - timedelta(days=days_ago)
             for mod in random.sample(modules, 3):
@@ -189,11 +189,32 @@ async def main() -> None:
                 )
                 session.add(session_obj)
                 await session.flush()
+
+                # Create a batch + items for the session (required by answer FK)
+                batch = LearningBatch(
+                    session_id=session_obj.id, module=mod,
+                    sequence_no=1,
+                )
+                session.add(batch)
+                await session.flush()
+
                 for _ in range(random.randint(5, 10)):
                     is_correct = random.random() < 0.75
+                    # Create batch_item first, then answer referencing it
+                    item = BatchItem(
+                        batch_id=batch.id,
+                        content_id=f"demo_{mod}_{days_ago}_{_}",
+                        content_type=mod,
+                        content_snapshot={"question": f"Demo question {_}"},
+                        item_order=_,
+                        created_at=datetime.now(SHANGHAI_TZ),
+                    )
+                    session.add(item)
+                    await session.flush()
+
                     session.add(AnswerRecord(
                         session_id=session_obj.id,
-                        batch_item_id=uuid.uuid4(),
+                        batch_item_id=item.id,
                         child_id=child.id, module=mod,
                         question_snapshot={
                             "question": f"Demo question {_}",
