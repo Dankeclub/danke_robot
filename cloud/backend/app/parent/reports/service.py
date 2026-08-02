@@ -423,29 +423,103 @@ async def _build_weekly_report(
 
     label = f"{monday} ~ {sunday}"
 
+    # --- Behavior data (from behavior_event table) ---
+    from app.models.behavior import BehaviorEvent
+
+    # Focus score for this week
+    focus_result = await db.execute(
+        select(func.avg(BehaviorEvent.score))
+        .where(
+            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.event_type == "focus",
+            func.date(BehaviorEvent.recorded_at).between(monday, sunday),
+        )
+    )
+    focus_avg = focus_result.scalar()
+    focus_score = int(focus_avg) if focus_avg else 0
+
+    # Posture score for this week
+    posture_result = await db.execute(
+        select(func.avg(BehaviorEvent.score))
+        .where(
+            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.event_type == "posture",
+            func.date(BehaviorEvent.recorded_at).between(monday, sunday),
+        )
+    )
+    posture_avg = posture_result.scalar()
+    posture_score = int(posture_avg) if posture_avg else 0
+
+    # Focus daily series
+    focus_series_result = await db.execute(
+        select(
+            func.date(BehaviorEvent.recorded_at).label("d"),
+            func.avg(BehaviorEvent.score).label("avg_score"),
+        )
+        .where(
+            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.event_type == "focus",
+            func.date(BehaviorEvent.recorded_at).between(monday, sunday),
+        )
+        .group_by(func.date(BehaviorEvent.recorded_at))
+        .order_by(func.date(BehaviorEvent.recorded_at))
+    )
+    focus_series = [
+        {"date": date.fromisoformat(str(r.d)), "score": int(r.avg_score)}
+        for r in focus_series_result.all()
+    ]
+
+    # Anomalies and discoveries from behavior insights
+    insight_result = await db.execute(
+        select(BehaviorEvent)
+        .where(
+            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.event_type.in_(["focus", "posture"]),
+            func.date(BehaviorEvent.recorded_at).between(monday, sunday),
+        )
+        .limit(20)
+    )
+    anomalies = []
+    discoveries = []
+    for e in insight_result.scalars().all():
+        p = e.payload if isinstance(e.payload, dict) else {}
+        if p.get("is_anomaly"):
+            anomalies.append({
+                "title": p.get("title", ""),
+                "description": p.get("description", ""),
+                "tags": [
+                    {"text": t.get("text", ""), "cls": t.get("cls", "")}
+                    for t in p.get("tags", [])
+                ],
+            })
+        if p.get("is_discovery"):
+            discoveries.append({
+                "title": p.get("title", ""),
+                "description": p.get("description", ""),
+                "color": p.get("color", "#778ccd"),
+            })
+
     return {
         "week_key": week_key,
         "label": label,
         "start_date": monday,
         "end_date": sunday,
         "learning_summary": {
-            "total_active_duration_minutes": 0,
+            "total_active_duration_minutes": 0,  # TODO Phase 4: real duration from behavior_event
             "completed_tasks": task_row.completed or 0,
             "total_tasks": task_row.total or 0,
             "average_accuracy": avg_accuracy,
             "modules_touched": modules_touched,
         },
-        # TODO Phase 3: populate from behavior_event table (focus_score, posture_score, etc.)
         "behavior_summary": {
-            "focus_score": 0, "focus_change_percent": 0,
-            "posture_score": 0, "posture_change_percent": 0,
-            "anomaly_count": 0, "discovery_count": 0,
+            "focus_score": focus_score, "focus_change_percent": 0,
+            "posture_score": posture_score, "posture_change_percent": 0,
+            "anomaly_count": len(anomalies), "discovery_count": len(discoveries),
         },
-        # TODO Phase 3: populate from behavior_event daily aggregation
-        "focus_daily_series": [],
+        "focus_daily_series": focus_series,
         "posture_weekly_series": [],
-        "anomalies": [],
-        "discoveries": [],
+        "anomalies": anomalies,
+        "discoveries": discoveries,
         # TODO Phase 3: generate via AI/LLM summary of week's behavior
         "ai_summary": "",
     }

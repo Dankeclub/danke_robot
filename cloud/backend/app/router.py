@@ -6,13 +6,23 @@ from app.auth.router_car import car_auth_router
 from app.auth.router_parent import parent_auth_router
 from app.car.learning.router import learning_router
 from app.car.task.router import task_router
+from app.parent.behavior.router import behavior_router
 from app.parent.children.router import children_router
 from app.parent.config.router import config_router
 from app.parent.dashboard.router import dashboard_router
 from app.parent.device.router import device_router
 from app.parent.dispatch.router import dispatch_router
+from app.parent.files.router import files_router
 from app.parent.goal.router import goal_router
+from app.parent.messages.router import messages_router
+from app.parent.navigation.router import navigation_router
+from app.parent.notifications.router import (
+    notification_center_router,
+    notification_settings_router,
+)
+from app.parent.online.router import online_router
 from app.parent.reports.router import reports_router
+from app.parent.usage.router import usage_router
 from app.telemetry.router import telemetry_router
 
 top_router = APIRouter()
@@ -42,4 +52,12 @@ parent_router.include_router(dashboard_router)
 parent_router.include_router(goal_router)
 parent_router.include_router(dispatch_router)
 parent_router.include_router(reports_router)
+parent_router.include_router(behavior_router)
+parent_router.include_router(usage_router)
+parent_router.include_router(online_router)
+parent_router.include_router(messages_router)
+parent_router.include_router(navigation_router)
+parent_router.include_router(notification_settings_router)
+parent_router.include_router(notification_center_router)
+parent_router.include_router(files_router)
 top_router.include_router(parent_router)
