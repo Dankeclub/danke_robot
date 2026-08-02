@@ -1,8 +1,8 @@
 """phase3 new tables — behavior_event, parent_message, navigation_instruction,
 notification_settings, notification, file_upload
 
-Revision ID: a1b2c3d4e5f6
-Revises: 20260730_a1b2c4_relax_daily_task_module
+Revision ID: d5e6f7a8b9c0
+Revises: a1b2c4d5e6f7
 Create Date: 2026-08-02
 """
 
@@ -13,8 +13,8 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "a1b2c3d4e5f6"
-down_revision: Union[str, None] = "20260730_a1b2c4_relax_daily_task_module"
+revision: str = "d5e6f7a8b9c0"
+down_revision: Union[str, None] = "a1b2c4d5e6f7"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
