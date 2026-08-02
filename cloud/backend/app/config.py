@@ -41,6 +41,10 @@ class Settings(BaseSettings):
     # Business
     business_timezone: str = "Asia/Shanghai"
 
+    # Security — pepper values for hashing (dev defaults, override in production .env)
+    phone_pepper: str = "danke-phone-pepper-v1"
+    token_pepper: str = "danke-token-pepper-v1"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

@@ -53,6 +53,12 @@ async def get_learning_progress(
     )
     task_rows = task_result.all()
 
+    # NOTE: tasks are filtered by business_date (the date the task is assigned to),
+    # while answers are filtered by answered_at (the actual wall-clock time).
+    # These two time axes can differ when a child works past midnight
+    # or when tasks span multiple days. This is intentional for Phase 1-2;
+    # Phase 3 may unify on business_date for both.
+    #
     # Aggregate answers per module for accuracy
     start_dt, _ = datetime_range_shanghai(start_date)
     _, end_dt_end = datetime_range_shanghai(end_date)
@@ -247,7 +253,7 @@ async def _get_session_summary(db: AsyncSession, session_id: uuid.UUID) -> dict:
         "accuracy": accuracy,
         "correct_count": correct,
         "wrong_count": wrong,
-        "total_active_duration_ms": 0,
+        "total_active_duration_ms": 0,  # TODO Phase 3: compute from behavior_event duration data
     }
 
 
@@ -429,14 +435,17 @@ async def _build_weekly_report(
             "average_accuracy": avg_accuracy,
             "modules_touched": modules_touched,
         },
+        # TODO Phase 3: populate from behavior_event table (focus_score, posture_score, etc.)
         "behavior_summary": {
             "focus_score": 0, "focus_change_percent": 0,
             "posture_score": 0, "posture_change_percent": 0,
             "anomaly_count": 0, "discovery_count": 0,
         },
+        # TODO Phase 3: populate from behavior_event daily aggregation
         "focus_daily_series": [],
         "posture_weekly_series": [],
         "anomalies": [],
         "discoveries": [],
+        # TODO Phase 3: generate via AI/LLM summary of week's behavior
         "ai_summary": "",
     }

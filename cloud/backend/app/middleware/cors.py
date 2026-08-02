@@ -7,7 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 def add_cors(app: FastAPI) -> None:
     """Add CORS middleware allowing all origins in dev.
 
-    Production must restrict origins to the actual mini-program and car domains.
+    WARNING: Production MUST restrict origins to the actual mini-program domain
+    and car device origins. Example for production:
+        allow_origins=["https://your-domain.com", "https://api.weixin.qq.com"]
     """
     app.add_middleware(
         CORSMiddleware,

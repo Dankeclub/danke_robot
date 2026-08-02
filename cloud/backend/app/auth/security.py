@@ -16,14 +16,14 @@ from app.config import settings
 
 # ── Hashing ─────────────────────────────────────────────
 
-_PHONE_PEPPER = "danke-phone-pepper-v1"  # TODO: move to config
-_TOKEN_PEPPER = "danke-token-pepper-v1"  # TODO: move to config
+# Pepper values loaded from config; defaults are for dev only.
+# Set PHONE_PEPPER / TOKEN_PEPPER in .env for production.
 
 
 def hash_token(token: str) -> str:
     """HMAC-SHA256 hash of a token string with server-side pepper."""
     return hmac.new(
-        _TOKEN_PEPPER.encode(),
+        settings.token_pepper.encode(),
         token.encode(),
         hashlib.sha256,
     ).hexdigest()
@@ -32,7 +32,7 @@ def hash_token(token: str) -> str:
 def hash_phone(phone: str) -> str:
     """HMAC-SHA256 hash of phone number with server-side pepper."""
     return hmac.new(
-        _PHONE_PEPPER.encode(),
+        settings.phone_pepper.encode(),
         phone.encode(),
         hashlib.sha256,
     ).hexdigest()
