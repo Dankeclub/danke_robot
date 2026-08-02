@@ -9,10 +9,12 @@ Creates a complete demo environment with:
   - 5 completed learning sessions with answer records
   - 14 days of behavior events (focus, posture, location)
 
-Usage: cd cloud/backend && python scripts/seed_full_demo.py
+Prerequisites: PostgreSQL must be running and alembic migrations applied.
+  cd cloud/backend
+  alembic upgrade head          # <-- run this first
+  python scripts/seed_full_demo.py
 
 Idempotent: checks for existing demo parent before seeding.
-Auto-runs alembic if tables don't exist yet.
 """
 
 import asyncio
@@ -41,12 +43,12 @@ MODULE_LABELS = {
 
 
 async def main() -> None:
-    """Run full demo seed. Auto-runs alembic if tables are missing."""
+    """Run full demo seed."""
     session_factory = async_sessionmaker(
         async_engine, class_=AsyncSession, expire_on_commit=False,
     )
 
-    # Check if tables exist; run alembic if not
+    # Check tables exist
     try:
         async with async_engine.connect() as conn:
             result = await conn.execute(
@@ -62,16 +64,15 @@ async def main() -> None:
         tables_exist = False
 
     if not tables_exist:
-        print("Tables not found — running alembic upgrade head...")
-        import os
-
-        from alembic import command
-        from alembic.config import Config as AlembicConfig
-
-        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        alembic_cfg = AlembicConfig(os.path.join(backend_dir, "alembic.ini"))
-        command.upgrade(alembic_cfg, "head")
-        print("Migration complete.\n")
+        print("=" * 60)
+        print("ERROR: Database tables not found.")
+        print("Run this command first, then re-run this script:")
+        print()
+        print("  cd cloud/backend && alembic upgrade head")
+        print()
+        print("(PostgreSQL must be running — check 'docker compose ps db')")
+        print("=" * 60)
+        return
 
     async with session_factory() as session:
         # 1. Check if already seeded
