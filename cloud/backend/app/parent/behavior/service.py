@@ -1,5 +1,6 @@
 """Parent behavior business logic — focus, posture, location, insights."""
 
+import uuid as _uuid
 from datetime import date, timedelta
 
 from sqlalchemy import func, select
@@ -14,7 +15,7 @@ def _period_days(period: str) -> int:
 
 
 async def _compute_daily_scores(
-    db: AsyncSession, child_id: str, event_type: str, days: int,
+    db: AsyncSession, child_uuid, event_type: str, days: int,
 ) -> tuple[int, list[dict]]:
     """Return average score and daily series for an event type over N days."""
     cutoff = date.today() - timedelta(days=days - 1)
@@ -26,7 +27,7 @@ async def _compute_daily_scores(
             func.avg(BehaviorEvent.score).label("avg_score"),
         )
         .where(
-            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.child_id == child_uuid,
             BehaviorEvent.event_type == event_type,
             func.date(BehaviorEvent.recorded_at) >= cutoff,
         )
@@ -40,8 +41,8 @@ async def _compute_daily_scores(
     count = 0
     for d, avg in rows:
         d_str = d.isoformat() if isinstance(d, date) else str(d)
-        score_map[d_str] = float(avg)
-        total += avg
+        score_map[d_str] = float(avg) if avg is not None else 0.0
+        total += float(avg) if avg is not None else 0.0
         count += 1
 
     overall = int(total / count) if count > 0 else 0
@@ -60,14 +61,15 @@ async def get_focus(
 ) -> dict | None:
     if not await verify_parent_access(db, parent_id, child_id):
         return None
+    child_uuid = _uuid.UUID(child_id)
     days = _period_days(period)
-    score, series = await _compute_daily_scores(db, child_id, "focus", days)
+    score, series = await _compute_daily_scores(db, child_uuid, "focus", days)
 
     cutoff = date.today() - timedelta(days=days - 1)
     raw = await db.execute(
         select(BehaviorEvent.payload)
         .where(
-            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.child_id == child_uuid,
             BehaviorEvent.event_type == "focus",
             func.date(BehaviorEvent.recorded_at) >= cutoff,
         )
@@ -99,14 +101,15 @@ async def get_posture(
 ) -> dict | None:
     if not await verify_parent_access(db, parent_id, child_id):
         return None
+    child_uuid = _uuid.UUID(child_id)
     days = _period_days(period)
-    score, series = await _compute_daily_scores(db, child_id, "posture", days)
+    score, series = await _compute_daily_scores(db, child_uuid, "posture", days)
 
     cutoff = date.today() - timedelta(days=days - 1)
     raw = await db.execute(
         select(BehaviorEvent.payload)
         .where(
-            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.child_id == child_uuid,
             BehaviorEvent.event_type == "posture",
             func.date(BehaviorEvent.recorded_at) >= cutoff,
         )
@@ -134,12 +137,13 @@ async def get_location(
 ) -> dict | None:
     if not await verify_parent_access(db, parent_id, child_id):
         return None
+    child_uuid = _uuid.UUID(child_id)
     days = _period_days(period)
     cutoff = date.today() - timedelta(days=days - 1)
     raw = await db.execute(
         select(BehaviorEvent.payload)
         .where(
-            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.child_id == child_uuid,
             BehaviorEvent.event_type.in_(["location", "zone"]),
             func.date(BehaviorEvent.recorded_at) >= cutoff,
         )
@@ -167,12 +171,13 @@ async def get_insights(
 ) -> dict | None:
     if not await verify_parent_access(db, parent_id, child_id):
         return None
+    child_uuid = _uuid.UUID(child_id)
     days = _period_days(period)
     cutoff = date.today() - timedelta(days=days - 1)
     raw = await db.execute(
         select(BehaviorEvent)
         .where(
-            BehaviorEvent.child_id == child_id,
+            BehaviorEvent.child_id == child_uuid,
             BehaviorEvent.event_type.in_(["focus", "posture"]),
             func.date(BehaviorEvent.recorded_at) >= cutoff,
         )
