@@ -115,7 +115,7 @@ async def create_dispatched_tasks(
 
     created = []
     for t in tasks:
-        module = t.get("module") if t.get("task_category") == "learning" else None
+        module = None  # only non-learning tasks here; learning handled by today-tasks
         task = DailyTask(
             child_id=child_id,
             business_date=today,

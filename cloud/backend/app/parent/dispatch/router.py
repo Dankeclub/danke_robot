@@ -88,6 +88,14 @@ async def create_dispatched_tasks_endpoint(
     db: AsyncSession = Depends(get_db),
 ):
     """Create dispatched tasks for a child."""
+    # Dispatched tasks are non-learning only; learning tasks go through today-tasks
+    for t in body.tasks:
+        if t.task_category == "learning":
+            return JSONResponse(
+                status_code=400,
+                content=error(400, "learning_tasks_not_allowed_here"),
+            )
+
     tasks_data = [
         {"task_category": t.task_category, "module": t.module, "title": t.title}
         for t in body.tasks
