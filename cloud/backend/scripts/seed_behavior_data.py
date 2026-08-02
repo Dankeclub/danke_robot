@@ -3,14 +3,16 @@
 Usage: cd cloud/backend && python scripts/seed_behavior_data.py
 
 Idempotent: skips children that already have behavior_event rows.
+Auto-runs alembic if tables don't exist yet.
 """
 
 import asyncio
+import os
 import random
 import uuid
 from datetime import date, datetime, timedelta, timezone
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.db import async_engine
@@ -135,7 +137,32 @@ async def seed_behavior_for_child(
 
 
 async def main() -> None:
-    """Seed behavior events for all existing children."""
+    """Seed behavior events for all existing children. Auto-runs alembic if needed."""
+    # Check if tables exist; run alembic if not
+    try:
+        async with async_engine.connect() as conn:
+            result = await conn.execute(
+                text(
+                    "SELECT EXISTS ("
+                    "SELECT FROM information_schema.tables "
+                    "WHERE table_name = 'behavior_event'"
+                    ")"
+                )
+            )
+            tables_exist = result.scalar()
+    except Exception:
+        tables_exist = False
+
+    if not tables_exist:
+        print("Tables not found — running alembic upgrade head...")
+        from alembic import command
+        from alembic.config import Config as AlembicConfig
+
+        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        alembic_cfg = AlembicConfig(os.path.join(backend_dir, "alembic.ini"))
+        command.upgrade(alembic_cfg, "head")
+        print("Migration complete.\n")
+
     session_factory = async_sessionmaker(
         async_engine, class_=AsyncSession, expire_on_commit=False,
     )

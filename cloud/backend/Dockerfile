@@ -7,11 +7,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install Python dependencies (layer-cached: pyproject.toml changes infrequently)
 COPY pyproject.toml .
-RUN pip install --no-cache-dir . && pip install --no-cache-dir httpx PyJWT
+# Create minimal app package so pip install . succeeds before full COPY
+RUN mkdir -p app && touch app/__init__.py \
+    && pip install --no-cache-dir . \
+    && rm -rf app
 
-# Copy application code
+# Copy application code (overwrites the stub)
 COPY . .
 
 # Run with single worker for in-memory rate limiter compatibility

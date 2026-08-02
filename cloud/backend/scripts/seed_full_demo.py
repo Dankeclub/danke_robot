@@ -12,6 +12,7 @@ Creates a complete demo environment with:
 Usage: cd cloud/backend && python scripts/seed_full_demo.py
 
 Idempotent: checks for existing demo parent before seeding.
+Auto-runs alembic if tables don't exist yet.
 """
 
 import asyncio
@@ -19,17 +20,17 @@ import random
 import uuid
 from datetime import date, datetime, timedelta, timezone
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.db import async_engine
 from app.models.child import Child
+from app.models.device_binding import DeviceBinding
 from app.models.family import Family
 from app.models.parent import ParentAccount
 from app.models.parent_child import ParentChild
-from app.models.device_binding import DeviceBinding
-from scripts.seed_learning_data import DEFAULT_CONFIGS, seed_configs, seed_content
 from scripts.seed_behavior_data import seed_behavior_for_child
+from scripts.seed_learning_data import DEFAULT_CONFIGS, seed_content
 
 SHANGHAI_TZ = timezone(timedelta(hours=8))
 MODULE_LABELS = {
@@ -40,10 +41,38 @@ MODULE_LABELS = {
 
 
 async def main() -> None:
-    """Run full demo seed."""
+    """Run full demo seed. Auto-runs alembic if tables are missing."""
     session_factory = async_sessionmaker(
         async_engine, class_=AsyncSession, expire_on_commit=False,
     )
+
+    # Check if tables exist; run alembic if not
+    try:
+        async with async_engine.connect() as conn:
+            result = await conn.execute(
+                text(
+                    "SELECT EXISTS ("
+                    "SELECT FROM information_schema.tables "
+                    "WHERE table_name = 'parent_account'"
+                    ")"
+                )
+            )
+            tables_exist = result.scalar()
+    except Exception:
+        tables_exist = False
+
+    if not tables_exist:
+        print("Tables not found — running alembic upgrade head...")
+        import os
+
+        from alembic import command
+        from alembic.config import Config as AlembicConfig
+
+        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        alembic_cfg = AlembicConfig(os.path.join(backend_dir, "alembic.ini"))
+        command.upgrade(alembic_cfg, "head")
+        print("Migration complete.\n")
+
     async with session_factory() as session:
         # 1. Check if already seeded
         existing = await session.execute(
@@ -111,8 +140,8 @@ async def main() -> None:
         session.add(LearningGoal(
             child_id=child.id, daily_goal_minutes=120,
             module_goals=[
-                {"module": m, "goal_minutes": min}
-                for m, min in [
+                {"module": mod, "goal_minutes": goal_min}
+                for mod, goal_min in [
                     ("math", 30), ("science", 20), ("english", 20),
                     ("poems", 20), ("music", 15), ("quiz", 15),
                 ]
@@ -144,8 +173,8 @@ async def main() -> None:
         print("  Tasks seeded (7 days × 6 modules)")
 
         # 10. Create learning sessions with answers
-        from app.models.learning import LearningSession
         from app.models.answer import AnswerRecord
+        from app.models.learning import LearningSession
         for days_ago in [1, 2, 3, 4, 5]:
             d = today - timedelta(days=days_ago)
             for mod in random.sample(modules, 3):
@@ -185,10 +214,10 @@ async def main() -> None:
 
         await session.commit()
         print("\n=== Full demo seed complete! ===")
-        print(f"Parent demo_openid: demo_parent_seed")
+        print("Parent demo_openid: demo_parent_seed")
         print(f"Child ID: {child.id}")
         print(f"Family ID: {family.id}")
-        print(f"Device ID: demo_car_001")
+        print("Device ID: demo_car_001")
         print()
         print("Run the backend: uvicorn app.main:app --reload")
         print("Use the parent JWT with parent_id=" + str(parent.id))
