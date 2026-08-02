@@ -6,6 +6,7 @@ from app.auth.router_car import car_auth_router
 from app.auth.router_parent import parent_auth_router
 from app.car.learning.router import learning_router
 from app.car.task.router import task_router
+from app.car.files.router import files_router as car_files_router
 from app.parent.behavior.router import behavior_router
 from app.parent.children.router import children_router
 from app.parent.config.router import config_router
@@ -40,6 +41,7 @@ car_router.include_router(car_auth_router)
 car_router.include_router(learning_router)
 car_router.include_router(task_router)
 car_router.include_router(telemetry_router)
+car_router.include_router(car_files_router)
 top_router.include_router(car_router)
 
 # Parent mini-program API

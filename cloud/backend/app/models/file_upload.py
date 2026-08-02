@@ -34,7 +34,8 @@ class FileUpload(Base):
         Text,
         CheckConstraint(
             "purpose IN "
-            "('parent_message_image','parent_message_audio','parent_avatar','child_avatar')",
+            "('parent_message_image','parent_message_audio','parent_avatar','child_avatar',"
+            "'poem_recording','chat_asr','parent_message_voice_reply')",
             name="ck_file_purpose",
         ),
         nullable=False,
