@@ -1,7 +1,7 @@
 """Car daily task business logic — ensure tasks, claim, list."""
 
 import uuid
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta, timezone
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -37,9 +37,13 @@ async def ensure_daily_tasks(
     )
     configs = {c.module: c for c in result.scalars().all()}
 
+    SHANGHAI_TZ = timezone(timedelta(hours=8))
+
     # Create missing tasks
-    tomorrow = datetime.now(UTC) + timedelta(days=1)
-    expires_at = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0)
+    # expires_at = 次日 00:00:00+08:00 per design spec
+    now_shanghai = datetime.now(SHANGHAI_TZ)
+    midnight = now_shanghai.replace(hour=0, minute=0, second=0, microsecond=0)
+    expires_at = midnight + timedelta(days=1)
 
     for mod, cfg in configs.items():
         if mod in existing:
