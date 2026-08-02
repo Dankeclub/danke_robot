@@ -6,6 +6,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.parent.service import verify_parent_access
 
+# TODO(Phase 4): Migrate _online_store from in-memory dict to Redis.
+# In-memory storage does not survive process restarts and cannot be
+# shared across multiple backend instances. Redis will provide:
+#   - Persistence across deployments/restarts
+#   - Shared state for horizontally scaled backend pods
+#   - TTL-based auto-expiry (replace the manual 300s timeout logic)
+# Use a key pattern like online_status:{child_id} with a 5-minute TTL
+# refreshed on each heartbeat.
 _online_store: dict[str, dict] = {}
 SHANGHAI_TZ = timezone(timedelta(hours=8))
 
