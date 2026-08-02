@@ -1,7 +1,7 @@
 """Parent messages business logic."""
 
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta, timezone
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession

@@ -93,14 +93,14 @@ async def get_notifications(
 ) -> dict:
     query = select(Notification).where(Notification.parent_id == parent_id)
     if filter_type == "unread":
-        query = query.where(Notification.is_read == False)
+        query = query.where(Notification.is_read.is_(False))
 
     query = query.order_by(Notification.created_at.desc())
 
     unread_q = select(func.count()).select_from(
         select(Notification).where(
             Notification.parent_id == parent_id,
-            Notification.is_read == False,
+            Notification.is_read.is_(False),
         ).subquery()
     )
     unread = (await db.execute(unread_q)).scalar() or 0
