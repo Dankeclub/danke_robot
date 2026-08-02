@@ -182,7 +182,7 @@ async def complete_session(
     if session is None:
         raise ValueError("session_not_found")
     if session.status != "active":
-        return _session_summary_dict(session)
+        return await _session_summary_dict(db, session)
 
     # Count batch items for this session
     result = await db.execute(
@@ -205,7 +205,7 @@ async def complete_session(
         session.status = "completed"
         await db.flush()
 
-    return _session_summary_dict(session)
+    return await _session_summary_dict(db, session)
 
 
 async def get_session_summary(
@@ -226,7 +226,7 @@ async def get_session_summary(
     if session is None:
         raise ValueError("session_not_found")
 
-    return _session_summary_dict(session)
+    return await _session_summary_dict(db, session)
 
 
 async def _get_session_answer_stats(
@@ -258,17 +258,22 @@ async def _get_session_answer_stats(
     return total, answered, correct
 
 
-def _session_summary_dict(session: LearningSession) -> dict:
+async def _session_summary_dict(
+    db: AsyncSession, session: LearningSession,
+) -> dict:
+    total, answered, correct = await _get_session_answer_stats(db, session.id)
+    wrong = answered - correct
+    accuracy = (correct / answered) if answered > 0 else None
     return {
         "session_id": str(session.id),
         "module": session.module,
         "status": session.status,
         "summary": {
-            "completed_count": 0,
-            "total_count": 0,
-            "accuracy": None,
-            "correct_count": 0,
-            "wrong_count": 0,
+            "completed_count": answered,
+            "total_count": total,
+            "accuracy": accuracy,
+            "correct_count": correct,
+            "wrong_count": wrong,
             "total_active_duration_ms": 0,
             "is_final": session.status in ("completed", "expired"),
         },
